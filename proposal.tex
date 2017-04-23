@@ -1,0 +1,137 @@
+\documentclass[12pt]{article}
+
+% Pretty much all of the ams maths packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+
+% Allows you to manipulate the page a bit
+\usepackage[a4paper]{geometry}
+
+% Pulls the page out a bit - makes it look better (in my opinion)
+\usepackage{a4wide}
+
+% Allows inclusion of graphics easily and configurably
+\usepackage{graphicx}
+
+% Provides ways to make nice looking tables
+\usepackage{booktabs}
+
+% Allows you to rotate tables and figures
+\usepackage{rotating}
+
+% Allows shading of table cells
+\usepackage{colortbl}
+% Define a simple command to use at the start of a table row to make it have a shaded background
+\newcommand{\gray}{\rowcolor[gray]{.9}}
+
+\usepackage{textcomp}
+
+% Provides commands to make subfigures (figures with (a), (b) and (c))
+\usepackage{subfigure}
+
+% Typesets URLs sensibly - with tt font, clickable in PDFs, and not breaking across lines
+\usepackage{url}
+
+% Makes references hyperlinks in PDF output
+\usepackage{hyperref}
+
+% Provides ways to include syntax-highlighted source code
+\usepackage{listings}
+\lstset{frame=single, basicstyle=\ttfamily}
+
+% Provides good access to colours
+\usepackage{color}
+\usepackage{xcolor}
+
+% Simple command I defined to allow me to mark TODO items in red
+\newcommand{\todo}[1] {\textbf{\textcolor{red}{#1}}}
+
+% Command for vector, matrix, tensor names
+\renewcommand{\vec}[1] {\mathbf{#1}}
+\newcommand{\Mat}[1] {\mathbf{#1}}
+\newcommand{\Ten}[1] {\mathbf{\mathcal{#1}}}
+
+% Command for vector, matrix, tensor names
+\newcommand{\F} {\mathbb{F}}
+
+% Allows fancy stuff in the page header
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+% Vastly improves the standard formatting of captions
+\usepackage[margin=10pt,font=small,labelfont=bf, labelsep=endash]{caption}
+
+% Standard title, author etc.
+\title{CS8656 Project Proposal // Analysis of an Efficient Fill Estimation Algorithm for Sparse Tensors in Blocked Formats}
+\author{Peter Ahrens, Nicholas Schiefer, Helen Xu}
+\date{}
+% Put text on the left-hand and right-hand side of the header
+%\fancyhead{}
+%\lhead{}
+%\rhead{}
+%\chead{}
+
+\begin{document}
+
+  \maketitle
+
+  We present an algorithm to efficiently compute an important heuristic for autotuning sparse tensor operations. A tensor is a multidimensional array. A sparse tensor is a tensor whose entries are mostly zeros, which do not have to be stored or operated on in most linear algebraic operations. Since sparse tensors typically contain more than 90\% zero entries, taking advantage of sparsity can provide substantial increases in performance. However, the increased complexity of datastructures that can describe the irregular locations of nonzeros in these tensors poses a significant challenge to performance engineers.
+
+  These challenges are magnified in an era of increasing heterogeneity of processors. In order to write the most efficient sparse tensor code, the programmer must take into account both the target architecture and the relevant structural properties of the nonzeros of the sparse tensor. Writing custom code for each processor requires extensive engineering effort and the structure of nonzeros is usually known only at runtime. Therefore, autotuning (automatically generating customized code) has become a necessary part of writing efficient sparse code.
+
+  Previous efforts in autotuning for sparse tensors focus on sparse matrices, which are more broadly applicable in fields ranging from scientific computing to machine learning. The diverse space of operations and nonzero patterns of sparse matrices have led to the development of a wide variety of sparse matrix formats. Here we describe perhaps the most popular such format, Compressed Sparse Row (CSR) and a variant we will call Blocked Compressed Sparse Row (BCSR).
+
+  Compressed sparse row format stores
+%Common formats for sparse matrices can be easily extended to tensors. For example, blocked CSR extends quite naturally to bl
+
+\todo{what is blocked tensor format?}
+\todo{problem is to choose right block size and offset}
+\todo{what heuristic do we use?}
+\todo{this leads to problem description}
+
+  \section{Notation}
+    A \textit{tensor} is a multidimensional array. A tensor of \textit{order} $N$ is an element of the tensor (direct) product of $N$ vector spaces. We assume all of our vector spaces are over an arbitrary field $\F$. Vectors are order 1 tensors and will be denoted by boldface lowercase letters, like this: $\vec{a}$. Matrices are order 2 tensors and will be denoted by boldface capital letters, like this: $\Mat{A}$. Tensors will be denoted by boldface capital Euler script letters, like this: $\Ten{A}$.
+
+    We will refer to the number of nonzero elements in a tensor $\Ten{A}$ by $K(\Ten{A})$.
+
+    The $n^{th}$ element in a sequence is denoted by $\Ten{A}^{(n)}$.
+    Element $(i_1, ..., i_N)$ of an order-$N$ tensor $\Ten{A} \in \F^{I_1 \times ... \times I_N}$ is denoted $\Ten{A}_{i_1, ..., i_N}$.
+    Subarrays are formed when we fix a subset of indices. We use a colon to indicate all elements of a mode. If we wish to represent a sequence of indices $i, i + 1, ..., j$, we write $i..j$. Thus, the middle $n/2$ columns of a matrix $\Mat{A} \in \F^{n \times n}$ would be written $\Mat{A}_{:, n/4..3n/4}$.
+
+  \section{Formulation of the problem}
+    We are given a tensor $\Ten{A} \in \F^{I_1\times ...\times I_N}$ and a positive integer $B > 0$. We define the function $r_{b, o}$ for $1 \leq b, o \leq B$ as follows:
+    \[
+      r_{b, o}(j) = (o + j * (b - 1) + 1)..(o + j * b)
+    \]
+    Intuitively, if we grouped the natural numbers into blocks of length $b$ and then offset these blocks by $o$, $r_{b, o}(j)$ represents the range of indices corresponding to the $j^{th}$ block.
+
+    We can now formally define the function $K_{b_1, ..., b_N, o_1, ..., o_N}$ for $1 \leq b_1, ..., b_N, o_1, ..., o_N \leq B$ as follows.
+    \[
+      K_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A}) = \sum\limits_{j_1, ..., j_n} \begin{cases}1 \text{ if any of $\Ten{A}_{r_{b_1, o_1}(j_1),  ..., r_{b_N, o_N}(j_N)}$ are nonzero} \\ 0 \text{ otherwise}\end{cases}
+    \]
+
+    Thus, if we broke up our range of tensor indices into blocks of $b_1, ..., b_N$ and offset these blocks by $o_1, ..., o_N$, $K_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A})$ tells us how many of these blocks would be needed to cover the nonzeros of $\Ten{A}$. Note that $K_{1, ..., 1, 0, ..., 0}(\Ten{A}) = K(\Ten{A})$.
+
+    With $K$ defined, we can formally define $f_{b_1, ..., b_N, o_1, ..., o_N}$ for all $1 \leq b_1, ..., b_N, o_1, ..., o_N \leq B$
+
+    \[
+      f_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A}) = \frac{b_1...b_NK_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A})}{K(\Ten{A})}
+    \]
+
+    The problem is to compute approximate $\tilde{f}_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A})$ such that $f_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A})(1 - \epsilon) \leq \tilde{f}_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A}) \leq f_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A})(1 + \epsilon)$ for all $1 \leq b_1, ..., b_N, o_1, ..., o_N \leq B$ with probability at least $1 - \delta$.
+  \section{Previous Work}
+    \todo{Someone needs to write this}
+
+  \section{Peter's Possibly Useful Algorithm}
+
+    We define a new function $q_{b_1, ..., b_N, o_1, ..., o_N}$ for $\Ten{A}$
+    oh god describing this algorithm will be incredibly painful.
+
+
+  \section{Analysis of Algorithm}
+    \subsection{Samples vs. Accuracy}
+    \subsection{Operations required per sample}
+  
+  \section{Empirical Comparisons}
+    \subsection{Samples vs. Accuracy}
+    \subsection{Operations required per sample}
+\end{document}

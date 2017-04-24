@@ -61,7 +61,7 @@
 \usepackage[margin=10pt,font=small,labelfont=bf, labelsep=endash]{caption}
 
 % Standard title, author etc.
-\title{CS8656 Project Proposal // Analysis of an Efficient Fill Estimation Algorithm for Sparse Tensors in Blocked Formats}
+\title{CS8656 Project Proposal // An Efficient Fill Estimation Algorithm for Sparse Tensors in Blocked Formats}
 \author{Peter Ahrens, Nicholas Schiefer, Helen Xu}
 \date{}
 % Put text on the left-hand and right-hand side of the header
@@ -78,15 +78,25 @@
 
   These challenges are magnified in an era of increasing heterogeneity of processors. In order to write the most efficient sparse tensor code, the programmer must take into account both the target architecture and the relevant structural properties of the nonzeros of the sparse tensor. Writing custom code for each processor requires extensive engineering effort and the structure of nonzeros is usually known only at runtime. Therefore, autotuning (automatically generating customized code) has become a necessary part of writing efficient sparse code.
 
-  Previous efforts in autotuning for sparse tensors focus on sparse matrices, which are more broadly applicable in fields ranging from scientific computing to machine learning. The diverse space of operations and nonzero patterns of sparse matrices have led to the development of a wide variety of sparse matrix formats. Here we describe perhaps the most popular such format, Compressed Sparse Row (CSR) and a variant we will call Blocked Compressed Sparse Row (BCSR).
+  Previous efforts in autotuning for sparse tensors focus on sparse matrices, which are more broadly applicable in fields ranging from scientific computing to machine learning. The diverse space of operations and nonzero patterns of sparse matrices have led to the development of a wide variety of sparse matrix formats that allow programmers to more efficiently operate on the matrices. We limit our description to perhaps the most popular such format, Compressed Sparse Row (CSR) and a variant we will call Blocked Compressed Sparse Row (BCSR). In CSR, only the nonzeros and their locations are stored in each row of the matrix. In Blocked Compressed Sparse Row, an $m \times n$ matrix is divided into $m/r \times n/c$ submatrices, where each submatrix is of size $r \times c$. Only blocks which contain nonzeros are stored, and these nonzero blocks are stored in CSR format. Storing the locations of nonzero blocks requires less memory and less computational logic than storing the locations of individual nonzeros. For matrices that naturally have a block structure of nonzeros, such as those produced by finite element methods, this can lead to an increase in the performance of sparse matrix operations. However, because we store the entire block (filling in zero entries with explicit zeros) setting the block size to be too large can decrease the performance.
 
-  Compressed sparse row format stores
-%Common formats for sparse matrices can be easily extended to tensors. For example, blocked CSR extends quite naturally to bl
+  Given the definition of BCSR, it is natural to wonder how one might choose the correct block size for a given matrix.
+  Vuduc et. al. describes an effective heuristic for predicting the performance $P$ (in $Mflop/s$) of a particular block size on a sparse matrix $A$.
+  We refer to the number of nonzeros in $A$ as $K(A)$. We refer to the number of blocks of size $r \times c$ which contain nonzeros in $A$ as $K_{r, c}(A)$.
+  We can then define the \textit{fill} of the matrix to be $f(A) = rcK_{r, c}(A)/K(A)$.
+  Once per machine, we compute a profile of how the machine performs for a particular block size.
+  Let $P_{rc}(dense)$ be the performance of the machine (in $Mflop/s$) on a dense matrix stored with block size $r \times c$.
+  Then we can estimate $P_{rc}(A)$ as
 
-\todo{what is blocked tensor format?}
-\todo{problem is to choose right block size and offset}
-\todo{what heuristic do we use?}
-\todo{this leads to problem description}
+  \[
+    \tilde{P}_{rc}(A) = \frac{P_{rc}(dense)}{f_{rc}(A)}
+  \]
+
+  Thus, our task is to compute $f_{rc}$ for all $r$ and $c$ to within some tolerable relative accuracy, and to do so efficiently. Statistical sampling methods given by Vuduc et. al. provide no theoretical guarantee of accuracy, and take as long as 1 to 10 times the time it takes to perform a sparse matrix vector multiplication on the same matrix. We describe an algorithm which provides estimates to within $\epsilon$ relative error with probability $1 - \delta$ in time \todo{$O(\log(\delta)/\epsilon^2)$}, and show that our algorithm runs efficiently and accurately on real-world cases. Note that our algorithm depends only on the desired accuracy, whereas the algorithm in \cite{vuduc2003} depends linearly upon the number of nonzeros.
+
+  Our algorithm estimates a more general notion of fill for tensors, where we divide the tensor into smaller subarrays (our blocks) and again only the nonzero blocks and their locations are stored in each row of the tensor. We further generalize this by allowing the user to offset the grid of blocks by some fixed amount, so that the block structure of the tensor does not have to align with the block size.
+
+  Finally, we note that estimating the fill can be an important part of any sparse datastructure which uses blocking, not just BCSR. In fact, any sparse datastructure can be adapted to a blocked regime by grouping a tensor into blocks and simply treating nonzero blocks as nonzeros of some sparse tensor.
 
   \section{Notation}
     A \textit{tensor} is a multidimensional array. A tensor of \textit{order} $N$ is an element of the tensor (direct) product of $N$ vector spaces. We assume all of our vector spaces are over an arbitrary field $\F$. Vectors are order 1 tensors and will be denoted by boldface lowercase letters, like this: $\vec{a}$. Matrices are order 2 tensors and will be denoted by boldface capital letters, like this: $\Mat{A}$. Tensors will be denoted by boldface capital Euler script letters, like this: $\Ten{A}$.
@@ -119,19 +129,19 @@
 
     The problem is to compute approximate $\tilde{f}_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A})$ such that $f_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A})(1 - \epsilon) \leq \tilde{f}_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A}) \leq f_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A})(1 + \epsilon)$ for all $1 \leq b_1, ..., b_N, o_1, ..., o_N \leq B$ with probability at least $1 - \delta$.
   \section{Previous Work}
-    \todo{Someone needs to write this}
+    \todo{finish plz. Mainly this is Vuduc}
 
-  \section{Peter's Possibly Useful Algorithm}
+  \section{Peter's Slightly Predictable Algorithm}
 
-    We define a new function $q_{b_1, ..., b_N, o_1, ..., o_N}$ for $\Ten{A}$
-    oh god describing this algorithm will be incredibly painful.
-
+    \todo{I have no time to write this up right now, but it's not too long. max 2 page description/proof of correctness i promise. The hard part is describing how to sample all of the block sizes and offsets at once in $N$ dimensions (the super clever part of it).}
 
   \section{Analysis of Algorithm}
-    \subsection{Samples vs. Accuracy}
-    \subsection{Operations required per sample}
-  
-  \section{Empirical Comparisons}
-    \subsection{Samples vs. Accuracy}
-    \subsection{Operations required per sample}
+    \todo{Here, we will beat the analysis of this algorithm to death so that we can get a bound on the number of operations required to compute this estimate (we are talking about constants after all)}
+    \subsection{Error Analysis}
+      \todo{Here, we will bound (very tightly) the number of samples needed}
+    \subsection{Runtime Analysis}
+      \todo{Here, we will bound (very tightly) the number of operations per sample needed}
+
+  \section{Results}
+    \todo{Here we explore the relationship between runtime and accuracy of the fill prediction on several matrices from Vuduc et. al. and also from the suitesparse collection from florida}
 \end{document}

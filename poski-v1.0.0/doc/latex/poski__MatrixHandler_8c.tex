@@ -1,0 +1,330 @@
+\hypertarget{poski__MatrixHandler_8c}{\section{poski\-\_\-\-Matrix\-Handler.\-c File Reference}
+\label{poski__MatrixHandler_8c}\index{poski\-\_\-\-Matrix\-Handler.\-c@{poski\-\_\-\-Matrix\-Handler.\-c}}
+}
+
+
+Handle the tunable sparse matrix object.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$stdarg.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-threadcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-thread.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-partitioncommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-partition.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-matrixcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-matrixgetset.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-kernelcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-malloc.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-print.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+poski\-\_\-mat\-\_\-t \hyperlink{poski__MatrixHandler_8c_ad4378cf4895c7b593f2195f27d68ed6f}{poski\-\_\-\-Create\-Mat\-C\-S\-R} (poski\-\_\-index\-\_\-t $\ast$ptr, poski\-\_\-index\-\_\-t $\ast$ind, poski\-\_\-value\-\_\-t $\ast$val, poski\-\_\-index\-\_\-t nrows, poski\-\_\-index\-\_\-t ncols, poski\-\_\-index\-\_\-t nnz, poski\-\_\-copymode\-\_\-t mode, poski\-\_\-threadarg\-\_\-t $\ast$threadargs, poski\-\_\-partitionarg\-\_\-t $\ast$partitionargs, int k,...)
+\begin{DoxyCompactList}\small\item\em Create a tunable matrix object in C\-S\-R format. \end{DoxyCompactList}\item 
+poski\-\_\-mat\-\_\-t \hyperlink{poski__MatrixHandler_8c_a00f5b2f886dbc3f7577b7a9fa078c3b4}{poski\-\_\-\-Create\-Mat\-C\-S\-R\-File} (poski\-\_\-sparse\-\_\-matrix\-\_\-t $\ast$Sp\-A, poski\-\_\-copymode\-\_\-t mode, poski\-\_\-threadarg\-\_\-t $\ast$threadargs, poski\-\_\-partitionarg\-\_\-t $\ast$partitionargs, int k,...)
+\begin{DoxyCompactList}\small\item\em Create a tunable matrix object in C\-S\-R format. \end{DoxyCompactList}\item 
+int \hyperlink{poski__MatrixHandler_8c_ab466a4149dd6dba918a399c8aca5d67c}{poski\-\_\-\-Destroy\-Mat} (poski\-\_\-mat\-\_\-t A\-\_\-tunable)
+\begin{DoxyCompactList}\small\item\em Destroy the tunable matrix object. \end{DoxyCompactList}\item 
+int \hyperlink{poski__MatrixHandler_8c_a2b29f1432a231f39652a9e405e0f131a}{poski\-\_\-\-Set\-Mat\-Entry} (poski\-\_\-mat\-\_\-t A\-\_\-tunable, poski\-\_\-int\-\_\-t row, poski\-\_\-int\-\_\-t col, poski\-\_\-value\-\_\-t val)
+\begin{DoxyCompactList}\small\item\em Change the value of the specified matrix element. \end{DoxyCompactList}\item 
+poski\-\_\-value\-\_\-t \hyperlink{poski__MatrixHandler_8c_aa209fef6af5f65c428359a139a825664}{poski\-\_\-\-Get\-Mat\-Entry} (poski\-\_\-mat\-\_\-t A\-\_\-tunable, poski\-\_\-int\-\_\-t row, poski\-\_\-int\-\_\-t col)
+\begin{DoxyCompactList}\small\item\em Returns the value of the specified matrix element in A(row,col). \end{DoxyCompactList}\item 
+int \hyperlink{poski__MatrixHandler_8c_a4d7948d03ba5b22351e435be8b8ed79d}{poski\-\_\-\-Set\-Mat\-Subset} (poski\-\_\-mat\-\_\-t A\-\_\-tunable, const int num\-Rows, const int num\-Cols, const int row\-Stride, const int col\-Stride, const poski\-\_\-int\-\_\-t $\ast$rows, const poski\-\_\-int\-\_\-t $\ast$cols, const poski\-\_\-value\-\_\-t $\ast$vals, poski\-\_\-subsettype\-\_\-t subsettype)
+\begin{DoxyCompactList}\small\item\em Set a subset of non-\/zero values, specified as a clique or indexed list. \end{DoxyCompactList}\item 
+int \hyperlink{poski__MatrixHandler_8c_a0bb61e92865622b43330c5e06760aa33}{poski\-\_\-\-Get\-Mat\-Subset} (poski\-\_\-mat\-\_\-t A\-\_\-tunable, const int num\-Rows, const int num\-Cols, const int row\-Stride, const int col\-Stride, const poski\-\_\-int\-\_\-t $\ast$rows, const poski\-\_\-int\-\_\-t $\ast$cols, poski\-\_\-value\-\_\-t $\ast$vals, poski\-\_\-subsettype\-\_\-t subsettype)
+\begin{DoxyCompactList}\small\item\em Get a subset of values, specified as a subset or indexed list. \end{DoxyCompactList}\item 
+int \hyperlink{poski__MatrixHandler_8c_a1add7ffe00eef9becb3e9e707bd276a3}{poski\-\_\-report\-\_\-tunable\-\_\-matrix} (poski\-\_\-mat\-\_\-t mat)
+\begin{DoxyCompactList}\small\item\em Report information of a tunable matrix object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handle the tunable sparse matrix object. This module implements the routines to handle the tunable sparse matrix object.
+
+\begin{DoxyAttention}{Attention}
+Currently, only support a sparse matrix in C\-S\-R format.
+\end{DoxyAttention}
+Also, refer \hyperlink{poski__Matrix__common_8c}{poski\-\_\-\-Matrix\-\_\-common.\-c}, \hyperlink{poski__Matrix__getset_8c}{poski\-\_\-\-Matrix\-\_\-getset.\-c} 
+
+\subsection{Function Documentation}
+\hypertarget{poski__MatrixHandler_8c_ad4378cf4895c7b593f2195f27d68ed6f}{\index{poski\-\_\-\-Matrix\-Handler.\-c@{poski\-\_\-\-Matrix\-Handler.\-c}!poski\-\_\-\-Create\-Mat\-C\-S\-R@{poski\-\_\-\-Create\-Mat\-C\-S\-R}}
+\index{poski\-\_\-\-Create\-Mat\-C\-S\-R@{poski\-\_\-\-Create\-Mat\-C\-S\-R}!poski_MatrixHandler.c@{poski\-\_\-\-Matrix\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Create\-Mat\-C\-S\-R}]{\setlength{\rightskip}{0pt plus 5cm}poski\-\_\-mat\-\_\-t {\bf poski\-\_\-\-Create\-Mat\-C\-S\-R} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-index\-\_\-t $\ast$}]{ptr, }
+\item[{poski\-\_\-index\-\_\-t $\ast$}]{ind, }
+\item[{poski\-\_\-value\-\_\-t $\ast$}]{val, }
+\item[{poski\-\_\-index\-\_\-t}]{nrows, }
+\item[{poski\-\_\-index\-\_\-t}]{ncols, }
+\item[{poski\-\_\-index\-\_\-t}]{nnz, }
+\item[{poski\-\_\-copymode\-\_\-t}]{mode, }
+\item[{poski\-\_\-threadarg\-\_\-t $\ast$}]{threadargs, }
+\item[{poski\-\_\-partitionarg\-\_\-t $\ast$}]{partitionargs, }
+\item[{int}]{k, }
+\item[{}]{...}
+\end{DoxyParamCaption}
+)}}\label{poski__MatrixHandler_8c_ad4378cf4895c7b593f2195f27d68ed6f}
+
+
+Create a tunable matrix object in C\-S\-R format. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em ptr} & C\-S\-R row pointers. \\
+\hline
+\mbox{\tt in}  & {\em ind} & C\-S\-R column indices. \\
+\hline
+\mbox{\tt in}  & {\em val} & C\-S\-R non-\/zero values. \\
+\hline
+\mbox{\tt in}  & {\em nrows} & Number of rows. \\
+\hline
+\mbox{\tt in}  & {\em ncols} & Number of columns. \\
+\hline
+\mbox{\tt in}  & {\em nnz} & Number of non-\/zeros. \\
+\hline
+\mbox{\tt in}  & {\em mode} & Copy mode in \{S\-H\-A\-R\-E\-\_\-\-I\-N\-P\-U\-T\-M\-A\-T, C\-O\-P\-Y\-\_\-\-I\-N\-P\-U\-T\-M\-A\-T\} for matrix creation routines. \\
+\hline
+\mbox{\tt in}  & {\em threadargs} & Threading model information. \\
+\hline
+\mbox{\tt in}  & {\em partitionargs} & Partitioning model information. \\
+\hline
+\mbox{\tt in}  & {\em k} & Number of explicitly specified semantic properties of a sparse matrix (ptr, ind, val). \\
+\hline
+\mbox{\tt in}  & {\em ...} & Specified semantic properties $<property_1>, ..., <property_k>$. See poski\-\_\-inmatprop\-\_\-t.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A valid, tunable matrix object if success, or an error message otherwise.
+\end{DoxyReturn}
+This routine performs as follows\-: (1) error-\/check for the input parameters.
+
+(2) collect the specified semantic properies.
+
+(3) allocate the space for a new tunable matrix object, and initailize it.
+
+(4) create the partitioned submatrices.
+
+(5) clean-\/up the temporary stroage and return the tunable matrix object. \hypertarget{poski__MatrixHandler_8c_a00f5b2f886dbc3f7577b7a9fa078c3b4}{\index{poski\-\_\-\-Matrix\-Handler.\-c@{poski\-\_\-\-Matrix\-Handler.\-c}!poski\-\_\-\-Create\-Mat\-C\-S\-R\-File@{poski\-\_\-\-Create\-Mat\-C\-S\-R\-File}}
+\index{poski\-\_\-\-Create\-Mat\-C\-S\-R\-File@{poski\-\_\-\-Create\-Mat\-C\-S\-R\-File}!poski_MatrixHandler.c@{poski\-\_\-\-Matrix\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Create\-Mat\-C\-S\-R\-File}]{\setlength{\rightskip}{0pt plus 5cm}poski\-\_\-mat\-\_\-t {\bf poski\-\_\-\-Create\-Mat\-C\-S\-R\-File} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-sparse\-\_\-matrix\-\_\-t $\ast$}]{Sp\-A, }
+\item[{poski\-\_\-copymode\-\_\-t}]{mode, }
+\item[{poski\-\_\-threadarg\-\_\-t $\ast$}]{threadargs, }
+\item[{poski\-\_\-partitionarg\-\_\-t $\ast$}]{partitionargs, }
+\item[{int}]{k, }
+\item[{}]{...}
+\end{DoxyParamCaption}
+)}}\label{poski__MatrixHandler_8c_a00f5b2f886dbc3f7577b7a9fa078c3b4}
+
+
+Create a tunable matrix object in C\-S\-R format. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em Sp\-A} & Sparse matrix in C\-S\-R format. \\
+\hline
+\mbox{\tt in}  & {\em mode} & Copy mode in \{S\-H\-A\-R\-E\-\_\-\-I\-N\-P\-U\-T\-M\-A\-T, C\-O\-P\-Y\-\_\-\-I\-N\-P\-U\-T\-M\-A\-T\} for matrix creation routines. \\
+\hline
+\mbox{\tt in}  & {\em threadargs} & Threading model information. \\
+\hline
+\mbox{\tt in}  & {\em partitionargs} & Partitioning model information. \\
+\hline
+\mbox{\tt in}  & {\em k} & Number of explicitly specified semantic properties of a sparse matrix (ptr, ind, val). \\
+\hline
+\mbox{\tt in}  & {\em ...} & Specified semantic properties $<property_1>, ..., <property_k>$. See poski\-\_\-inmatprop\-\_\-t.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A valid, tunable matrix object if success, or an error message otherwise.
+\end{DoxyReturn}
+This routine performs as follows\-: (1) error-\/check for the input parameters.
+
+(2) collect the specified semantic properies.
+
+(3) allocate the space for a new tunable matrix object, and initailize it.
+
+(4) create the partitioned submatrices.
+
+(5) clean-\/up the temporary stroage and return the tunable matrix object. \hypertarget{poski__MatrixHandler_8c_ab466a4149dd6dba918a399c8aca5d67c}{\index{poski\-\_\-\-Matrix\-Handler.\-c@{poski\-\_\-\-Matrix\-Handler.\-c}!poski\-\_\-\-Destroy\-Mat@{poski\-\_\-\-Destroy\-Mat}}
+\index{poski\-\_\-\-Destroy\-Mat@{poski\-\_\-\-Destroy\-Mat}!poski_MatrixHandler.c@{poski\-\_\-\-Matrix\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Destroy\-Mat}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-\-Destroy\-Mat} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-mat\-\_\-t}]{A\-\_\-tunable}
+\end{DoxyParamCaption}
+)}}\label{poski__MatrixHandler_8c_ab466a4149dd6dba918a399c8aca5d67c}
+
+
+Destroy the tunable matrix object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em A\-\_\-tunable} & A tunable matrix object.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}
+\hypertarget{poski__MatrixHandler_8c_a2b29f1432a231f39652a9e405e0f131a}{\index{poski\-\_\-\-Matrix\-Handler.\-c@{poski\-\_\-\-Matrix\-Handler.\-c}!poski\-\_\-\-Set\-Mat\-Entry@{poski\-\_\-\-Set\-Mat\-Entry}}
+\index{poski\-\_\-\-Set\-Mat\-Entry@{poski\-\_\-\-Set\-Mat\-Entry}!poski_MatrixHandler.c@{poski\-\_\-\-Matrix\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Set\-Mat\-Entry}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-\-Set\-Mat\-Entry} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-mat\-\_\-t}]{A\-\_\-tunable, }
+\item[{poski\-\_\-int\-\_\-t}]{row, }
+\item[{poski\-\_\-int\-\_\-t}]{col, }
+\item[{poski\-\_\-value\-\_\-t}]{val}
+\end{DoxyParamCaption}
+)}}\label{poski__MatrixHandler_8c_a2b29f1432a231f39652a9e405e0f131a}
+
+
+Change the value of the specified matrix element. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in,out}  & {\em A\-\_\-tunable} & The tunable matrix object. \\
+\hline
+\mbox{\tt in}  & {\em row} & The specified row of the element whose value is to be modified. \\
+\hline
+\mbox{\tt in}  & {\em col} & The specified column of the element whose value is to be modified. \\
+\hline
+\mbox{\tt in}  & {\em val} & The specified value to modify.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}
+\hypertarget{poski__MatrixHandler_8c_aa209fef6af5f65c428359a139a825664}{\index{poski\-\_\-\-Matrix\-Handler.\-c@{poski\-\_\-\-Matrix\-Handler.\-c}!poski\-\_\-\-Get\-Mat\-Entry@{poski\-\_\-\-Get\-Mat\-Entry}}
+\index{poski\-\_\-\-Get\-Mat\-Entry@{poski\-\_\-\-Get\-Mat\-Entry}!poski_MatrixHandler.c@{poski\-\_\-\-Matrix\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Get\-Mat\-Entry}]{\setlength{\rightskip}{0pt plus 5cm}poski\-\_\-value\-\_\-t {\bf poski\-\_\-\-Get\-Mat\-Entry} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-mat\-\_\-t}]{A\-\_\-tunable, }
+\item[{poski\-\_\-int\-\_\-t}]{row, }
+\item[{poski\-\_\-int\-\_\-t}]{col}
+\end{DoxyParamCaption}
+)}}\label{poski__MatrixHandler_8c_aa209fef6af5f65c428359a139a825664}
+
+
+Returns the value of the specified matrix element in A(row,col). 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em A\-\_\-tunable} & The tunable matrix object. \\
+\hline
+\mbox{\tt in}  & {\em row} & The specified row of the elemenit whose value is to be returned. \\
+\hline
+\mbox{\tt in}  & {\em col} & The specified column of the element whose value is to be returned.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of A(row,col) if success, or an error message otherwise. 
+\end{DoxyReturn}
+\hypertarget{poski__MatrixHandler_8c_a4d7948d03ba5b22351e435be8b8ed79d}{\index{poski\-\_\-\-Matrix\-Handler.\-c@{poski\-\_\-\-Matrix\-Handler.\-c}!poski\-\_\-\-Set\-Mat\-Subset@{poski\-\_\-\-Set\-Mat\-Subset}}
+\index{poski\-\_\-\-Set\-Mat\-Subset@{poski\-\_\-\-Set\-Mat\-Subset}!poski_MatrixHandler.c@{poski\-\_\-\-Matrix\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Set\-Mat\-Subset}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-\-Set\-Mat\-Subset} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-mat\-\_\-t}]{A\-\_\-tunable, }
+\item[{const int}]{num\-Rows, }
+\item[{const int}]{num\-Cols, }
+\item[{const int}]{row\-Stride, }
+\item[{const int}]{col\-Stride, }
+\item[{const poski\-\_\-int\-\_\-t $\ast$}]{rows, }
+\item[{const poski\-\_\-int\-\_\-t $\ast$}]{cols, }
+\item[{const poski\-\_\-value\-\_\-t $\ast$}]{vals, }
+\item[{poski\-\_\-subsettype\-\_\-t}]{subsettype}
+\end{DoxyParamCaption}
+)}}\label{poski__MatrixHandler_8c_a4d7948d03ba5b22351e435be8b8ed79d}
+
+
+Set a subset of non-\/zero values, specified as a clique or indexed list. 
+
+This imitates the U\-S\-C\-R\-\_\-\-I\-N\-S\-E\-R\-T\-\_\-\-C\-L\-I\-Q\-U\-E Sparse B\-L\-A\-S standard interface. See p. 128 (Chapter 3) of the \href{http://www.netlib.org/blas/blast-forum/}{\tt B\-L\-A\-S standard.} A clique is typically how one defines an element for matrix assembly in the finite element method.
+
+If insertion of any entry of the subset does not succeed, the entry is not changed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em A\-\_\-tunable} & \mbox{[}in/out\mbox{]} The tunable matrix object. \\
+\hline
+{\em num\-Rows} & \mbox{[}in\mbox{]} Number of rows in the subset. \\
+\hline
+{\em num\-Cols} & \mbox{[}in\mbox{]} Number of columns in the subset. \\
+\hline
+{\em row\-Stride} & \mbox{[}in\mbox{]} Stride between rows of vals. \\
+\hline
+{\em col\-Stride} & \mbox{[}in\mbox{]} Stride between columns of vals. \\
+\hline
+{\em rows} & \mbox{[}in\mbox{]} Row indices of the subset. \\
+\hline
+{\em cols} & \mbox{[}in\mbox{]} Column indices of the subset. \\
+\hline
+{\em vals} & \mbox{[}in\mbox{]} Dense matrix storing the subset entries. \\
+\hline
+{\em subsettype} & \mbox{[}in\mbox{]} The type of subset in \{P\-O\-S\-K\-I\-\_\-\-B\-L\-O\-C\-K\-E\-N\-T\-R\-I\-E\-S, P\-O\-S\-K\-I\-\_\-\-A\-R\-R\-A\-Y\-E\-N\-T\-R\-I\-E\-S\}\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}
+\hypertarget{poski__MatrixHandler_8c_a0bb61e92865622b43330c5e06760aa33}{\index{poski\-\_\-\-Matrix\-Handler.\-c@{poski\-\_\-\-Matrix\-Handler.\-c}!poski\-\_\-\-Get\-Mat\-Subset@{poski\-\_\-\-Get\-Mat\-Subset}}
+\index{poski\-\_\-\-Get\-Mat\-Subset@{poski\-\_\-\-Get\-Mat\-Subset}!poski_MatrixHandler.c@{poski\-\_\-\-Matrix\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Get\-Mat\-Subset}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-\-Get\-Mat\-Subset} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-mat\-\_\-t}]{A\-\_\-tunable, }
+\item[{const int}]{num\-Rows, }
+\item[{const int}]{num\-Cols, }
+\item[{const int}]{row\-Stride, }
+\item[{const int}]{col\-Stride, }
+\item[{const poski\-\_\-int\-\_\-t $\ast$}]{rows, }
+\item[{const poski\-\_\-int\-\_\-t $\ast$}]{cols, }
+\item[{poski\-\_\-value\-\_\-t $\ast$}]{vals, }
+\item[{poski\-\_\-subsettype\-\_\-t}]{subsettype}
+\end{DoxyParamCaption}
+)}}\label{poski__MatrixHandler_8c_a0bb61e92865622b43330c5e06760aa33}
+
+
+Get a subset of values, specified as a subset or indexed list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em A\-\_\-tunable} & \mbox{[}in\mbox{]} The tunable matrix object. \\
+\hline
+{\em num\-Rows} & \mbox{[}in\mbox{]} Number of rows in the subset. \\
+\hline
+{\em num\-Cols} & \mbox{[}in\mbox{]} Number of columns in the subset. \\
+\hline
+{\em row\-Stride} & \mbox{[}in\mbox{]} Stride between rows of vals. \\
+\hline
+{\em col\-Stride} & \mbox{[}in\mbox{]} Stride between columns of vals. \\
+\hline
+{\em rows} & \mbox{[}in\mbox{]} Row indices of the subset. \\
+\hline
+{\em cols} & \mbox{[}in\mbox{]} Column indices of the subset. \\
+\hline
+{\em vals} & \mbox{[}in/out\mbox{]} Dense matrix storing the subset entries. \\
+\hline
+{\em subsettype} & \mbox{[}in\mbox{]} The type of subset in \{P\-O\-S\-K\-I\-\_\-\-B\-L\-O\-C\-K\-E\-N\-T\-R\-I\-E\-S, P\-O\-S\-K\-I\-\_\-\-A\-R\-R\-A\-Y\-E\-N\-T\-R\-I\-E\-S\}\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}
+\hypertarget{poski__MatrixHandler_8c_a1add7ffe00eef9becb3e9e707bd276a3}{\index{poski\-\_\-\-Matrix\-Handler.\-c@{poski\-\_\-\-Matrix\-Handler.\-c}!poski\-\_\-report\-\_\-tunable\-\_\-matrix@{poski\-\_\-report\-\_\-tunable\-\_\-matrix}}
+\index{poski\-\_\-report\-\_\-tunable\-\_\-matrix@{poski\-\_\-report\-\_\-tunable\-\_\-matrix}!poski_MatrixHandler.c@{poski\-\_\-\-Matrix\-Handler.\-c}}
+\subsubsection[{poski\-\_\-report\-\_\-tunable\-\_\-matrix}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-report\-\_\-tunable\-\_\-matrix} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-mat\-\_\-t}]{mat}
+\end{DoxyParamCaption}
+)}}\label{poski__MatrixHandler_8c_a1add7ffe00eef9becb3e9e707bd276a3}
+
+
+Report information of a tunable matrix object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em mat} & A tuanble matrix object.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}

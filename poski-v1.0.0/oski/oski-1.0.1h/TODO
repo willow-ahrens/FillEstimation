@@ -1,0 +1,102 @@
+------------------------------
+Current major OSKI to-do items
+July 6, 2005
+------------------------------
+
+*  Distribute binaries.
+
+Install times can be very long, and binaries would help a lot. Some
+care is needed to make them reliably 'installable' on different
+platforms due to the library/linking issues.
+
+*  Complete OSKI-Lua implementation.
+
+Some of the semantics need to be ironed out, and so functionality
+described in the original design document is not yet included in the
+main OSKI release branch. This is a high-priority for a 1.1 release.
+
+*  Integration of additional data structures,
+and reordering algorithms.
+
+There are still a several data structures for which we have prototype
+implementations that have not yet been integrated into the official
+release branch, including UBCSR and RSEGDIAG (see Chapter 5 of Vuduc's
+dissertation), "traditional" data structures designed for vector boxes
+(e.g., Jagged Diagonal).
+
+On the algorithms side, TSP-based reordering work by Pinar and Heath,
+as well as other reorderings should be available as add-on modules. We
+have prototype code and just need the cycles to do it.
+
+*  Additional platform testing/support
+
+Some of this work is interesting (e.g., exploiting special instruction
+sets), and some mundane (DLLs on Windows still don't work
+completely. Testing on MacOS-X/Darwin has thus far been fairly
+limited.)
+
+Related note: Need default architecture-specific compiler flag
+selection, particularly since the flags vary with compiler versions.
+
+*  Update BLAS auto-detection to detect new Goto 1.0 libraries.
+
+*  Mixing types
+
+It's possible to use multiple precision combinations in the same
+application, the interfaces for doing this are not clean. No one's
+asked about this yet, but it's just a matter of time...
+
+*  Multithreaded and distributed memory OSKI
+
+*  Higher-level library integration
+
+Notes on how to do this are in the User's Guide (Appendix C).
+
+*  Code generators
+
+We need real code generators, a la Bernoulli Sparse Compiler
+Toolkit. (Note to self: Can we use ROSE to do this?)
+
+*  Write a FAQ!
+
+There are already a couple of questions for the FAQ:
+	*  What does 'error xyz mean'?
+	*  How fast can I expect my problem to go?
+	*  Why didn't OSKI tune?
+	*  What is the relationship between the "BeBOP", "Sparsity",
+       "PHiPAC", and "OSKI" projects?
+	*  'configure' aborts during Fortran stuff on Mac
+		--> add '--disable-fortran' flag
+
+* Add fail-safe timing routines when cycle counters don't work.
+
+*  Developer's Reference
+
+There are a lot of things to know to add new matrix modules or
+heuristics to the system. These can of course be developed as add-ons
+outside of OSKI, but to integrate them into the main distribution
+requires editing a lot of stuff.
+
+*  Lots of outstanding coding details
+
+There are still a number of outstanding TODO items; see the
+Doxygen-generated documentation for more details.
+
+*  Other debugging techniques
+
+In addition to the techniques listed in the User's Guide, there are
+other things to know about:
+
+  -  Manually setting working paths: OSKI_LD_LIBRARY_PATH,
+     LIBPATH, LD_LIBRARY_PATH, ...
+  -  Manually changing the OSKI-Lua path: OSKI_LUA_PATH
+  -  Manually changing the benchmark data directory: OSKI_BENCH_DIR
+  -  Selectively running tests: DISABLE_TESTS
+  -  Disable benchmarking: DISABLE_BENCH
+
+*  Write a real CODING document
+
+Maybe this should be titled, "Come up with a real, usable coding
+style." :-)
+
+# eof

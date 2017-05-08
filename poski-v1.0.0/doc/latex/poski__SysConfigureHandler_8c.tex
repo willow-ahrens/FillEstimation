@@ -1,0 +1,59 @@
+\hypertarget{poski__SysConfigureHandler_8c}{\section{poski\-\_\-\-Sys\-Configure\-Handler.\-c File Reference}
+\label{poski__SysConfigureHandler_8c}\index{poski\-\_\-\-Sys\-Configure\-Handler.\-c@{poski\-\_\-\-Sys\-Configure\-Handler.\-c}}
+}
+
+
+Check the current system configurations.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-system.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-print.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{poski__SysConfigureHandler_8c_a23450f212161365f113f33d3d3f5fbf9}{poski\-\_\-system\-\_\-configure} (void)
+\begin{DoxyCompactList}\small\item\em Check the system configurations. \end{DoxyCompactList}\item 
+int \hyperlink{poski__SysConfigureHandler_8c_ae9425831a75643b518620a634237f55a}{test\-\_\-main\-\_\-poski\-\_\-system\-\_\-configure} ()
+\begin{DoxyCompactList}\small\item\em Test the poski\-\_\-\-Sy\-S\-Configure\-Handler's routines. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Check the current system configurations. This module implements the system configuration handler routines.
+
+N\-O\-T\-E\-: Currently, only support Linux and Solaris. \begin{DoxyAttention}{Attention}
+These routines are usually for the library's internal use and should not normally be called directly by users. 
+
+Called by \hyperlink{poski__ThreadHandler_8c}{poski\-\_\-\-Thread\-Handler.\-c} 
+\end{DoxyAttention}
+
+
+\subsection{Function Documentation}
+\hypertarget{poski__SysConfigureHandler_8c_a23450f212161365f113f33d3d3f5fbf9}{\index{poski\-\_\-\-Sys\-Configure\-Handler.\-c@{poski\-\_\-\-Sys\-Configure\-Handler.\-c}!poski\-\_\-system\-\_\-configure@{poski\-\_\-system\-\_\-configure}}
+\index{poski\-\_\-system\-\_\-configure@{poski\-\_\-system\-\_\-configure}!poski_SysConfigureHandler.c@{poski\-\_\-\-Sys\-Configure\-Handler.\-c}}
+\subsubsection[{poski\-\_\-system\-\_\-configure}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-system\-\_\-configure} (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{poski__SysConfigureHandler_8c_a23450f212161365f113f33d3d3f5fbf9}
+
+
+Check the system configurations. 
+
+This routine is for checking the system configurations including the pagesize and the number of cores on the system. \begin{DoxyReturn}{Returns}
+The number of available cores on system. 
+\end{DoxyReturn}
+\hypertarget{poski__SysConfigureHandler_8c_ae9425831a75643b518620a634237f55a}{\index{poski\-\_\-\-Sys\-Configure\-Handler.\-c@{poski\-\_\-\-Sys\-Configure\-Handler.\-c}!test\-\_\-main\-\_\-poski\-\_\-system\-\_\-configure@{test\-\_\-main\-\_\-poski\-\_\-system\-\_\-configure}}
+\index{test\-\_\-main\-\_\-poski\-\_\-system\-\_\-configure@{test\-\_\-main\-\_\-poski\-\_\-system\-\_\-configure}!poski_SysConfigureHandler.c@{poski\-\_\-\-Sys\-Configure\-Handler.\-c}}
+\subsubsection[{test\-\_\-main\-\_\-poski\-\_\-system\-\_\-configure}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf test\-\_\-main\-\_\-poski\-\_\-system\-\_\-configure} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{poski__SysConfigureHandler_8c_ae9425831a75643b518620a634237f55a}
+
+
+Test the poski\-\_\-\-Sy\-S\-Configure\-Handler's routines. 
+
+This routine is for testing the functionality of the poski\-\_\-\-Sy\-S\-Configure\-Handler's routines. \begin{DoxyReturn}{Returns}
+0 on success, an error message otherwise. 
+\end{DoxyReturn}

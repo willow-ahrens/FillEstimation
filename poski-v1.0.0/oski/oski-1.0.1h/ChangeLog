@@ -1,0 +1,313 @@
+2007-06-25  Richard W. Vuduc  <richie@eecs.berkeley.edu>
+
+	* configure.ac, INSTALL, NEWS, README, doc/usersguide/Makefile,
+	include/oski/oski.h.in: doc/usersguide/oski-ug.tex: Upgraded
+	version number to 1.0.1h.
+
+	* include/oski/oski_Tlc.h, include/oski/oski_Tlc.h,
+	include/oski/oski_Tlc.h, include/oski/oski_Tlc.h: Fixed
+	DEF_IND_TYPE to be 2 (for 'long' indices), not 1 ('int'). See Bug
+	#1740970.
+
+2007-06-11  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* configure.ac, INSTALL, NEWS, README, doc/usersguide/Makefile,
+	include/oski/oski.h.in: doc/usersguide/oski-ug.tex: Upgraded
+	version number to 1.0.1g.
+
+	* oski-ug.pdf: Added a PDF copy of the User's Guide to the
+	distribution.
+
+	* include/oski/inmatprop.h, include/oski/matcreate.h,
+	include/oski/userconst.h, src/matcreate.c, src/inmatprop.c:
+	Changed the internal interfaces to support passing input
+	properties by an array, rather than by variable arguments. This
+	capability supports the F77-binding interface.
+
+	* include/oski/vecview.h: Added PUBLIC group keywords to doxygen
+	comments.
+
+	* src/lt/Makefile.am: Applied workaround needed for Darwin.
+
+2007-05-31  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* configure.ac, README, NEWS: Upgraded version number to 1.0.1f.
+
+	* configure.ac, src/corelib/Makefile.am, src/lt,
+	src/lt/Makefile.am: Moved lt module to its own subdirectory. This
+	module is sometimes necessary when the user does not link with
+	libtool, and fixes a problem on Darwin.
+
+2006-11-03  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* util/readhbpat.c: Corrected the number of non-zeros used by the
+	benchmark programs when the user specifies the '--expand-symm'
+	option (over-counting by a factor of 2).
+
+2006-10-31  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* configure.ac, README: Upgraded version number to 1.0.1c.
+
+	* README: Added note about static libraries not working under Mac
+	OS X.
+
+	* NOTES-devel: Added note about libtool version dependence
+	(libtool-1.5.22 seems to work on some platforms).
+
+	* bench/autotune.c, util/readhbpat.c: Corrected the number of
+	non-zeros used by the benchmark programs. This value was off by
+	~2x, but only in the case of symmetric/Hermitian Harwell-Boeing
+	input matrices.
+
+	* ac_macros/acx_csymx.m4: Removed extraneous escape, which caused
+	problems in some shells.
+
+2006-10-16  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* bench/autotune.c: Added an option to 'oskibench_autotune_Txy'
+	that allows a user to request that symmetric matrices be expanded
+	to non-symmetric format.
+
+2006-10-15  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* bench/matopts.h, bench/matopts.c, util/expand.c,
+	util/readhbpat.h, util/readhbpat.c: Added an option to
+	'oskibench_Txy' that allows a user to request that symmetric
+	matrices be expanded to non-symmetric format.
+	
+	* src/timer/cycle.h: Added PGI/x86 support (reported by Adrian
+	Tate).
+
+	* include/oski/inmatprop.h, include/oski/matcreate.h,
+	src/inmatprop.c, src/matcreate.c: Refactored input matrix property
+	collection for future use with other matrix types.
+
+2006-03-19  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* configure.ac, Makefile.am, ac_macros/acx_csymx.m4,
+	bench/Makefile.am, src/gen_extlibs_stub.sh, src/Make.extlibs,
+	src/Make.extlibs_util, src/Makefile.am, src/Makefile.build,
+	src/Makefile.common, src/corelib/ltdlstub.c,
+	src/corelib/Makefile.am, tests/Make.test, tests/Makefile.am: Fixed
+	linking against static OSKI libraries.
+
+2006-03-16  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* src/BCSR/getset.c: Fixed set-entry error for Hermitian matrices
+	stored in BCSR format.
+
+	* src/MBCSR/convert.c, src/MBCSR/getset.c, tests/getset.c: Fixed
+	an MBCSR conversion error for Hermitian matrices.
+
+	* include/oski/heur/regprofmgr.h, include/oski/blas_names.h,
+	include/oski/xforms_internal.h, src/corelib/blas.c: Fixed
+	multiply-defined symbols in static builds.
+
+2006-03-14  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* include/oski/CSR/format.h, include/oski/a_and_at.h,
+	include/oski/ata.h, include/oski/getset.h, include/oski/hint.h,
+	include/oski/mangle.h, include/oski/matcommon.h,
+	include/oski/matcreate.h, include/oski/matmult.h,
+	include/oski/matpow.h, include/oski/matrix.h,
+	include/oski/oski.h.in, include/oski/oski_Tic.h,
+	include/oski/oski_Tid.h, include/oski/oski_Tis.h,
+	include/oski/oski_Tiz.h, include/oski/oski_Tlc.h,
+	include/oski/oski_Tld.h, include/oski/oski_Tls.h,
+	include/oski/oski_Tlz.h, include/oski/perm.h,
+	include/oski/trace.h, include/oski/trisolve.h,
+	include/oski/tune.h, include/oski/vector.h,
+	include/oski/vecview.h: Fixed header files to allow users to mix
+	types by #defining OSKI_REBIND before including the OSKI
+	type-specific headers, oski/oski_Txy.h.
+
+	* include/oski/mangle.h: Moved definition of IS_REAL_ZERO out of
+	'!IS_VAL_COMPLEX' preprocessor guard.
+
+	* INSTALL, README, src/heur/regprof/regprofheur.c,
+	src/heur/symmrb/symmrb.c: Minor documentation updates.
+
+	* doc/usersguide/Makefile, doc/usersguide/integration.tex,
+	doc/usersguide/oski-ug.bib, doc/usersguide/interface.tex,
+	doc/usersguide/oski-ug.tex, doc/usersguide/srctypog.tex: Minor
+	documentation updates, including new description of how to mix
+	types.
+	
+2006-03-12  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* configure.ac, src/Makefile.am: Fixed build-time link error on
+	MacOS X (Darwin), where lt_preloaded_syms was being reported as
+	missing.
+
+	* tests/Make.test, tests/gen_test_stub.bash: Fixed "matmult" test
+	to run only in the real-valued case.
+
+	* src/heur/regprof/regprofquery.c: Fixed initialization bug
+	reported by Viral Shah when he tried to compile complex-valued
+	OSKI.
+
+	* src/VBR/convert.c: Removed non-portable variable declaration.
+
+	* util/readhbpat.c: Fixed bug in the Harwell-Boeing read routine
+	to make it less fragile when reading header lines that contain
+	fewer than 80 characters.
+
+	* NEWS, README: Minor updates for 1.0.1 release.
+
+2006-02-22  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* src/heur/regprof/regprofheur.c (oski_HeurEvaluate): Added a dump
+	of the fill ratios to the debugging message log.
+
+	* src/heur/estfill.c (EstimateFillFromCSR): Fixed fill ratio
+	estimate.
+
+2006-02-21  Richard Vuduc  <richie@eecs.berkeley.edu>
+	
+	* src/tune.c (FreeTunedMat): Fixed bug in which the tuning
+	transformation string was not being reset. Also removed an extra
+	'newline' from one of the debugging messages.
+
+	* src/heur.c (oski_RegisterHeur): Fixed bug in which the heuristic
+	modules were not all being loaded correctly.
+
+	* include/oski/heur_internal.h, src/heur.c: Made the 'name' field
+	of the heuristic record non-const, so that it must be explicitly
+	allocated and freed. This behavior mimics that of the matrix type
+	record.
+
+	* src/corelib/modloader.c (RegisterSiteModules): Added a debugging
+	message.
+	
+2006-02-20  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* src/MBCSR/convert.c (DestroySubmatBCSR): Fixed double-free bug
+	in MBCSR module.
+
+	* src/MBCSR/convert.c (ConvertSubmatFromCSR): Fixed a bug in MBCSR
+	conversion which occurs when the number of matrix columns is 0.
+
+	* include/oski/blas_names.h (BLAS_xTRSV): Added missing
+	conditional macro rename of BLAS_xTRSV.
+
+	* ac_macros/acx_coptflags.m4, ac_macros/acx_getcpu.m4,
+	ac_macros/general_BEBOP.m4: Fixed autoconf macro underquoting
+	warnings.
+
+2005-09-07  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* src/tune.c (oski_TuneMat): Fixed a bug which caused the tuned
+	matrix to be immediately freed after tuning.
+
+	* src/corelib/mattypes.c (oski_LookupMattypeId): Removed
+	latent debugging print statements.
+
+	* include/oski/mattypes_internal.h (oski_mattype_t): Removed
+	'const' from 'name' field, which preventing freeing of 'name' on
+	destruction.
+
+2005-08-25  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* src/MATTYPE_TEMPLATE/a_and_at.c, src/MATTYPE_TEMPLATE/ata.c,
+	src/MATTYPE_TEMPLATE/convert.c, src/MATTYPE_TEMPLATE/getset.c,
+	src/MATTYPE_TEMPLATE/matmult.c, src/MATTYPE_TEMPLATE/matpow.c,
+	src/MATTYPE_TEMPLATE/module.c, src/MATTYPE_TEMPLATE/trisolve.c,
+	include/oski/MATTYPE_TEMPLATE/format.h,
+	include/oski/MATTYPE_TEMPLATE/module.h, include/oski/CB/format.h,
+	include/oski/GCSR/format.h, include/oski/DENSE/format.h,
+	include/oski/VBR/format.h, include/oski/heur/symmrb.h,
+	include/oski/heur/regblock.h, include/oski/heur/mregblock.h,
+	include/oski/MBCSR/format.h, include/oski/perm.h,
+	src/corelib/mattypes.c, src/timer/cycle.h, doc/oski_dox.cfg.in,
+	doc/mainpage.c, doc/Makefile.am, doc/stylesheet.css, src/xforms.c,
+	src/trace_query.c: Updated developer's documentation, with an
+	emphasis on implementation of the tuning and tracing modules.
+
+2005-08-04  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* doc/usersguide/install.tex.in, doc/usersguide/interface.tex,
+	doc/usersguide/srctypog.tex (Sections 2.3.2 and 5.1): Added
+	information on how to change the default scalar bindings.
+
+2005-07-21  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* tests/Make.test, tests/gen_test_stub.bash: Removed obsolete
+	tests.
+
+	* libltdl/ltdl.c (try_dlopen): Fixed memory leak.
+
+	* Makefile.am, include/oski/modloader.h, src/BCSR/convert.c,
+	src/CSC/module.c, src/CSR/expand.c, src/CSR/transpose.c,
+	src/MBCSR/convert.c, src/Make.extlibs, src/Makefile.am,
+	src/VBR/convert.c, src/corelib/mattypes.c,
+	src/corelib/modloader.c, src/gen_extlibs_stub.sh, src/heur.c,
+	src/xforms.c: Fixed several memory leaks.
+
+2005-07-06  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* include/oski/VBR/Makefile.am, include/oski/VBR/format.h,
+	include/oski/VBR/module.h, src/VBR/Makefile.am, src/VBR/VBR.lua,
+	src/VBR/convert.c, src/VBR/getset.c, src/VBR/matmult.c,
+	src/VBR/module.c, src/VBR/spmv_vbr.c, src/VBR/spmv_vbr.h,
+	src/VBR/spmv_vbr_partition.c, Makefile.am,
+	ac_macros/oski_enable_bench.m4, configure.ac, doc/libdep.dot,
+	src/Makefile.mattypes, src/Make.extlibs, src/gen_extlibs_stub.sh,
+	src/MATTYPE_TEMPLATE/matmult.c: Added VBR module.
+
+	*  tests/12-raefsky4-cut.psa, tests/12-raefsky4-cut.pua,
+	tests/12-raefsky4-cut.mat, tests/12-raefsky4-cut-symm.mat,
+	tests/Makefile.am: Added a test matrix with mixed block
+	structure.
+
+	* include/oski/mangle.h (IS_REAL_ZERO): Added C99 wrapper for a
+	function to test for exact zero.
+
+	* example/01/Makefile, example/01/example1.c: Fixed bug in linking
+	example (liboski_core_Txy is obsolete).
+
+	* ac_macros/acx_getcpu.m4, TODO (Bug 1229961): Partial fix for
+	IA-64 default compiler flag selection when using gcc.
+
+2005-07-01  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* include/oski/MATTYPE_TEMPLATE,
+	include/oski/MATTYPE_TEMPLATE/Makefile.am,
+	include/oski/MATTYPE_TEMPLATE/format.h,
+	include/oski/MATTYPE_TEMPLATE/module.h,
+	src/MATTYPE_TEMPLATE/Makefile.am, src/MATTYPE_TEMPLATE/a_and_at.c,
+	src/MATTYPE_TEMPLATE/ata.c, src/MATTYPE_TEMPLATE/convert.c,
+	src/MATTYPE_TEMPLATE/getset.c, src/MATTYPE_TEMPLATE/matmult.c,
+	src/MATTYPE_TEMPLATE/matpow.c, src/MATTYPE_TEMPLATE/module.c,
+	src/MATTYPE_TEMPLATE/trisolve.c: Added a matrix-type template for
+	developers creating new matrix types.
+
+	* bench/genprof-MatTrisolve-DENSE.sh: Fixed missing reference to
+	list of problem sizes, N_LIST.
+
+2005-06-30  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* bench/Make.DENSE_MatMult, bench/Make.DENSE_MatTrisolve,
+	bench/genprof-MatMult-DENSE.sh,
+	bench/genprof-MatTrisolve-DENSE.sh,
+	include/oski/DENSE/Makefile.am, include/oski/DENSE/format.h,
+	include/oski/DENSE/module.h, src/DENSE/DENSE.lua,
+	src/DENSE/Make.stub, src/DENSE/Makefile.am, src/DENSE/getset.c,
+	src/DENSE/matmult.c, src/DENSE/module.c, src/DENSE/trisolve.c,
+	src/corelib/trsv.c: Added dense column major matrix type.
+
+	* tests/trisolve_xform.c (Check): Added conditionally-compiled
+	debug dump.
+
+	* src/corelib/gemv.c (BLAS_xGEMV): Fixed alpha=-1 bug.
+	
+	* ac_macros/oski_enable_bench.m4: Eliminated duplicate
+	cache-blocking entry.
+
+	* README: Updated information for OSKI developers.
+	* NOTES-devel: Created to contain notes for OSKI
+	developers.
+
+2005-06-29  Richard Vuduc  <richie@eecs.berkeley.edu>
+
+	* ChangeLog: Clean change log for 1.0.
+

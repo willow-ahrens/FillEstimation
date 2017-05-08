@@ -1,0 +1,208 @@
+
+# BEGIN BCSR MatMult no normal Tis
+if BUILD_Tis
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatMult_Tis.dat
+profile_BCSR_MatMult_Tis.dat: oskibench_Tis \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tis normal "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no normal Tis
+
+# BEGIN BCSR MatMult no trans Tis
+if BUILD_Tis
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatTransMult_Tis.dat
+profile_BCSR_MatTransMult_Tis.dat: oskibench_Tis \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tis trans "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no trans Tis
+
+# BEGIN BCSR MatMult no normal Tid
+if BUILD_Tid
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatMult_Tid.dat
+profile_BCSR_MatMult_Tid.dat: oskibench_Tid \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tid normal "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no normal Tid
+
+# BEGIN BCSR MatMult no trans Tid
+if BUILD_Tid
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatTransMult_Tid.dat
+profile_BCSR_MatTransMult_Tid.dat: oskibench_Tid \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tid trans "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no trans Tid
+
+# BEGIN BCSR MatMult no normal Tic
+if BUILD_Tic
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatMult_Tic.dat
+profile_BCSR_MatMult_Tic.dat: oskibench_Tic \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tic normal "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no normal Tic
+
+# BEGIN BCSR MatMult no trans Tic
+if BUILD_Tic
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatTransMult_Tic.dat
+profile_BCSR_MatTransMult_Tic.dat: oskibench_Tic \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tic trans "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no trans Tic
+
+# BEGIN BCSR MatMult no normal Tiz
+if BUILD_Tiz
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatMult_Tiz.dat
+profile_BCSR_MatMult_Tiz.dat: oskibench_Tiz \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tiz normal "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no normal Tiz
+
+# BEGIN BCSR MatMult no trans Tiz
+if BUILD_Tiz
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatTransMult_Tiz.dat
+profile_BCSR_MatTransMult_Tiz.dat: oskibench_Tiz \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tiz trans "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no trans Tiz
+
+# BEGIN BCSR MatMult no normal Tls
+if BUILD_Tls
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatMult_Tls.dat
+profile_BCSR_MatMult_Tls.dat: oskibench_Tls \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tls normal "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no normal Tls
+
+# BEGIN BCSR MatMult no trans Tls
+if BUILD_Tls
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatTransMult_Tls.dat
+profile_BCSR_MatTransMult_Tls.dat: oskibench_Tls \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tls trans "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no trans Tls
+
+# BEGIN BCSR MatMult no normal Tld
+if BUILD_Tld
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatMult_Tld.dat
+profile_BCSR_MatMult_Tld.dat: oskibench_Tld \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tld normal "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no normal Tld
+
+# BEGIN BCSR MatMult no trans Tld
+if BUILD_Tld
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatTransMult_Tld.dat
+profile_BCSR_MatTransMult_Tld.dat: oskibench_Tld \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tld trans "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no trans Tld
+
+# BEGIN BCSR MatMult no normal Tlc
+if BUILD_Tlc
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatMult_Tlc.dat
+profile_BCSR_MatMult_Tlc.dat: oskibench_Tlc \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tlc normal "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no normal Tlc
+
+# BEGIN BCSR MatMult no trans Tlc
+if BUILD_Tlc
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatTransMult_Tlc.dat
+profile_BCSR_MatTransMult_Tlc.dat: oskibench_Tlc \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tlc trans "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no trans Tlc
+
+# BEGIN BCSR MatMult no normal Tlz
+if BUILD_Tlz
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatMult_Tlz.dat
+profile_BCSR_MatMult_Tlz.dat: oskibench_Tlz \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tlz normal "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no normal Tlz
+
+# BEGIN BCSR MatMult no trans Tlz
+if BUILD_Tlz
+if BENCH_BCSR_MatMult
+benchdata_files += profile_BCSR_MatTransMult_Tlz.dat
+profile_BCSR_MatTransMult_Tlz.dat: oskibench_Tlz \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			BCSR  Tlz trans "$(BCSR_B_LIST)" "$(BCSR_B_LIST)"
+endif
+endif
+# END BCSR MatMult no trans Tlz

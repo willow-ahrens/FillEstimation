@@ -3,6 +3,9 @@
 % Pretty much all of the ams maths packages
 \usepackage{amsmath,amsthm,amssymb,amsfonts}
 
+% Pretty much all of the algorithms packages
+\usepackage{algorithmicx,algpseudocode}
+
 % Allows you to manipulate the page a bit
 \usepackage[a4paper]{geometry}
 
@@ -102,84 +105,85 @@
   \section{Notation}
     A \textit{tensor} is a multidimensional array. A tensor of \textit{order} $N$ is an element of the tensor (direct) product of $N$ vector spaces. We assume all of our vector spaces are over an arbitrary field $\F$. Vectors are order 1 tensors and will be denoted by boldface lowercase letters, like this: $\vec{a}$. Matrices are order 2 tensors and will be denoted by boldface capital letters, like this: $\Mat{A}$. Tensors will be denoted by boldface capital Euler script letters, like this: $\Ten{A}$.
 
-    We will refer to the number of nonzero elements in a tensor $\Ten{A}$ by $k(\Ten{A})$.
+    We refer to populations using capital Euler script letters, like this: $\Pop{X}$. We refer to random variables and index bounds using capital letters, like this: $X$. We refer to functions, indices and elements of populations using lowercase letters, like this $x$.
 
     The $n^{th}$ element in a sequence is denoted by $\Ten{A}^{(n)}$.
-    Element $(i_1, ..., i_N)$ of an order-$N$ tensor $\Ten{A} \in \F^{I_1 \times ... \times I_N}$ is denoted $\Ten{A}_{i_1, ..., i_N}$ or $ \Ten{A}[i_1, ..., i_N]$.
+    Element $(i_1, i_2, ..., i_N)$ of an order-$N$ tensor $\Ten{A} \in \F^{I_1 \times I_2 \times ... \times I_N}$ is denoted $\Ten{A}_{i_1, i_2, ..., i_N}$ or $ \Ten{A}[i_1, i_2, ..., i_N]$.
 
-    If we wish to represent the sequence $i, i + 1, ..., j$, we use the syntax $i \to j$. \todo{When this sequence appears as a subscript, it is used a shorthand for a sequence of subscripted variables. For example, we use the syntax $i_{1 \to N}$ as a shorthand for $i_1, ..., i_N$.}
+    If we wish to represent the integer range $i, i + 1, ..., j$, we use the syntax $i \to j$. When this syntax appears as a subscript, it is a shorthand for the range of subscripted variables. For example, we use the syntax $i_{1 \to N}$ as a shorthand for $i_1, i_2, ..., i_N$.
 
     Subarrays are formed when we fix a subset of indices. We use a colon to indicate all elements of a mode. Thus, the middle $n/2$ columns of a matrix $\Mat{A} \in \F^{n \times n}$ would be written $\Mat{A}_{:, n/4 \to 3n/4}$.
 
     For convenience, we say that $\Ten{A} = 0$ if and only if every element of $\Ten{A}$ is 0.
 
-    We refer to populations using capital Euler script letters, like this: $\Pop{X}$. We refer to random variables and index bounds using capital letters, like this: $X$. We refer to functions, indices and elements of populations using lowercase letters, like this $x$.
-
   \section{Formulation of the problem}
-    We are given a tensor $\Ten{A} \in \F^{I_1\times ...\times I_N}$ and positive integers $B, o$ where $0 \leq o < B$. We define the function $r_{B, o}$ as follows:
-    \[
-      r_{B, o}(j) = (o + j * (B - 1) + 1)\to(o + j * B)
-    \]
+    We are given a tensor $\Ten{A} \in \F^{I_1 \times I_2 \times ... \times I_N}$ and positive integers $B, o$ where $0 \leq o < B$.
 
-    Intuitively, if we grouped the natural numbers into contiguous blocks of length $B$ and then offset these blocks by $o$, $r_{B, o}(j)$ represents the range of indices corresponding to the $j^{th}$ block.
-
-    We also define a corresponding function $l$ that gives us $j$ such that $i$ is an index in the $j^th$ block.
+    We will group the nonzero natural numbers into contiguous \textbf{blocks} of size $B$, and shift these blocks by $o$. The function $l$ looks up the block index $j$ of a number $i$, so that $i$ is in the $j^{th}$ block.
 
     \[
-      l_{B, o}(i) = \left\lceil\frac{i - o}{B}\right\rceil
+      l_{B, o}(i) = \left\lceil\frac{i + o}{B}\right\rceil
     \]
 
-    We can extend this blocking concept to multiple dimensions. An $N$-dimensional blocking scheme $b = (B_1, ..., B_N, o_1, ..., o_N)$ is characterized by block dimensions $B_1, ..., B_N$ and block offsets $o_1, ..., o_N$ where $0 \leq o_1 \leq B_1, ..., 0 \leq o_N \leq B_N$. We say that $b \leq B$ if $B_1, ..., B_N \leq B$.
+    We also define a sort of inverse function of $l$, $r$, which returns the range of numbers corresponding to the $j^{th}$ block.
+    \[
+      r_{B, o}(j) = (o + j * (B - 1) + 1) \to (o + j * B)
+    \]
+
+    We can extend this blocking concept to multiple dimensions. An $N$-dimensional \textbf{blocking scheme} $b = (B_1, B_2, ..., B_N, o_1, o_2, ..., o_N)$ is characterized by block dimensions $B_1, B_2, ..., B_N$ and block offsets $o_1, o_2, ..., o_N$ where $0 \leq o_n \leq B_n$ for all $1 \leq n \leq N$. We say that $b \leq B$ if $B_1, B_2, ..., B_N \leq B$. We extend our definitions of $l$ and $r$ to an $N$-dimensional blocking scheme $b$ as follows:
 
     \[
-      r_b(j_{1 \to N}) = r_{b_1, o_1}(j_1) \times ... \times r_{b_N, o_N}(j_N)
+      r_b(j_{1 \to N}) = r_{B_1, o_1}(j_1) \times r_{B_2, o_2}(j_2) \times ... \times r_{B_N, o_N}(j_N)
     \]
 
     \[
-      l_b(i_{1 \to N}) = (l_{b_1, o_1}(i_1), ..., l_{b_N, o_N}(i_N))
+      l_b(i_{1 \to N}) = (l_{B_1, o_1}(i_1), l_{B_2, o_2}(i_2), ..., l_{B_N, o_N}(i_N))
     \]
 
-    We define $k_b$ for $b \leq B$ as follows.
+    Let $k(\Ten{A})$ be the number of nonzero elements of the tensor $\Ten{A}$. The definition of $k$ can be extended to an $N$-dimensional blocking scheme $b$ so that $k_b(A)$ is the number of nonzero blocks in the tensor $\Ten{A}$.
     \[
-      k_{b_{1 \to N}, o_{1 \to N}}(\Ten{A}) = \left|\{(j_{1 \to N}) | \Ten{A}[r_{b_{1 \to N}, o_{1 \to N}}(j_{1 \to N})] \neq 0\}\right|
+      k_b(\Ten{A}) = \sum\limits_{(j_{1 \to N}) | \Ten{A}[r_b(j_{1 \to N})] \neq 0} 1
     \]
 
-    Thus, if we broke up our range of tensor indices into blocks of size $b_1, ..., b_N$ and offset these blocks by $o_1, ..., o_N$, $k_{b_{1 \to N}, o_{1 \to N}}(\Ten{A})$ tells us how many of these blocks would be needed to cover the nonzeros of $\Ten{A}$. Note that $k_{1, ..., 1, 0, ..., 0}(\Ten{A}) = k(\Ten{A})$.
+    Thus, if we broke up our range of tensor indices into blocks of size $B_1, B_2, ..., B_N$ and offset these blocks by $o_1, o_2, ..., o_N$, $k_{(B_{1 \to N}, o_{1 \to N})}(\Ten{A})$ tells us how many of these blocks would be needed to cover the nonzeros of $\Ten{A}$. Note that $k_{(1, 1, ..., 1, 0, 0, ..., 0)}(\Ten{A}) = k(\Ten{A})$.
 
-    Now we can formally define the fill $f_{b_{1 \to N}, o_{1 \to N}}$ for all $1 \leq b_1, ..., b_N, o_1, ..., o_N \leq B$.
+    Now we can formally define the \textbf{fill} $f_b$.
 
     \[
-      f_{b_{1 \to N}, o_{1 \to N}}(\Ten{A}) = \frac{k_{b_{1 \to N}, o_{1 \to N}}(\Ten{A})}{k(\Ten{A})}
+      f_b(\Ten{A}) = \frac{k_b(\Ten{A})}{k(\Ten{A})}
     \]
 
-    The problem is to compute approximate $\tilde{f}_{b_{1 \to N}, o_{1 \to N}}(\Ten{A})$ such that $f_{b_{1 \to N}, o_{1 \to N}}(\Ten{A})(1 - \epsilon) \leq \tilde{f}_{b_{1 \to N}, o_{1 \to N}}(\Ten{A}) \leq f_{b_{1 \to N}, o_{1 \to N}}(\Ten{A})(1 + \epsilon)$ for all $1 \leq b_1, ..., b_N, o_1, ..., o_N \leq B$ with probability at least $1 - \delta$.
+    The problem is to compute an approximation $\tilde{f}_b(\Ten{A})$ such that $f_b(\Ten{A})(1 - \epsilon) \leq \tilde{f}_b(\Ten{A}) \leq f_b(\Ten{A})(1 + \epsilon)$ for all $N$-dimensional blocking schemes $b \leq B$ with probability at least $1 - \delta$.
   \section{Previous Work}
     \todo{finish plz. Mainly this is Vuduc}
 
   \section{The Algorithm}
 
-    We define the function $x_{b_{1 \to N}, o_{1 \to N}}$ on each nonzero element $(i_{1 \to N})$ of $\Ten{A}$ as follows.
+    We define the function $x_b$ on each nonzero element $(i_{1 \to N})$ of $\Ten{A}$ as follows.
 
     \[
-      x_{b_{1 \to N}, o_{1 \to N}}(\Ten{A}, i_{1 \to N}) = 1/k(\Ten{A}[r_{b_{1 \to N}, o_{1 \to N}}(l_{b_{1 \to N}, o_{1 \to N}}(i_{1 \to N}))]
+      x_b(\Ten{A}, i_{1 \to N}) = \frac{1}{k(\Ten{A}[r_b(l_b(i_{1 \to N}))])}
     \]
 
-    $x_{b_{1 \to N}, o_{1 \to N}}(\Ten{A}, i_{1 \to N})$ is therefore equal to the reciprocal of the number of nonzeros in its block. Consider the sum of $x_{b_{1 \to N}, o_{1 \to N}}$ over all of the nonzeros of $A$. We have that
+    $x_b(\Ten{A}, i_{1 \to N})$ is therefore equal to the reciprocal of the number of nonzeros in its block. Consider the sum of $x_b$ over all of the nonzeros of $A$. We have that
 
     \begin{align*}
-      &\sum\limits_{(i_{1 \to N}) | \Ten{A}[i_{1 \to N}] \neq 0} x_{b_{1 \to N}, o_{1 \to N}}(\Ten{A}, i_{1 \to N})\\ &= \sum\limits_{(j_{1 \to N}) | \Ten{A}[r_{b_{1 \to N}, o_{1 \to N}}(j_{1 \to N})] \neq 0} \left(\sum\limits_{(i_{1 \to N}) \in r_{b_{1 \to N}, o_{1 \to N}}(j_{1 \to N}) | \Ten{A}[i_{1 \to N}] \neq 0} x_{b_{1 \to N}, o_{1 \to N}}(A, i_{1 \to N})\right)\\
-      &= \sum\limits_{(j_{1 \to N}) | \Ten{A}[r_{b_{1 \to N}, o_{1 \to N}}(j_{1 \to N})] \neq 0} \sum\limits_{(i_{1 \to N}) \in r_{b_{1 \to N}, o_{1 \to N}}(j_{1 \to N}) | A(i_{1 \to N}) \neq 0} 1/k(\Ten{A}[r_{b_{1 \to N}, o_{1 \to N}}(j_{1 \to N})])\\
-      &= \sum\limits_{(j_{1 \to N}) | \Ten{A}_{r_{b_1, o_1}(j_1),  ..., r_{b_N, o_N}(j_N)} \neq 0} 1\\
-      &= \left|\{(j_{1 \to N}) | \Ten{A}_{r_{b_1, o_1}(j_1),  ..., r_{b_N, o_N}(j_N)} \neq 0\}\right|\\
-      &= k_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A})\\
+      &\sum\limits_{(i_{1 \to N}) | \Ten{A}[i_{1 \to N}] \neq 0} x_b(\Ten{A}, i_{1 \to N})\\ &= \sum\limits_{(j_{1 \to N}) | \Ten{A}[r_b(j_{1 \to N})] \neq 0} \left(\sum\limits_{(i_{1 \to N}) \in r_b(j_{1 \to N}) | \Ten{A}[i_{1 \to N}] \neq 0} x_b(A, i_{1 \to N})\right)\\
+      &= \sum\limits_{(j_{1 \to N}) | \Ten{A}[r_b(j_{1 \to N})] \neq 0} \left(\sum\limits_{(i_{1 \to N}) \in r_b(j_{1 \to N}) | A(i_{1 \to N}) \neq 0} \frac{1}{k(\Ten{A}[r_b(l_b(i_{1 \to N}))])}\right)\\
+      &= \sum\limits_{(j_{1 \to N}) | \Ten{A}[r_b(j_{1 \to N})] \neq 0} \left(\sum\limits_{(i_{1 \to N}) \in r_b(j_{1 \to N}) | A(i_{1 \to N}) \neq 0} \frac{1}{k(\Ten{A}[r_b(j_{1 \to N})])}\right)\\
+      &= \sum\limits_{(j_{1 \to N}) | \Ten{A}[r_b(j_{1 \to N})] \neq 0} 1\\
+      &= k_b(\Ten{A})\\
     \end{align*}
 
-    Consider the population $\Pop{X}_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A}) = \left(x_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A}, i_{1 \to N}) | \Ten{A}(i_{1 \to N}) \neq 0\right)$. Note that the average value of elements in $\Pop{X}_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A})$ is
+    Consider the population $\Pop{X}_b(\Ten{A}) = \left(x_b(\Ten{A}, i_{1 \to N}) | \Ten{A}(i_{1 \to N}) \neq 0\right)$. We have just shown that the average value of elements in $\Pop{X}_b(\Ten{A})$ is
     \[
-      \frac{\sum\limits_{(i_{1 \to N}) | \Ten{A}(i_{1 \to N}) \neq 0} x_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A}, i_{1 \to N})}{\|\{(i_{1 \to N}) | \Ten{A}(i_{1 \to N}) \neq 0\}\|} = \frac{k_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A})}{k(\Ten{A})} = f_{b_1, ..., b_N, o_1, ..., o_N}(\Ten{A})
+      \frac{\sum\limits_{(i_{1 \to N}) | \Ten{A}(i_{1 \to N}) \neq 0} x_b(\Ten{A}, i_{1 \to N})}{\|\{(i_{1 \to N}) | \Ten{A}(i_{1 \to N}) \neq 0\}\|} = \frac{k_b(\Ten{A})}{k(\Ten{A})} = f_b(\Ten{A})
     \]
 
-    Thus, our task is to randomly sample elements from $\Pop{X}_{b_1, ..., b_N, o_1, ..., o_N}$ to compute an estimate of its average. We can compute a sample of $\Pop{X}_{b_1, ..., b_N, o_1, ..., o_N}$ by randomly choosing counting the number of nonzeros  Randomly sampling a particular element of $X$$X_{b_1, ..., b_N, o_1, ..., o_N}$ can be difficult depending on how the sparse array is stored. However, we can demonstrate a method for sampling $q_{b_1, ..., b_N, o_1, ..., o_N}$
+    Thus, our task is to randomly sample elements from $\Pop{X}_b$ to compute an estimate of its average. We can compute a sample of $\Pop{X}_b$ by selecting a nonzero uniformly at random, looking up how many nonzeros are in the block corresponding to this nonzero, and returning the reciprocal. This is a lot of work to do for one sample, especially if the block is very full. However, once we have the locations of all the nonzeros within a $B$ radius of our nonzero at index $i_{1 \to N}$, we can compute $x_b(i_{1 \to N})$ for all $b \leq B$ at the same time, saving an enormous amount of work. We call this algorithm \textproc{sample}.
+
+    
+
 
 
   \section{Analysis of Algorithm}

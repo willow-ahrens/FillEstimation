@@ -3,6 +3,15 @@
 % Pretty much all of the ams maths packages
 \usepackage{amsmath,amsthm,amssymb,amsfonts}
 
+% Set up some environments
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{dfn}{Definition}[section]
+\theoremstyle{dfn}
+\newtheorem{alg}{Algorithm}[section]
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
 % Pretty much all of the algorithms packages
 \usepackage{algorithmicx,algpseudocode}
 
@@ -50,12 +59,14 @@
 
 % Command for vector, matrix, tensor names
 \renewcommand{\vec}[1] {\mathbf{#1}}
+%\usepackage{esvect}
 \newcommand{\Mat}[1] {\mathbf{#1}}
 \newcommand{\Ten}[1] {\mathbf{\mathcal{#1}}}
 \newcommand{\Pop}[1] {\mathcal{#1}}
 
-% Command for vector, matrix, tensor names
+% Command for important sets
 \newcommand{\F} {\mathbb{F}}
+\newcommand{\N} {\mathbb{N}}
 
 % Allows fancy stuff in the page header
 \usepackage{fancyhdr}
@@ -103,86 +114,130 @@
   Finally, we note that estimating the fill can be an important part of any sparse datastructure which uses blocking, not just BCSR. In fact, any sparse datastructure can be adapted to a blocked regime by grouping a tensor into blocks and simply treating nonzero blocks as nonzeros of some sparse tensor.
 
   \section{Notation}
-    A \textit{tensor} is a multidimensional array. A tensor of \textit{order} $N$ is an element of the tensor (direct) product of $N$ vector spaces. We assume all of our vector spaces are over an arbitrary field $\F$. Vectors are order 1 tensors and will be denoted by boldface lowercase letters, like this: $\vec{a}$. Matrices are order 2 tensors and will be denoted by boldface capital letters, like this: $\Mat{A}$. Tensors will be denoted by boldface capital Euler script letters, like this: $\Ten{A}$.
+    A \textit{tensor} is a multidimensional array. A tensor of \textit{order} $N$ is an element of the tensor (direct) product of $N$ vector spaces. We assume all of our vector spaces are over an arbitrary field $\F$. Vectors are order 1 tensors and will be denoted with boldface lowercase letters, like this: $\vec{a}$. Matrices are order 2 tensors and will be denoted by boldface capital letters, like this: $\Mat{A}$. Tensors will be denoted by boldface capital Euler script letters, like this: $\Ten{A}$.
 
     We refer to populations using capital Euler script letters, like this: $\Pop{X}$. We refer to random variables and index bounds using capital letters, like this: $X$. We refer to functions, indices and elements of populations using lowercase letters, like this $x$.
 
     The $n^{th}$ element in a sequence is denoted by $\Ten{A}^{(n)}$.
-    Element $(i_1, i_2, ..., i_N)$ of an order-$N$ tensor $\Ten{A} \in \F^{I_1 \times I_2 \times ... \times I_N}$ is denoted $\Ten{A}_{i_1, i_2, ..., i_N}$ or $ \Ten{A}[i_1, i_2, ..., i_N]$.
+    Element $(i_1, i_2, ..., i_N)$ of an order-$N$ tensor $\Ten{A} \in \F^{I_1 \times I_2 \times ... \times I_N}$ is denoted $ \Ten{A}[i_1, i_2, ..., i_N]$.\todo{ or $\Ten{A}_{i_1, i_2, ..., i_N}$.}
+    Sometimes it is convenient to represent an $N$-dimensional index $i_1, i_2, ..., i_N$ as a vector, like this: $\vec{i}$.
 
-    If we wish to represent the integer range $i, i + 1, ..., j$, we use the syntax $i \to j$. When this syntax appears as a subscript, it is a shorthand for the range of subscripted variables. For example, we use the syntax $i_{1 \to N}$ as a shorthand for $i_1, i_2, ..., i_N$.
+    If we wish to represent the integer range $i, i + 1, ..., i'$, we use the syntax $i \to i'$. If we wish to represent the range of indices between two vectors, we use the syntax $\vec{i} \to \vec{i}'$, meaning $i_1 \to i_1', ..., i_N \to i_N'$.
 
     Subarrays are formed when we fix a subset of indices. We use a colon to indicate all elements of a mode. Thus, the middle $n/2$ columns of a matrix $\Mat{A} \in \F^{n \times n}$ would be written $\Mat{A}_{:, n/4 \to 3n/4}$.
 
-    For convenience, we say that $\Ten{A} = 0$ if and only if every element of $\Ten{A}$ is 0.
+    \todo{For convenience, we say that $\Ten{A} = 0$ if and only if every element of $\Ten{A}$ is 0.}
 
   \section{Formulation of the problem}
-    We are given a tensor $\Ten{A} \in \F^{I_1 \times I_2 \times ... \times I_N}$ and positive integers $B, o$ where $0 \leq o < B$.
+    We are given a tensor $\Ten{A} \in \F^{I_1 \times I_2 \times ... \times I_N}$ and positive integers $b, o$ where $0 \leq o < b$.
 
-    We will group the nonzero natural numbers into contiguous \textbf{blocks} of size $B$, and shift these blocks by $o$. The function $l$ looks up the block index $j$ of a number $i$, so that $i$ is in the $j^{th}$ block.
+    We will group the nonzero natural numbers into contiguous \textbf{blocks} of size $b$, and shift these blocks by $o$. The function $l$ looks up the block index $j$ of a number $i$, so that $i$ is in the $j^{th}$ block.
 
     \[
-      l_{B, o}(i) = \left\lceil\frac{i + o}{B}\right\rceil
+      l_{b, o}(i) = \left\lceil\frac{i + o}{b}\right\rceil
     \]
 
     We also define a sort of inverse function of $l$, $r$, which returns the range of numbers corresponding to the $j^{th}$ block.
     \[
-      r_{B, o}(j) = (o + j * (B - 1) + 1) \to (o + j * B)
+      r_{b, o}(j) = (o + j * (b - 1) + 1) \to (o + j * b)
     \]
 
-    We can extend this blocking concept to multiple dimensions. An $N$-dimensional \textbf{blocking scheme} $b = (B_1, B_2, ..., B_N, o_1, o_2, ..., o_N)$ is characterized by block dimensions $B_1, B_2, ..., B_N$ and block offsets $o_1, o_2, ..., o_N$ where $0 \leq o_n \leq B_n$ for all $1 \leq n \leq N$. We say that $b \leq B$ if $B_1, B_2, ..., B_N \leq B$. We extend our definitions of $l$ and $r$ to an $N$-dimensional blocking scheme $b$ as follows:
+    We can extend this blocking concept to multiple dimensions. An $N$-dimensional \textbf{grid} $g = (b_1, b_2, ..., b_N, o_1, o_2, ..., o_N)$ is characterized by block dimensions $b_1, b_2, ..., b_N$ and block offsets $o_1, o_2, ..., o_N$ where $0 \leq o_n \leq b_n$ for all $1 \leq n \leq N$. We say that $g \leq B$ if $b_1, b_2, ..., b_N \leq B$. We extend our definitions of $l$ and $r$ to an $N$-dimensional grid $g$ as follows:
 
     \[
-      r_b(j_{1 \to N}) = r_{B_1, o_1}(j_1) \times r_{B_2, o_2}(j_2) \times ... \times r_{B_N, o_N}(j_N)
-    \]
+      r_g(\vec{j}) = r_{b_1, o_1}(j_1), r_{b_2, o_2}(j_2), ..., r_{b_N, o_N}(j_N)
+    \]\todo{$ = (o + \vec{j} * (b - 1) + 1) \to (o + \vec{j} * b)$}
 
     \[
-      l_b(i_{1 \to N}) = (l_{B_1, o_1}(i_1), l_{B_2, o_2}(i_2), ..., l_{B_N, o_N}(i_N))
-    \]
+      l_g(\vec{i}) = (l_{b_1, o_1}(i_1), l_{b_2, o_2}(i_2), ..., l_{b_N, o_N}(i_N))
+    \]\todo{$ = \left\lceil\frac{\vec{i} + o}{b}\right\rceil$}
 
-    Let $k(\Ten{A})$ be the number of nonzero elements of the tensor $\Ten{A}$. The definition of $k$ can be extended to an $N$-dimensional blocking scheme $b$ so that $k_b(A)$ is the number of nonzero blocks in the tensor $\Ten{A}$.
+    Let $k(\Ten{A})$ be the number of nonzero elements of the tensor $\Ten{A}$. The definition of $k$ can be extended to an $N$-dimensional grid $g$ so that $k_g(A)$ is the number of nonzero blocks in the tensor $\Ten{A}$.
     \[
-      k_b(\Ten{A}) = \sum\limits_{(j_{1 \to N}) | \Ten{A}[r_b(j_{1 \to N})] \neq 0} 1
+      k_g(\Ten{A}) = \left|\{\vec{j} | \Ten{A}[r_g(\vec{j})] \neq 0\}\right|
     \]
 
-    Thus, if we broke up our range of tensor indices into blocks of size $B_1, B_2, ..., B_N$ and offset these blocks by $o_1, o_2, ..., o_N$, $k_{(B_{1 \to N}, o_{1 \to N})}(\Ten{A})$ tells us how many of these blocks would be needed to cover the nonzeros of $\Ten{A}$. Note that $k_{(1, 1, ..., 1, 0, 0, ..., 0)}(\Ten{A}) = k(\Ten{A})$.
+    Thus, if we broke up our range of tensor indices into blocks of size $b_1, b_2, ..., b_N$ and offset these blocks by $o_1, o_2, ..., o_N$, $k_{(\vec{b}, \vec{o})}(\Ten{A})$ tells us how many of these blocks would be needed to cover the nonzeros of $\Ten{A}$. Note that $k_{(\vec{1}, \vec{0})}(\Ten{A}) = k(\Ten{A})$.
 
-    Now we can formally define the \textbf{fill} $f_b$.
+    Now we can formally define the \textbf{fill} $f_g$.
 
     \[
-      f_b(\Ten{A}) = \frac{k_b(\Ten{A})}{k(\Ten{A})}
+      f_g(\Ten{A}) = \frac{k_g(\Ten{A})}{k(\Ten{A})}
     \]
 
-    The problem is to compute an approximation $\tilde{f}_b(\Ten{A})$ such that $f_b(\Ten{A})(1 - \epsilon) \leq \tilde{f}_b(\Ten{A}) \leq f_b(\Ten{A})(1 + \epsilon)$ for all $N$-dimensional blocking schemes $b \leq B$ with probability at least $1 - \delta$.
+    The problem is to compute an approximation $\tilde{f}_g(\Ten{A})$ such that $f_g(\Ten{A})(1 - \epsilon) \leq \tilde{f}_g(\Ten{A}) \leq f_g(\Ten{A})(1 + \epsilon)$ for all $N$-dimensional blocking schemes $b \leq B$ with probability at least $1 - \delta$.
   \section{Previous Work}
     \todo{finish plz. Mainly this is Vuduc}
 
   \section{The Algorithm}
 
-    We define the function $x_b$ on each nonzero element $(i_{1 \to N})$ of $\Ten{A}$ as follows.
+    We define the function $x_g$ on each index $\vec{i}$ of a nonzero in $\Ten{A}$ as follows.
 
     \[
-      x_b(\Ten{A}, i_{1 \to N}) = \frac{1}{k(\Ten{A}[r_b(l_b(i_{1 \to N}))])}
+      x_g(\Ten{A}, \vec{i}) = \frac{1}{k(\Ten{A}[r_g(l_g(\vec{i}))])}
     \]
 
-    $x_b(\Ten{A}, i_{1 \to N})$ is therefore equal to the reciprocal of the number of nonzeros in its block. Consider the sum of $x_b$ over all of the nonzeros of $A$. We have that
+    $x_g(\Ten{A}, \vec{i})$ is therefore equal to the reciprocal of the number of nonzeros in its block. Consider the sum of $x_g$ over all of the nonzeros of $\Ten{A}$. We have that
 
     \begin{align*}
-      &\sum\limits_{(i_{1 \to N}) | \Ten{A}[i_{1 \to N}] \neq 0} x_b(\Ten{A}, i_{1 \to N})\\ &= \sum\limits_{(j_{1 \to N}) | \Ten{A}[r_b(j_{1 \to N})] \neq 0} \left(\sum\limits_{(i_{1 \to N}) \in r_b(j_{1 \to N}) | \Ten{A}[i_{1 \to N}] \neq 0} x_b(A, i_{1 \to N})\right)\\
-      &= \sum\limits_{(j_{1 \to N}) | \Ten{A}[r_b(j_{1 \to N})] \neq 0} \left(\sum\limits_{(i_{1 \to N}) \in r_b(j_{1 \to N}) | A(i_{1 \to N}) \neq 0} \frac{1}{k(\Ten{A}[r_b(l_b(i_{1 \to N}))])}\right)\\
-      &= \sum\limits_{(j_{1 \to N}) | \Ten{A}[r_b(j_{1 \to N})] \neq 0} \left(\sum\limits_{(i_{1 \to N}) \in r_b(j_{1 \to N}) | A(i_{1 \to N}) \neq 0} \frac{1}{k(\Ten{A}[r_b(j_{1 \to N})])}\right)\\
-      &= \sum\limits_{(j_{1 \to N}) | \Ten{A}[r_b(j_{1 \to N})] \neq 0} 1\\
-      &= k_b(\Ten{A})\\
+      &\sum\limits_{\vec{i} | \Ten{A}[\vec{i}] \neq 0} x_g(\Ten{A}, \vec{i})\\ &= \sum\limits_{\vec{j} | \Ten{A}[r_g(\vec{j})] \neq 0} \left(\sum\limits_{\vec{i} \in r_g(\vec{j}) | \Ten{A}[\vec{i}] \neq 0} x_g(\Ten{A}, \vec{i})\right)\\
+      &= \sum\limits_{\vec{j} | \Ten{A}[r_g(\vec{j})] \neq 0} \left(\sum\limits_{\vec{i} \in r_g(\vec{j}) | \Ten{A}[\vec{i}] \neq 0} \frac{1}{k(\Ten{A}[r_g(l_g(\vec{i}))])}\right)\\
+      &= \sum\limits_{\vec{j} | \Ten{A}[r_g(\vec{j})] \neq 0} \left(\sum\limits_{\vec{i} \in r_g(\vec{j}) | \Ten{A}[\vec{i}] \neq 0} \frac{1}{k(\Ten{A}[r_g(\vec{j})])}\right)\\
+      &= \sum\limits_{\vec{j} | \Ten{A}[r_g(\vec{j})] \neq 0} 1\\
+      &= k_g(\Ten{A})\\
     \end{align*}
 
-    Consider the population $\Pop{X}_b(\Ten{A}) = \left(x_b(\Ten{A}, i_{1 \to N}) | \Ten{A}(i_{1 \to N}) \neq 0\right)$. We have just shown that the average value of elements in $\Pop{X}_b(\Ten{A})$ is
+    Consider the population $\Pop{X}_g(\Ten{A}) = \left(x_g(\Ten{A}, \vec{i}) | \Ten{A}[\vec{i}] \neq 0\right)$. We have just shown that the average value of elements in $\Pop{X}_g(\Ten{A})$ is
     \[
-      \frac{\sum\limits_{(i_{1 \to N}) | \Ten{A}(i_{1 \to N}) \neq 0} x_b(\Ten{A}, i_{1 \to N})}{\|\{(i_{1 \to N}) | \Ten{A}(i_{1 \to N}) \neq 0\}\|} = \frac{k_b(\Ten{A})}{k(\Ten{A})} = f_b(\Ten{A})
+      \frac{\sum\limits_{\vec{i} | \Ten{A}[\vec{i}] \neq 0} x_g(\Ten{A}, \vec{i})}{\|\{\vec{i} | \Ten{A}[\vec{i}] \neq 0\}\|} = \frac{k_g(\Ten{A})}{k(\Ten{A})} = f_g(\Ten{A})
     \]
 
-    Thus, our task is to randomly sample elements from $\Pop{X}_b$ to compute an estimate of its average. We can compute a sample of $\Pop{X}_b$ by selecting a nonzero uniformly at random, looking up how many nonzeros are in the block corresponding to this nonzero, and returning the reciprocal. This is a lot of work to do for one sample, especially if the block is very full. However, once we have the locations of all the nonzeros within a $B$ radius of our nonzero at index $i_{1 \to N}$, we can compute $x_b(i_{1 \to N})$ for all $b \leq B$ at the same time, saving an enormous amount of work. We call this algorithm \textproc{sample}.
+    Thus, our task is to randomly sample elements from $\Pop{X}_g$ to compute an estimate of its average. We can compute a sample of $\Pop{X}_g$ by selecting a nonzero uniformly at random, looking up how many nonzeros are in the block corresponding to this nonzero, and returning the reciprocal. This is a lot of work to do for one sample, especially if the block is very full. However, once we have the locations of all the nonzeros within a $B$ radius of our nonzero at index $\vec{i}$, we can compute $x_g(\Ten{A}, \vec{i})$ for all $b \leq B$ at the same time, saving an enormous amount of work. We call this algorithm \textproc{Sample}.
 
-    
+    To reflect the fact that $\Ten{A}$ may be stored in a sparse format, we abstract the process of finding the indices of nonzeros within a certain range into an algorithm called \textproc{NonzerosInRange}. $\textproc{NonzerosInRange}(\Ten{A}, \vec{j}, \vec{j}')$ returns a list of all $\vec{i} \in \vec{j} \to \vec{j}'$ such that $\Ten{A}[\vec{i}] \neq 0$. Efficient implementations of \textproc{NonzerosInRange} will be discussed for various sparse formats later.
+
+    \begin{samepage}
+    \begin{alg}
+      Given a sparse tensor $\Ten{A} \in \F^{I_1 \times I_2 \times ... \times I_N}$, $\vec{i}$, and $B$, compute $x_g(\Ten{A}, \vec{i})$ for all $b < B$. Note that $\Ten{A}$ may be stored in a sparse format, whereas all other tensors are stored in a dense format.
+      \begin{algorithmic}[1]
+        \Require
+        \Statex $\Ten{A}[\vec{i}] \neq 0$
+        \Statex $B \geq 1$
+        \Statex Damn Daniel...
+        \Function{Sample}{$\Ten{A}$, $\vec{i}$, $B$}
+          \State $\Ten{Z} \in \N^{2B - 1 \times ... \times 2B - 1}$
+          \State $\Ten{Z} = 0$
+          \For{$\vec{j} \in \textproc{NonzerosInRange}(\Ten{A}, \vec{i} - B + 1, \vec{i} + B - 1)$} \label{alg:depositrestricted:loop}
+            \State $\Ten{Z}[\vec{j}] = 1$
+          \EndFor
+          \For{$n = 1 \to N$}
+            \For{$j = 2 \to 2B - 1$}
+              \Comment Perform a prefix sum along mode $n$ fibers.
+              \State $\Ten{Z}[\underbrace{:,...,:,j}_{n}, :, ..., :] = \Ten{Z}[\underbrace{:,...,:,j}_{n}, :, ..., :] + \Ten{Z}[\underbrace{:,...,:j - 1}_{n}, :, ..., :]$
+            \EndFor
+          \EndFor
+          $\Ten{Y}_0 = \Ten{Z}$
+          \For{$b_1 = 1 \to B$}
+            \State $\Ten{Y}_1 = \Ten{Y}_0[B \to B + b - 1, :, ..., :] - \Ten{Y}_0[B - b + 1 \to B, :, ..., :]$
+            \For{$b_2 = 1 \to B$}
+              \State $\Ten{Y}_2 = \Ten{Y}_1[:, B \to B + b - 1, ..., :] - \Ten{Y}_1[:, B - b + 1 \to B, ..., :]$
+              \Statex \vdots
+              \For{$b_N = 1 \to B$}
+                \State $\Ten{Y}_N = \Ten{Y}_{N - 1}[:, ..., :, B \to B + b - 1] - \Ten{Y}_{N - 1}[:, ..., :, B - b + 1 \to B]$
+                \For{$\vec{o} \in 0 \to \vec{b} - 1$}
+                  \State $x_{\vec{b}, \vec{o}}(\Ten{A}, \vec{i}) = \frac{1}{\Ten{Y}_N[1 + \vec{o}]}$
+                \EndFor
+              \EndFor
+            \EndFor
+          \EndFor
+        \EndFunction
+        \Ensure
+        \Statex The amount added to ${Y_k}_P$ by this algorithm is exactly $d(x, I + k)$.
+        \Statex ...back at it again with the white vans!
+      \end{algorithmic}
+      \label{alg:sample}
+    \end{alg}
+    \end{samepage}
 
 
 

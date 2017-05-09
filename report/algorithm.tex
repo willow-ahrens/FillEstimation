@@ -22,13 +22,13 @@
       \frac{\sum\limits_{\vec{i} | \Ten{A}[\vec{i}] \neq 0} x_g(\Ten{A}, \vec{i})}{\|\{\vec{i} | \Ten{A}[\vec{i}] \neq 0\}\|} = \frac{k_g(\Ten{A})}{k(\Ten{A})} = f_g(\Ten{A})
     \]
 
-    Thus, our task is to randomly sample elements from $\Pop{X}_g$ to compute an estimate of its average. We can compute a sample of $\Pop{X}_g$ by selecting a nonzero uniformly at random, looking up how many nonzeros are in the block corresponding to this nonzero, and returning the reciprocal. This is a lot of work to do for one sample, especially if the block is very full. However, once we have the locations of all the nonzeros within a $B$ radius of our nonzero at index $\vec{i}$, we can compute $x_g(\Ten{A}, \vec{i})$ for all $b \leq B$ at the same time, saving an enormous amount of work. We call this algorithm \textproc{Sample}.
+    Thus, our task is to randomly sample elements from $\Pop{X}_g$ to compute an estimate of its average. We can compute a sample of $\Pop{X}_g$ by selecting a nonzero uniformly at random, looking up how many nonzeros are in the block corresponding to this nonzero, and returning the reciprocal. This is a lot of work to do for one sample, especially if the block is very full. However, once we have the locations of all the nonzeros within a $B$ radius of our nonzero at index $\vec{i}$, we can compute $x_g(\Ten{A}, \vec{i})$ for all $g \leq B$ at the same time, saving an enormous amount of work. We call this algorithm \textproc{Sample}.
 
     To reflect the fact that $\Ten{A}$ may be stored in a sparse format, we abstract the process of finding the indices of nonzeros within a certain range into an algorithm called \textproc{NonzerosInRange}. $\textproc{NonzerosInRange}(\Ten{A}, \vec{j}, \vec{j}')$ returns a list of all $\vec{i} \in \vec{j} \to \vec{j}'$ such that $\Ten{A}[\vec{i}] \neq 0$. Efficient implementations of \textproc{NonzerosInRange} will be discussed for various sparse formats later.
 
     \begin{samepage}
     \begin{alg}
-      Given a sparse tensor $\Ten{A} \in \F^{I_1 \times I_2 \times ... \times I_N}$, $\vec{i}$, and $B$, compute $x_g(\Ten{A}, \vec{i})$ for all $b < B$. Note that $\Ten{A}$ may be stored in a sparse format, whereas all other tensors are stored in a dense format.
+      Given a sparse tensor $\Ten{A} \in \F^{I_1 \times I_2 \times ... \times I_N}$, $\vec{i}$, and $B$, compute $x_g(\Ten{A}, \vec{i})$ for all $N$-dimensional grids $g \leq B$. Note that $\Ten{A}$ may be stored in a sparse format, whereas all other tensors are stored in a dense format.
       \begin{algorithmic}[1]
         \Require
         \Statex $\Ten{A}[\vec{i}] \neq 0$

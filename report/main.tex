@@ -1,0 +1,99 @@
+\documentclass[12pt]{article}
+
+% Pretty much all of the ams maths packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+
+% Set up some environments
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{dfn}{Definition}[section]
+\theoremstyle{dfn}
+\newtheorem{alg}{Algorithm}[section]
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+% Pretty much all of the algorithms packages
+\usepackage{algorithmicx,algpseudocode}
+
+% Allows you to manipulate the page a bit
+\usepackage[a4paper]{geometry}
+
+% Pulls the page out a bit - makes it look better (in my opinion)
+\usepackage{a4wide}
+
+% Allows inclusion of graphics easily and configurably
+\usepackage{graphicx}
+
+% Provides ways to make nice looking tables
+\usepackage{booktabs}
+
+% Allows you to rotate tables and figures
+\usepackage{rotating}
+
+% Allows shading of table cells
+\usepackage{colortbl}
+% Define a simple command to use at the start of a table row to make it have a shaded background
+\newcommand{\gray}{\rowcolor[gray]{.9}}
+
+\usepackage{textcomp}
+
+% Provides commands to make subfigures (figures with (a), (b) and (c))
+\usepackage{subfigure}
+
+% Typesets URLs sensibly - with tt font, clickable in PDFs, and not breaking across lines
+\usepackage{url}
+
+% Makes references hyperlinks in PDF output
+\usepackage{hyperref}
+
+% Provides ways to include syntax-highlighted source code
+\usepackage{listings}
+\lstset{frame=single, basicstyle=\ttfamily}
+
+% Provides good access to colours
+\usepackage{color}
+\usepackage{xcolor}
+
+% Simple command I defined to allow me to mark TODO items in red
+\newcommand{\todo}[1] {\textbf{\textcolor{red}{#1}}}
+
+% Command for vector, matrix, tensor names
+\renewcommand{\vec}[1] {\mathbf{#1}}
+%\usepackage{esvect}
+\newcommand{\Mat}[1] {\mathbf{#1}}
+\newcommand{\Ten}[1] {\mathbf{\mathcal{#1}}}
+\newcommand{\Pop}[1] {\mathcal{#1}}
+
+% Command for important sets
+\newcommand{\F} {\mathbb{F}}
+\newcommand{\N} {\mathbb{N}}
+
+% Allows fancy stuff in the page header
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+% Vastly improves the standard formatting of captions
+\usepackage[margin=10pt,font=small,labelfont=bf, labelsep=endash]{caption}
+
+% Standard title, author etc.
+\title{CS8656 Project Proposal // An Efficient Fill Estimation Algorithm for Sparse Tensors in Blocked Formats}
+\author{Peter Ahrens, Nicholas Schiefer, Helen Xu}
+\date{}
+% Put text on the left-hand and right-hand side of the header
+%\fancyhead{}
+%\lhead{}
+%\rhead{}
+%\chead{}
+
+\begin{document}
+
+  \maketitle
+
+\input{intro}
+\input{notation}  
+\input{problem}
+\input{related}
+\input{algorithm}
+\input{analysis}
+\input{implementation}
+\end{document}

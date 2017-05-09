@@ -1,0 +1,70 @@
+
+  \section{The Algorithm}
+
+    We define the function $x_g$ on each index $\vec{i}$ of a nonzero in $\Ten{A}$ as follows.
+
+    \[
+      x_g(\Ten{A}, \vec{i}) = \frac{1}{k(\Ten{A}[r_g(l_g(\vec{i}))])}
+    \]
+
+    $x_g(\Ten{A}, \vec{i})$ is therefore equal to the reciprocal of the number of nonzeros in its block. Consider the sum of $x_g$ over all of the nonzeros of $\Ten{A}$. We have that
+
+    \begin{align*}
+      &\sum\limits_{\vec{i} | \Ten{A}[\vec{i}] \neq 0} x_g(\Ten{A}, \vec{i})\\ &= \sum\limits_{\vec{j} | \Ten{A}[r_g(\vec{j})] \neq 0} \left(\sum\limits_{\vec{i} \in r_g(\vec{j}) | \Ten{A}[\vec{i}] \neq 0} x_g(\Ten{A}, \vec{i})\right)\\
+      &= \sum\limits_{\vec{j} | \Ten{A}[r_g(\vec{j})] \neq 0} \left(\sum\limits_{\vec{i} \in r_g(\vec{j}) | \Ten{A}[\vec{i}] \neq 0} \frac{1}{k(\Ten{A}[r_g(l_g(\vec{i}))])}\right)\\
+      &= \sum\limits_{\vec{j} | \Ten{A}[r_g(\vec{j})] \neq 0} \left(\sum\limits_{\vec{i} \in r_g(\vec{j}) | \Ten{A}[\vec{i}] \neq 0} \frac{1}{k(\Ten{A}[r_g(\vec{j})])}\right)\\
+      &= \sum\limits_{\vec{j} | \Ten{A}[r_g(\vec{j})] \neq 0} 1\\
+      &= k_g(\Ten{A})\\
+    \end{align*}
+
+    Consider the population $\Pop{X}_g(\Ten{A}) = \left(x_g(\Ten{A}, \vec{i}) | \Ten{A}[\vec{i}] \neq 0\right)$. We have just shown that the average value of elements in $\Pop{X}_g(\Ten{A})$ is
+    \[
+      \frac{\sum\limits_{\vec{i} | \Ten{A}[\vec{i}] \neq 0} x_g(\Ten{A}, \vec{i})}{\|\{\vec{i} | \Ten{A}[\vec{i}] \neq 0\}\|} = \frac{k_g(\Ten{A})}{k(\Ten{A})} = f_g(\Ten{A})
+    \]
+
+    Thus, our task is to randomly sample elements from $\Pop{X}_g$ to compute an estimate of its average. We can compute a sample of $\Pop{X}_g$ by selecting a nonzero uniformly at random, looking up how many nonzeros are in the block corresponding to this nonzero, and returning the reciprocal. This is a lot of work to do for one sample, especially if the block is very full. However, once we have the locations of all the nonzeros within a $B$ radius of our nonzero at index $\vec{i}$, we can compute $x_g(\Ten{A}, \vec{i})$ for all $b \leq B$ at the same time, saving an enormous amount of work. We call this algorithm \textproc{Sample}.
+
+    To reflect the fact that $\Ten{A}$ may be stored in a sparse format, we abstract the process of finding the indices of nonzeros within a certain range into an algorithm called \textproc{NonzerosInRange}. $\textproc{NonzerosInRange}(\Ten{A}, \vec{j}, \vec{j}')$ returns a list of all $\vec{i} \in \vec{j} \to \vec{j}'$ such that $\Ten{A}[\vec{i}] \neq 0$. Efficient implementations of \textproc{NonzerosInRange} will be discussed for various sparse formats later.
+
+    \begin{samepage}
+    \begin{alg}
+      Given a sparse tensor $\Ten{A} \in \F^{I_1 \times I_2 \times ... \times I_N}$, $\vec{i}$, and $B$, compute $x_g(\Ten{A}, \vec{i})$ for all $b < B$. Note that $\Ten{A}$ may be stored in a sparse format, whereas all other tensors are stored in a dense format.
+      \begin{algorithmic}[1]
+        \Require
+        \Statex $\Ten{A}[\vec{i}] \neq 0$
+        \Statex $B \geq 1$
+        \Statex Damn Daniel...
+        \Function{Sample}{$\Ten{A}$, $\vec{i}$, $B$}
+          \State $\Ten{Z} \in \N^{2B \times ... \times 2B}$
+          \State $\Ten{Z} = 0$
+          \For{$\vec{j} \in \textproc{NonzerosInRange}(\Ten{A}, \vec{i} - B + 1, \vec{i} + B - 1)$} \label{alg:depositrestricted:loop}
+            \State $\Ten{Z}[\vec{j} - \vec{i} + B + 1] = 1$
+          \EndFor
+          \For{$n = 1 \to N$}
+            \For{$j = 2 \to 2B$}
+              \Comment Perform a prefix sum along mode $n$ fibers.
+              \State $\Ten{Z}[\underbrace{:,...,:,j}_{n}, :, ..., :] = \Ten{Z}[\underbrace{:,...,:,j}_{n}, :, ..., :] + \Ten{Z}[\underbrace{:,...,:j - 1}_{n}, :, ..., :]$
+            \EndFor
+          \EndFor
+          \State $\Ten{Y}_0 = \Ten{Z}$
+          \For{$b_1 = 1 \to B$}
+            \State $\Ten{Y}_1 = \Ten{Y}_0[B + 1 \to B + b, :, ..., :] - \Ten{Y}_0[B - b + 1 \to B, :, ..., :]$
+            \For{$b_2 = 1 \to B$}
+              \State $\Ten{Y}_2 = \Ten{Y}_1[:, B + 1 \to B + b, ..., :] - \Ten{Y}_1[:, B - b + 1 \to B, ..., :]$
+              \Statex \vdots\nopagebreak
+              \For{$b_N = 1 \to B$}
+                \State $\Ten{Y}_N = \Ten{Y}_{N - 1}[:, ..., :, B + 1 \to B + b] - \Ten{Y}_{N - 1}[:, ..., :, B - b + 1 \to B]$
+                \For{$\vec{o} = 0 \to \vec{b} - 1$}
+                  \State $x_{\vec{b}, \vec{o}}(\Ten{A}, \vec{i}) = \frac{1}{\Ten{Y}_N[1 + \vec{o}]}$
+                \EndFor
+              \EndFor
+              \Statex \vdots\nopagebreak
+            \EndFor
+          \EndFor
+        \EndFunction
+        \Ensure
+        \Statex ...back at it again with the white vans!
+      \end{algorithmic}
+      \label{alg:sample}
+    \end{alg}
+    \end{samepage}

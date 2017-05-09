@@ -1,0 +1,39 @@
+
+  \section{Formulation of the problem}
+    We are given a tensor $\Ten{A} \in \F^{I_1 \times I_2 \times ... \times I_N}$ and positive integers $b, o$ where $0 \leq o < b$.
+
+    We will group the nonzero natural numbers into contiguous \textbf{blocks} of size $b$, and shift these blocks by $o$. The function $l$ looks up the block index $j$ of a number $i$, so that $i$ is in the $j^{th}$ block.
+
+    \[
+      l_{b, o}(i) = \left\lceil\frac{i + o}{b}\right\rceil
+    \]
+
+    We also define a sort of inverse function of $l$, $r$, which returns the range of numbers corresponding to the $j^{th}$ block.
+    \[
+      r_{b, o}(j) = (o + j * (b - 1) + 1) \to (o + j * b)
+    \]
+
+    We can extend this blocking concept to multiple dimensions. An $N$-dimensional \textbf{grid} $g = (b_1, b_2, ..., b_N, o_1, o_2, ..., o_N)$ is characterized by block dimensions $b_1, b_2, ..., b_N$ and block offsets $o_1, o_2, ..., o_N$ where $0 \leq o_n \leq b_n$ for all $1 \leq n \leq N$. We say that $g \leq B$ if $b_1, b_2, ..., b_N \leq B$. We extend our definitions of $l$ and $r$ to an $N$-dimensional grid $g$ as follows:
+
+    \[
+      r_g(\vec{j}) = r_{b_1, o_1}(j_1), r_{b_2, o_2}(j_2), ..., r_{b_N, o_N}(j_N)
+    \]\todo{$ = (o + \vec{j} * (b - 1) + 1) \to (o + \vec{j} * b)$}
+
+    \[
+      l_g(\vec{i}) = (l_{b_1, o_1}(i_1), l_{b_2, o_2}(i_2), ..., l_{b_N, o_N}(i_N))
+    \]\todo{$ = \left\lceil\frac{\vec{i} + o}{b}\right\rceil$}
+
+    Let $k(\Ten{A})$ be the number of nonzero elements of the tensor $\Ten{A}$. The definition of $k$ can be extended to an $N$-dimensional grid $g$ so that $k_g(A)$ is the number of nonzero blocks in the tensor $\Ten{A}$.
+    \[
+      k_g(\Ten{A}) = \left|\{\vec{j} | \Ten{A}[r_g(\vec{j})] \neq 0\}\right|
+    \]
+
+    Thus, if we broke up our range of tensor indices into blocks of size $b_1, b_2, ..., b_N$ and offset these blocks by $o_1, o_2, ..., o_N$, $k_{(\vec{b}, \vec{o})}(\Ten{A})$ tells us how many of these blocks would be needed to cover the nonzeros of $\Ten{A}$. Note that $k_{(\vec{1}, \vec{0})}(\Ten{A}) = k(\Ten{A})$.
+
+    Now we can formally define the \textbf{fill} $f_g$.
+
+    \[
+      f_g(\Ten{A}) = \frac{k_g(\Ten{A})}{k(\Ten{A})}
+    \]
+
+    The problem is to compute an approximation $\tilde{f}_g(\Ten{A})$ such that $f_g(\Ten{A})(1 - \epsilon) \leq \tilde{f}_g(\Ten{A}) \leq f_g(\Ten{A})(1 + \epsilon)$ for all $N$-dimensional blocking schemes $b \leq B$ with probability at least $1 - \delta$.

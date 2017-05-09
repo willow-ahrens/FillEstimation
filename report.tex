@@ -93,9 +93,9 @@
 
   These challenges are magnified in an era of increasing heterogeneity of processors. In order to write the most efficient sparse tensor code, the programmer must take into account both the target architecture and the relevant structural properties of the nonzeros of the sparse tensor. Writing custom code for each processor requires extensive engineering effort and the structure of nonzeros is usually known only at runtime. Therefore, autotuning (automatically generating customized code) has become a necessary part of writing efficient sparse code.
 
-  Previous efforts in autotuning for sparse tensors focus on sparse matrices, which are more broadly applicable in fields ranging from scientific computing to machine learning. The diverse space of operations and nonzero patterns of sparse matrices have led to the development of a wide variety of sparse matrix formats that allow programmers to more efficiently operate on the matrices. We limit our description to perhaps the most popular such format, Compressed Sparse Row (CSR) and a variant we will call Blocked Compressed Sparse Row (BCSR). In CSR, only the nonzeros and their locations are stored in each row of the matrix. In Blocked Compressed Sparse Row, an $m \times n$ matrix is divided into $m/r \times n/c$ submatrices, where each submatrix is of size $r \times c$. Only blocks which contain nonzeros are stored, and these nonzero blocks are stored in CSR format. Storing the locations of nonzero blocks requires less memory and less computational logic than storing the locations of individual nonzeros. For matrices that naturally have a block structure of nonzeros, such as those produced by finite element methods, this can lead to an increase in the performance of sparse matrix operations. However, because we store the entire block (filling in zero entries with explicit zeros) setting the block size to be too large can decrease the performance.
+  Previous efforts in autotuning for sparse tensors focus on sparse matrices, which are more broadly applicable in fields ranging from scientific computing to machine learning. The diverse space of operations and nonzero patterns of sparse matrices have led to the development of a wide variety of sparse matrix formats that allow programmers to more efficiently operate on the matrices. We limit our description to perhaps the most popular such format, Compressed Sparse Row (CSR) and a variant we will call Blocked Compressed Sparse Row (BCSR). In CSR, only the nonzeros and their locations are stored in each row of the matrix. In Blocked Compressed Sparse Row, an $m \times n$ matrix is divided into $m/r \times n/c$ submatrices, where each submatrix is of size $r \times c$. The submatrices are called blocks, and are stored in a dense format (so zeros are represented explicitly). Only blocks which contain nonzeros are stored, and the locations of nonzero blocks are stored in CSR format. We only need to store the location of the entire block, instead of individual entries. If many nonzeros appear within the same block, storing the locations of nonzero blocks requires less memory and less computational logic than storing the locations of the individual nonzeros. For matrices that naturally have a block structure of nonzeros, such as those produced by finite element methods, this can improve the performance of sparse matrix operations.
 
-  Given the definition of BCSR, it is natural to wonder how one might choose the correct block size for a given matrix.
+  Given the definition of BCSR, it is natural to wonder how one might choose the correct block size for a given matrix. If we set the block size too small, then we must store the locations of more blocks. If we set the block size too large, then the blocks will be filled with too many zeros.
   Vuduc et. al. describes an effective heuristic for predicting the performance $P$ (in $Mflop/s$) of a particular block size on a sparse matrix $A$.
   We refer to the number of nonzeros in $A$ as $k(A)$. We refer to the number of blocks of size $r \times c$ which contain nonzeros in $A$ as $k_{r, c}(A)$.
   We can then define the \textit{fill} of the matrix to be $f(A) = rck_{r, c}(A)/k(A)$.
@@ -216,18 +216,19 @@
               \State $\Ten{Z}[\underbrace{:,...,:,j}_{n}, :, ..., :] = \Ten{Z}[\underbrace{:,...,:,j}_{n}, :, ..., :] + \Ten{Z}[\underbrace{:,...,:j - 1}_{n}, :, ..., :]$
             \EndFor
           \EndFor
-          $\Ten{Y}_0 = \Ten{Z}$
+          \State $\Ten{Y}_0 = \Ten{Z}$
           \For{$b_1 = 1 \to B$}
             \State $\Ten{Y}_1 = \Ten{Y}_0[B + 1 \to B + b, :, ..., :] - \Ten{Y}_0[B - b + 1 \to B, :, ..., :]$
             \For{$b_2 = 1 \to B$}
               \State $\Ten{Y}_2 = \Ten{Y}_1[:, B + 1 \to B + b, ..., :] - \Ten{Y}_1[:, B - b + 1 \to B, ..., :]$
-              \Statex \vdots
+              \Statex \vdots\nopagebreak
               \For{$b_N = 1 \to B$}
                 \State $\Ten{Y}_N = \Ten{Y}_{N - 1}[:, ..., :, B + 1 \to B + b] - \Ten{Y}_{N - 1}[:, ..., :, B - b + 1 \to B]$
-                \For{$\vec{o} \in 0 \to \vec{b} - 1$}
+                \For{$\vec{o} = 0 \to \vec{b} - 1$}
                   \State $x_{\vec{b}, \vec{o}}(\Ten{A}, \vec{i}) = \frac{1}{\Ten{Y}_N[1 + \vec{o}]}$
                 \EndFor
               \EndFor
+              \Statex \vdots\nopagebreak
             \EndFor
           \EndFor
         \EndFunction

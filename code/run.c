@@ -19,19 +19,18 @@ int test (size_t m,
 
 int main (int argc, char **argv) {
 
-  size_t B = 12;
+  size_t B = 5;
   int trials = 1;
 
   /* Beware. Option parsing below. */
   long longarg;
   while (1) {
-    static char *options = "vqB:m:th";
+    static char *options = "vqB:th";
     static struct option long_options[] = {
         {"verbose", no_argument,       &verbose, 1},
         {"quiet",   no_argument,       &verbose, 0},
         {"help",    no_argument,       &help,    1},
         {"max-block-size",  required_argument, 0, 'B'},
-        {"matrix",    required_argument, 0, 'm'},
         {"trials",    required_argument, 0, 't'},
         {0, 0, 0, 0}
       };

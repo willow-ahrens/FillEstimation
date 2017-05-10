@@ -164,7 +164,7 @@ int main (int argc, char **argv) {
   FILE *f = fopen(argv[optind], "r");
   gsl_spmatrix *triples = gsl_spmatrix_fscanf(f);
   fclose(f);
-  if (errno != 0 || longarg < 1) {
+  if (triples == 0) {
     printf("<input> must be filename of MatrixMarket matrix\n");
     usage();
     return 1;
@@ -172,6 +172,8 @@ int main (int argc, char **argv) {
 
   gsl_spmatrix *csr = gsl_spmatrix_crs(triples);
   gsl_spmatrix_free(triples);
+
+  //gsl_spmatrix_fprintf(stdout, csr, "%g");
 
   int ret = test(csr->size1, csr->size2, csr->nz, csr->p, csr->i, B, trials, clock, results, verbose);
 

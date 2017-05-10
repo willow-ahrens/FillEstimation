@@ -95,5 +95,6 @@ int test (size_t m,
   }
   printf("}\n");
 
+  free(fills);
   return 0;
 }

@@ -23,6 +23,19 @@
  *  \param[out] *fill Fill ratios for all specified b_r, b_c, o_r, o_c in order
  *  \param[in] verbose 0 if you should be quiet
  *
+ *  Note that the fill ratios should be stored according to the following order:
+ *  size_t i = 0;
+ *  for (size_t b_r = 1; b_r <= B; b_r++) {
+ *    for (size_t b_c = 1; b_c <= B; b_c++) {
+ *      for (size_t o_r = 0; o_r < b_r; o_r++) {
+ *        for (size_t o_c = 0; o_c < b_c; o_c++) {
+ *          //fill[i] = fill for b_r, b_c, o_r, o_c
+ *          i++;
+ *        }
+ *      }
+ *    }
+ *  }
+ *
  *  \returns On success, returns 0. On error, returns an error code.
  */
 int estimate_fill (size_t m,

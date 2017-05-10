@@ -55,7 +55,7 @@ int estimate_fill (size_t m,
    for (size_t b_c = 1; b_c <= B; b_c++) {
      for (size_t o_r = 0; o_r < b_r; o_r++) {
        for (size_t o_c = 0; o_c < b_c; o_c++) {
-         fill[i] = 0.5
+         fill[i] = 0.5;
          i++;
        }
      }

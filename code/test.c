@@ -1,3 +1,4 @@
+#include <float.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
@@ -26,51 +27,67 @@ int test (size_t m,
           const size_t *ptr,
           const size_t *ind,
           size_t B,
+          int trials,
           int verbose) {
 
   size_t nfill = 0;
-  for (int b_r = 1; b_r <= B; b_r++) {
-    for (int b_c = 1; b_c <= B; b_c++) {
-      for (int o_r = 0; o_r < b_r; o_r++) {
-        for (int o_c = 0; o_c < b_c; o_c++) {
+  for (size_t b_r = 1; b_r <= B; b_r++) {
+    for (size_t b_c = 1; b_c <= B; b_c++) {
+      for (size_t o_r = 0; o_r < b_r; o_r++) {
+        for (size_t o_c = 0; o_c < b_c; o_c++) {
           nfill++;
         }
       }
     }
   }
 
-  double *fill = (double*)malloc(sizeof(double) * nfill);
+  double *fills = (double*)malloc(sizeof(double) * nfill * trials);
 
-  double test_time = 0;
-  int trials = 0;
-
-  //We must run the benchmarking application for a sufficient length of time
-  //to avoid small variations in processing speed. We do this by running an
-  //increasing number of trials until it takes at least TIMEOUT seconds.
-  for (trials = 1; test_time < TIMEOUT; trials *= 2) {
-
-    //Unless you want to measure the cache warm-up time, it is usually a good
-    //idea to run the problem for one iteration first to load the problem
-    //into cache.
-    for (size_t i = 0; i < nfill; i++) {
-      fill[i] = 0;
-    }
-    estimate_fill (m, n, nnz, ptr, ind, B, fill, verbose);
-
-    //Benchmark "trials" runs.
-    test_time = -wall_time();
-    for (int i = 0; i < trials - 1; ++i){
-      for (size_t i = 0; i < nfill; i++) {
-        fill[i] = 0;
-      }
-      estimate_fill (m, n, nnz, ptr, ind, B, fill, verbose);
-    }
-    test_time += wall_time();
+  //Load problem into cache
+  for (size_t i = 0; i < nfill; i++) {
+    fills[i] = 0;
   }
-  trials /= 2;
-  test_time /= trials;
+  estimate_fill(m, n, nnz, ptr, ind, B, fills, verbose);
+
+  //Zero the output again
+  for (size_t i = 0; i < nfill * trials; i++) {
+    fills[i] = 0;
+  }
+
+  //Benchmark some runs
+  double time = -wall_time();
+  for (int t = 0; t < trials; t++){
+    estimate_fill(m, n, nnz, ptr, ind, B, fills + t * nfill, verbose);
+  }
+  time += wall_time();
+
+  printf("{\n");
+  size_t i = 0;
+  printf("  \"output\": [\n");
+  for (int t = 0; t < trials; t++) {
+    printf("    [\n");
+    for (size_t b_r = 1; b_r <= B; b_r++) {
+      printf("      [\n");
+      for (size_t b_c = 1; b_c <= B; b_c++) {
+        printf("        [\n");
+        for (size_t o_r = 0; o_r < b_r; o_r++) {
+          printf("          [");
+          for (size_t o_c = 0; o_c < b_c; o_c++) {
+            printf("%.*e, ", DECIMAL_DIG, fills[i]);
+            i++;
+          }
+          printf("],\n");
+        }
+        printf("        ],\n");
+      }
+      printf("      ],\n");
+    }
+    printf("    ],\n");
+  }
+  printf("  ],\n");
+  printf("  \"time_total\": %.*e,\n", DECIMAL_DIG, time);
+  printf("  \"time_mean\": %.*e,\n", DECIMAL_DIG, time/trials);
+  printf("}\n");
 
   return 0;
 }
-
-

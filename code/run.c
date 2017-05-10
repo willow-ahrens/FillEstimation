@@ -14,22 +14,25 @@ int test (size_t m,
           const size_t *ptr,
           const size_t *ind,
           size_t B,
+          int trials,
           int verbose);
 
 int main (int argc, char **argv) {
 
   size_t B = 12;
+  int trials = 1;
 
   /* Beware. Option parsing below. */
   long longarg;
   while (1) {
-    static char *options = "vqB:m:";
+    static char *options = "vqB:m:th";
     static struct option long_options[] = {
         {"verbose", no_argument,       &verbose, 1},
         {"quiet",   no_argument,       &verbose, 0},
         {"help",    no_argument,       &help,    1},
         {"max-block-size",  required_argument, 0, 'B'},
         {"matrix",    required_argument, 0, 'm'},
+        {"trials",    required_argument, 0, 't'},
         {0, 0, 0, 0}
       };
 
@@ -74,6 +77,16 @@ int main (int argc, char **argv) {
         B = longarg;
         break;
 
+      case 't':
+        errno = 0;
+        longarg = strtol(optarg, 0, 10);
+        if (errno != 0 || longarg < 1) {
+          printf("option -t takes an integer number of trials >= 1\n");
+          abort();
+        }
+        B = longarg;
+        break;
+
       case '?':
         /* getopt_long already printed an error message. */
         break;
@@ -81,6 +94,11 @@ int main (int argc, char **argv) {
       default:
         abort();
     }
+  }
+
+  if (help) {
+    printf("email pahrens@mit.edu for usage information. lol.\n");
+    return 0;
   }
 
   if (optind != argc - 1) {
@@ -105,7 +123,7 @@ int main (int argc, char **argv) {
   gsl_spmatrix *csr = gsl_spmatrix_crs(triples);
   gsl_spmatrix_free(triples);
 
-  int ret = test(csr->size1, csr->size2, csr->nz, csr->p, csr->i, B, verbose);
+  int ret = test(csr->size1, csr->size2, csr->nz, csr->p, csr->i, B, trials, verbose);
 
   gsl_spmatrix_free(csr);
 

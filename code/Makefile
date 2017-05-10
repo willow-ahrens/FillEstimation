@@ -1,5 +1,5 @@
 CC = gcc-7
-CFLAGS = -std=c99 -march=native -O3 -lm
+CFLAGS = -std=c99 -march=native -lm -g
 LDFLAGS = -lgsl
 
 all: reference asx oski

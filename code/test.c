@@ -28,6 +28,8 @@ int test (size_t m,
           const size_t *ind,
           size_t B,
           int trials,
+          int clock,
+          int results,
           int verbose) {
 
   size_t nfill = 0;
@@ -63,30 +65,34 @@ int test (size_t m,
 
   printf("{\n");
   size_t i = 0;
-  printf("  \"output\": [\n");
-  for (int t = 0; t < trials; t++) {
-    printf("    [\n");
-    for (size_t b_r = 1; b_r <= B; b_r++) {
-      printf("      [\n");
-      for (size_t b_c = 1; b_c <= B; b_c++) {
-        printf("        [\n");
-        for (size_t o_r = 0; o_r < b_r; o_r++) {
-          printf("          [");
-          for (size_t o_c = 0; o_c < b_c; o_c++) {
-            printf("%.*e, ", DECIMAL_DIG, fills[i]);
-            i++;
+  if (results) {
+    printf("  \"output\": [\n");
+    for (int t = 0; t < trials; t++) {
+      printf("    [\n");
+      for (size_t b_r = 1; b_r <= B; b_r++) {
+        printf("      [\n");
+        for (size_t b_c = 1; b_c <= B; b_c++) {
+          printf("        [\n");
+          for (size_t o_r = 0; o_r < b_r; o_r++) {
+            printf("          [");
+            for (size_t o_c = 0; o_c < b_c; o_c++) {
+              printf("%.*e, ", DECIMAL_DIG, fills[i]);
+              i++;
+            }
+            printf("],\n");
           }
-          printf("],\n");
+          printf("        ],\n");
         }
-        printf("        ],\n");
+        printf("      ],\n");
       }
-      printf("      ],\n");
+      printf("    ],\n");
     }
-    printf("    ],\n");
+    printf("  ],\n");
   }
-  printf("  ],\n");
-  printf("  \"time_total\": %.*e,\n", DECIMAL_DIG, time);
-  printf("  \"time_mean\": %.*e,\n", DECIMAL_DIG, time/trials);
+  if (clock) {
+    printf("  \"time_total\": %.*e,\n", DECIMAL_DIG, time);
+    printf("  \"time_mean\": %.*e,\n", DECIMAL_DIG, time/trials);
+  }
   printf("}\n");
 
   return 0;

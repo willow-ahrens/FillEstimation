@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+char *name () {
+  return "asx";
+}
+
 /**
  *  Given an m by n CSR matrix A, estimates the fill ratio if the matrix were
  *  converted into b_r by b_c (offset by o_r and o_c) BCSR format. The fill

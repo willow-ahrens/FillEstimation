@@ -76,24 +76,24 @@ int test (size_t m,
           for (size_t o_r = 0; o_r < b_r; o_r++) {
             printf("          [");
             for (size_t o_c = 0; o_c < b_c; o_c++) {
-              printf("%.*e, ", DECIMAL_DIG, fills[i]);
+              printf("%.*e%s", DECIMAL_DIG, fills[i], o_c < b_c - 1 ? ", " : "");
               i++;
             }
-            printf("],\n");
+            printf("]%s\n", o_r < b_r - 1 ? "," : "");
           }
-          printf("        ],\n");
+          printf("        ]%s\n", b_c <= B - 1 ? "," : "");
         }
-        printf("      ],\n");
+        printf("      ]%s\n", b_r <= B - 1 ? "," : "");
       }
-      printf("    ],\n");
+      printf("    ]%s\n", t < trials - 1 ? "," : "");
     }
-    printf("  ],\n");
+    printf("  ]%s\n", clock ? "," : "");
   }
   if (clock) {
     printf("  \"time_total\": %.*e,\n", DECIMAL_DIG, time);
-    printf("  \"time_mean\": %.*e,\n", DECIMAL_DIG, time/trials);
+    printf("  \"time_mean\": %.*e%s\n", DECIMAL_DIG, time/trials, 0 ? "," : "");
   }
-  printf("}\n");
+  printf("\n}\n");
 
   free(fills);
   return 0;

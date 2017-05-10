@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
+#include <string.h>
 
 #define prob_examine 0.5
-
 
 /**
  * \brief Given an m x n matrix in CSR
@@ -27,6 +28,7 @@
  * \param[in] n Logical number of matrix columns
  * \param[in] r Desired row block size
  * \param[in] B Maximum block size
+ * \param[in] tempsize size of array to be returned (B^3)
  * \param[in, out] nnz_est Used to return the number of
  *  non-zeros actually examined. Must be non-NULL.
  * \param[in, out] nb_est Used to return the number of
@@ -54,11 +56,9 @@
 static int
 EstimateBlockCounts(const size_t * ptr, const size_t * ind,
 		    size_t m, size_t n,
-		    size_t r, size_t B,
+		    size_t r, size_t B, size_t tempsize,
 		    size_t * p_nnz_est, size_t * p_nb_est)
 {
-
-
 	/* block dimensions */
 	size_t		M;
 
@@ -66,30 +66,28 @@ EstimateBlockCounts(const size_t * ptr, const size_t * ind,
 	size_t		num_nonzeros;
 
 	/* auxiliary storage: reused for each block-row */
-	size_t         *block_count;	/* size N */
-	size_t		I;	/* block-row iteration variable */
+	size_t *block_count;
+	size_t I;	/* block-row iteration variable */
 
 	assert(p_nnz_est != NULL);
 	assert(p_nb_est != NULL);
 
 	M = m / r;		/* # of full block-rows */
 
+    // if number of columns is 0
 	if (n == 0) {
 		*p_nnz_est = 0;
-		memset(p_nb_est, 0, sizeof(size_t) * max_c);
+		memset(p_nb_est, 0, sizeof(size_t) * B);
 		return 0;	/* Quick return */
 	}
-	/*
-	 * ---------------------------------------------------- *  Allocate
-	 * temporary space.
-	 */
-
+	
+    // Allocate temporary space.
 	assert(n >= 1);
-	block_count = malloc(sizeof(size_t) * max_c * n);
+	block_count = malloc(sizeof(size_t) * B * n);
 	if (block_count == NULL) {
-		return ERR_OUT_OF_MEMORY;
+		return -1;
 	}
-	memset(block_count, 0, sizeof(size_t) * max_c * n);
+	memset(block_count, 0, sizeof(size_t) * B * n);
 
 	/** Get the block count for block column size c, block column J. */
 #define GET_BC(A, c, J) (A)[((c)-1)*n + (J)]
@@ -99,17 +97,17 @@ EstimateBlockCounts(const size_t * ptr, const size_t * ind,
 #define ZERO_BC(A, c, J) (A)[((c)-1)*n + (J)] = 0
 
 	/*
-	 * ---------------------------------------------------- *  Phase I:
-	 * Count the number of new blocks to *  create.
+     * phase I:
+	 * Count the number of new blocks to create.
 	 */
-	memset(p_nb_est, 0, sizeof(size_t) * max_c);
+	memset(p_nb_est, 0, sizeof(size_t) * B);
 	num_nonzeros = 0;
 
 	for (I = 0; I < M; I++) {	/* loop over block rows */
-		size_t		i;
-		size_t		di;
+		size_t i;
+		size_t di;
 
-		double		rand_val = RAND_DOUBLE;
+		double rand_val = (double)rand() / (double)RAND_MAX;
 
 		if (rand_val > prob_examine)
 			continue;	/* skip this block row */
@@ -133,11 +131,11 @@ EstimateBlockCounts(const size_t * ptr, const size_t * ind,
 			 * needed to store non-zeros in row i, and mark * the
 			 * blocks in block row I that have been visited.
 			 */
-			for (k = ptr[i] - base; k < ptr[i + 1] - base; k++) {
-				size_t		j = ind[k] - base;	/* column index */
+			for (k = ptr[i]; k < ptr[i + 1]; k++) {
+				size_t		j = ind[k];	/* column index */
 				size_t		c;
 
-				for (c = 1; c <= max_c; c++) {
+				for (c = 1; c <= B; c++) {
 					size_t		J = j / c;	/* block column index */
 
 					if (GET_BC(block_count, c, J) == 0) {
@@ -165,11 +163,11 @@ EstimateBlockCounts(const size_t * ptr, const size_t * ind,
 		for (i = I * r, di = 0; di < r; di++, i++) {
 			size_t		k;
 
-			for (k = ptr[i] - base; k < ptr[i + 1] - base; k++) {
-				size_t		j = ind[k] - base;	/* column index */
+			for (k = ptr[i] ; k < ptr[i + 1] ; k++) {
+				size_t		j = ind[k] ;	/* column index */
 				size_t		c;
 
-				for (c = 1; c <= max_c; c++) {
+				for (c = 1; c <= B; c++) {
 					size_t		J = j / c;	/* block column index */
 					ZERO_BC(block_count, c, J);
 				}
@@ -186,6 +184,10 @@ EstimateBlockCounts(const size_t * ptr, const size_t * ind,
 }
 
 
+// name
+char *name () {
+  return "oski";
+}
 
 /**
  *  Given an m by n CSR matrix A, estimates the fill ratio if the matrix were
@@ -234,41 +236,39 @@ estimate_fill(size_t m,
 	      double *fill,
 	      int verbose)
 {
-	size_t		i = 0;
-	int		err;
+	size_t i = 0;
+	int err;
 
 	//size of array estimating block counts
-		int		tempspace = B * B * B;
+	int	tempspace = B * B * B;
 	size_t         *nb_est = malloc(sizeof(size_t) * tempspace);
 	if (nb_est == NULL)
 		return -1;
-	//out of memoryy
+	//out of memory
 
 		// try all sizes and offsets
 		for (size_t b_r = 1; b_r <= B; b_r++) {
 		size_t		nnz_est = 0;
 		memset(nb_est, 0, sizeof(size_t) * tempspace);
 
-		err = EstimateBlockCounts(ptr, ind, m, n, r, B, &nnz_est, nb_est);
+		err = EstimateBlockCounts(ptr, ind, m, n, b_r, B, tempspace, &nnz_est, nb_est);
 		if (err) {
 			free(nb_est);
 			return err;
 		}
-		int		j = 0;
+		int	j = 0;
 		for (size_t b_c = 1; b_c <= B; b_c++) {
 			for (size_t o_r = 0; o_r < b_r; o_r++) {
 				for (size_t o_c = 0; o_c < b_c; o_c++) {
-
-					size_t		nb_nnz = nb_est[j] * r * c;
+					size_t nb_nnz = nb_est[j] * b_r * b_c;
 					double		ratio;
 					if (!nnz_est)
 						ratio = nb_nnz ? (1.0 / 0.0) : 1.0;
 					else
 						ratio = (double)nb_nnz / nnz_est;
 					fill[i] = ratio;;
-					//fill[i] = fill for b_r
-						,b_c, o_r, o_c
-							j++;
+					//fill[i] = fill for b_r, b_c, o_r, o_c
+					j++;
 					i++;
 				}
 			}

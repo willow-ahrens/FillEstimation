@@ -28,7 +28,6 @@ static void usage () {
   "  <input>                    MatrixMarket file (estimate fill of this matrix)\n"
   "  -B, --max-block-size <arg> Maximum block dimension for fill estimates\n"
   "  -t, --trials <arg>         Number of trials to run\n"
-  "  -B, --max-block-size       Maximum block dimension for fill estimates\n"
   "  -c, --clock                Display timing information\n"
   "  -d, --noclock              Do not display timing information\n"
   "  -r, --results              Display fill estimates for all trials\n"
@@ -97,7 +96,7 @@ int main (int argc, char **argv) {
           usage();
           return 1;
         }
-        B = longarg;
+        trials = longarg;
         break;
 
       case 'c':

@@ -79,11 +79,11 @@ int estimate_fill (size_t m,
     }
   }
 
-  for (size_t ii = max(i, B - 1) - (B - 1); ii <= min(i, m - (B - 1)) + (B - 1); ii++) {
+  for (size_t ii = max(i, B - 1) - (B - 1); ii <= min(i + (B - 1), m - 1); ii++) {
     int r = (B + ii) - i;
     size_t jj;
     size_t jj_min = max(j, B - 1) - (B - 1);
-    size_t jj_max = min(j, n - (B - 1)) + (B - 1);
+    size_t jj_max = min(j + (B - 1), n - 1);
 
     size_t scan = ptr[ii];
     size_t len = ptr[ii + 1] - ptr[ii];
@@ -123,14 +123,14 @@ int estimate_fill (size_t m,
   size_t fill_index = 0;
   for (size_t b_r = 1; b_r <= B; b_r++) {
     for (int r = B; r < B + b_r; r++) {
-      size_t o_r = (i + r - B) % b_r;
+      size_t o_r = (i + r + 1 - B) % b_r;
       for (int c = 0; c < 2*B; c++) {
         Y_1[o_r][c] = Z[r][c] - Z[r - b_r][c];
       }
     }
     for (size_t b_c = 1; b_c <= B; b_c++) {
       for (int c = B; c < B + b_c; c++) {
-        size_t o_c = (j + c - B) % b_c;
+        size_t o_c = (j + c + 1 - B) % b_c;
         for (size_t o_r = 0; o_r < b_r; o_r++) {
           Y_2[o_r][o_c] = Y_1[o_r][c] - Y_1[o_r][c - b_c];
         }
@@ -143,8 +143,13 @@ int estimate_fill (size_t m,
       }
     }
   }
+/*
+          if (b_r == 4 && b_c == 4){
+            printf("%d ", Y_2[o_r][o_c]);
+          }
+        if (b_r == 4 && b_c == 4) printf("\n");
+        printf("\n");
 
-  /*
   for (int r = 0; r < 2*B; r++) {
     for (int c = 0; c < 2*B; c++) {
       printf("%d, ", Z[r][c]);
@@ -152,7 +157,7 @@ int estimate_fill (size_t m,
     printf("\n");
   }
   printf("\n");
-  */
+*/
 
   return 0;
 }

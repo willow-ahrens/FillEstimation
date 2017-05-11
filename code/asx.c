@@ -143,21 +143,6 @@ int estimate_fill (size_t m,
       }
     }
   }
-/*
-          if (b_r == 4 && b_c == 4){
-            printf("%d ", Y_2[o_r][o_c]);
-          }
-        if (b_r == 4 && b_c == 4) printf("\n");
-        printf("\n");
-
-  for (int r = 0; r < 2*B; r++) {
-    for (int c = 0; c < 2*B; c++) {
-      printf("%d, ", Z[r][c]);
-    }
-    printf("\n");
-  }
-  printf("\n");
-*/
 
   return 0;
 }

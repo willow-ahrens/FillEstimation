@@ -38,8 +38,8 @@ reference = np.array([benchmark("reference", matrix_path(matrix)) for matrix in 
 oski = np.array([benchmark("oski", matrix_path(matrix)) for matrix in matrices])
 asx = np.array([benchmark("asx", matrix_path(matrix)) for matrix in matrices])
 
-print("       Reference Time: %g", np.mean(reference))
-print("            OSKI Time: %g", np.mean(oski))
-print("             ASX Time: %g", np.mean(asx))
-print("     ASX/OSKI Speedup: %g", np.mean(oski/asx))
-print("ASX/Reference Speedup: %g", np.mean(reference/asx))
+print("       Reference Time: %g" % np.mean(reference))
+print("            OSKI Time: %g" % np.mean(oski))
+print("             ASX Time: %g" % np.mean(asx))
+print("     ASX/OSKI Speedup: %g" % np.mean(oski/asx))
+print("ASX/Reference Speedup: %g" % np.mean(reference/asx))

@@ -1,9 +1,17 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
 
 #define prob_examine 0.5
+#define DEBUG 0
+
+#ifdef DEBUG
+#define DEBUG_PRINT(x) printf x
+#else
+#define DEBUG_PRINT(x) do {} while (0)
+#endif
 
 /**
  * \brief Given an m x n matrix in CSR
@@ -67,171 +75,194 @@ EstimateBlockCounts(const size_t * ptr, const size_t * ind,
 
 	/* auxiliary storage: reused for each block-row */
 	size_t *block_count;
-	size_t I;		/* block-row iteration variable */
+	int I;			/* block-row iteration variable */
 
-	//if number of columns is 0
+	/*
+	 * if number of columns is 0
+	 */
 	if (n == 0) {
-	    *p_nnz_est = 0;
+		*p_nnz_est = 0;
 		memset(p_nb_est, 0, sizeof(size_t) * tempsize);
 		return 0;	/* Quick return */
-    }
-	
-    //Allocate temporary space.
-	assert(n >= 1);
-	
-    // TODO(hjxu) - not sure if this is the right size
-    block_count = malloc(sizeof(size_t) * B * n * n);
-	
-    if (block_count == NULL) {
+	}
+	/* TODO(hjxu): check size is correct */
+	block_count = malloc(sizeof(size_t) * B * n * n);
+
+	if (block_count == NULL) {
 		return -1;
 	}
-	memset(block_count, 0, sizeof(size_t) * B * n);
+	memset(block_count, 0, sizeof(size_t) * B * n * n);
 
-	//note(hjxu):	might be able to go from B ^ 3 to B * r ^ 2
-	memset(p_nb_est, 0, sizeof(size_t) * tempsize);
+//note(hjxu):might be able to go from B ^ 3 to B * r ^ 2
+		memset(p_nb_est, 0, sizeof(size_t) * tempsize);
 	num_nonzeros = 0;
 
 	assert(p_nnz_est != NULL);
 	assert(p_nb_est != NULL);
 
 	for (size_t o_r = 0; o_r < r; o_r++) {
-		int num_rows_to_add = r - o_r - 1;
-		if (num_rows_to_add > 0) {
-			//prepend rows
+		DEBUG_PRINT(("\to_r: %d\n", o_r));
+		int num_rows_to_add = 0;
+
+		if (o_r != 0) {
+			num_rows_to_add = r - o_r;
 		}
-			
-        //number of total rows
-		int new_rows = m + num_rows_to_add;
+		DEBUG_PRINT(("\t\tnum_rows_to_add: %d\n", num_rows_to_add));
+
+		//number of total rows
+			int new_rows = m + num_rows_to_add;
 		int block_rows = new_rows / r;	/* # of full block-rows */
 
+		DEBUG_PRINT(("\t\tblock_rows: %d\n", block_rows));
 		/*
 		 * phase I: Count the number of new blocks to create.
 		 */
 
-        // -1 block is the one that goes off the side.
-        for (I = -1; I < block_rows; I++) {	/* loop over block rows */
-				size_t i;
-				size_t di;
+		bool pastfirst = false;
+		/* -1 block is the one that goes off the side. */
+		int startindex = -1;
+		if (o_r == 0) {
+			startindex++;
+		}
+		for (I = startindex; I < block_rows; I++) {	/* loop over block rows */
+			double rand_val = (double)rand() / (double)RAND_MAX;
 
-                // if there is no o_r, we do not need the extra one
-                if(o_r == 0) { I++; }
-				double rand_val = (double)rand() / (double)RAND_MAX;
+			if (rand_val > prob_examine) {
+				DEBUG_PRINT(("skipped row block %d\n", I));
+				continue;	/* skip this block row */
+			}
+			DEBUG_PRINT(("doing row block %d\n", I));
+			/*
+			 * Count the number of blocks within block-row I, and
+			 * remember in 'block_count' which of the possible
+			 * blocks have been 'visited' (i.e., contain at least
+			 * 1 non-zero).
+			 */
+            size_t i = I * r + o_r;
+            size_t di;
+			if (I == -1) {
+			    i = 0;
+				di = r - o_r;
+			}
+            while (di < r) {
+                DEBUG_PRINT(("block index: %d, row index: %d, small row index: %d\n", I, i, di));
+				size_t k;
 
-				if (rand_val > prob_examine)
-					continue;	/* skip this block row */
-
-				/*
-				 * Count the number of blocks within
-				 * block-row I, and remember in 'block_count'
-				 * which of the possible blocks have been
-				 * 'visited' (i.e., contain at least 1
-				 * non-zero).
+			/*
+				 * Invariant: block_count[J] == # of
+				 * non-zeros * encountered in rows I*r ..
+				 * I*r+di that should * be stored in
+				 * column-block J (i.e., that have * column
+				 * indices J*c <= j < (J+1)*c).
 				 */
-				for (i = I * r + o_r, di = 0; di < r; di++, i++) {
-					size_t k;
+				/*
+				 * Count the number of additional logical
+				 * blocks * needed to store non-zeros in row
+				 * i, and mark * the blocks in block row I
+				 * that have been visited.
+				 */
 
-                    // only if o_r > 0
-                    // simulate a smaller "real" block
-                    // TODO(hjxu): b_r - o_r might need to have a -1.
-                    if (I == -1) { i = 0; di = r - o_r; }
-					/*
-					 * Invariant: block_count[J] == # of
-					 * non-zeros * encountered in rows
-					 * I*r .. I*r+di that should * be
-					 * stored in column-block J (i.e.,
-					 * that have * column indices J*c <=
-					 * j < (J+1)*c).
-					 */
-					/*
-					 * Count the number of additional
-					 * logical blocks * needed to store
-					 * non-zeros in row i, and mark * the
-					 * blocks in block row I that have
-					 * been visited.
-					 */
-					for (k = ptr[i]; k < ptr[i + 1]; k++) {
-						size_t j = ind[k];	/* column index */
-						size_t c;
-						/** Get the block count for block column size c, block column J. */
-#define GET_BC(A, bc, oc, J) (A)[((bc)*B*n) + (oc)*n + (J)]
-						/** Increment the block count for block column size c, block column J. */
-#define INC_BC(A, bc, oc, J) (A)[((bc)*B*n) + (oc)*n + (J)]++
-						/** Set the block count for block column size c, block column J, to zero. */
-#define ZERO_BC(A, bc, oc, J) (A)[((bc)*B*n) + (oc)*n + (J)] = 0
+				for (k = ptr[i]; k < ptr[i + 1]; k++) {
+					size_t j = ind[k];	/* column index */
 
-                       /** find index in p_nb_est given r, c, or, oc. */
+#define BC_INDEX(bc, oc, J) ((bc)*B*n) + (oc)*n + (J)
+                    /** Get the block count for block column size c, block column J. */
+#define GET_BC(A, bc, oc, J) (A)[BC_INDEX(bc, oc, J)]
+					/** Increment the block count for block column size c, block column J. */
+#define INC_BC(A, bc, oc, J) (A)[BC_INDEX(bc, oc, J)]++
+					/** Set the block count for block column size c, block column J, to zero. */
+#define ZERO_BC(A, bc, oc, J) (A)[BC_INDEX(bc, oc, J)] = 0
+
+					/** find index in p_nb_est given r, c, or, oc. */
 #define INDEX_INC(r, c, or, oc) (r*c*(c-1)/2)+(or*c)+(oc)
-						/*
-						 * POST: num_blocks == total
-						 * # of blocks in examined
-						 * rows.
-						 */
-						/*
-						 * POST: num_nonzeros ==
-						 * total # of non-zeros in
-						 * examined rows.
-						 */
-						for (size_t b_c = 1; b_c <= B; c++) {
-                            for (size_t o_c = 0; o_c < b_c; o_c++) {
-								int num_cols_to_add = b_c - o_c - 1;
-								int new_cols = n + num_cols_to_add;
-                                
-    						    size_t J = (j + o_c - 1) / new_cols;	/* block column index */
+					/*
+					 * POST: num_blocks == total # of
+					 * blocks in examined rows.
+					 */
 
-                                //create(count) new block
-								if (GET_BC(block_count, b_c, o_c, J) == 0) {
-									INC_BC(block_count, b_c, o_c, J);
-									//indexing based on c outer.
-									p_nb_est[INDEX_INC(r, b_c, o_r, o_c)]++;
-								}
-							}
-						}
-					}
-					num_nonzeros += ptr[i] - ptr[I * r];
-
+					DEBUG_PRINT(("NZ found at (%d, %d)\n", i, j));
 					/*
 					 * POST: num_nonzeros == total # of
-					 * non-zeros examined so far
+					 * non-zeros in examined rows.
 					 */
-					/*
-					 * POST: num_blocks == total # of new
-					 * blocks in rows 0..i
-					 */
-					/*
-					 * POST: block_count[c,J] == # of
-					 * non-zeros in block J of block-row
-					 * I
-					 */
-					/*
-					 * Reset block_count for next
-					 * iteration, I+1. This second loop *
-					 * is needed to keep the complexity
-					 * of phase I to O(nnz).
-					 */
-					
-				    for (i = I * r + o_r, di = 0; di < r; di++, i++) {
-					    size_t k;
+					for (size_t b_c = 1; b_c <= B; b_c++) {
+						for (size_t o_c = 0; o_c < b_c; o_c++) {
+							int num_cols_to_add = b_c - o_c - 1;
+							int new_cols = n + num_cols_to_add;
 
-                        // TODO(hjxu): b_r - o_r might need to have a -1.
-                        if (I == -1) { i = 0; di = r - o_r; }
+							//block column index
+								size_t J;
+							if (o_c == 0) {
+								J = j / new_cols;
+							} else {
+								J = (j + o_c - 1) / new_cols;
+							}
 
-						for (k = ptr[i]; k < ptr[i + 1]; k++) {
-							size_t j = ind[k];	/* column index */
-							size_t c;
-    						for (size_t b_c = 1; b_c <= B; c++) {
-                                for (size_t o_c = 0; o_c < b_c; o_c++) {
-		    						int num_cols_to_add = b_c - o_c - 1;
-			    					int new_cols = n + num_cols_to_add;
-                                    
-    				    		    size_t J = (j + o_c - 1) / new_cols;	/* block column index */
-                                    ZERO_BC(block_count, b_c, o_c, J);
-								}
+							DEBUG_PRINT(("row: %d, col %d, o_r: %d, o_c: %d\n", r, b_c, o_r, o_c));
+							//create(count) new block
+                            DEBUG_PRINT(("BC_INDEX %d\n", BC_INDEX(b_c, o_c, J)));
+							if (GET_BC(block_count, b_c, o_c, J) == 0) {
+								INC_BC(block_count, b_c, o_c, J);
+								//indexing based on c outer.
+								p_nb_est[INDEX_INC(r, b_c, o_r, o_c)]++;
 							}
 						}
 					}
 				}
+				 num_nonzeros += ptr[i] - ptr[I * r];
+
+				/*
+				 * POST: num_nonzeros == total # of non-zeros
+				 * examined so far
+				 */
+				/*
+				 * POST: num_blocks == total # of new blocks
+				 * in rows 0..i
+				 */
+				/*
+				 * POST: block_count[c,J] == # of non-zeros
+				 * in block J of block-row I
+				 */
+				/*
+				 * Reset block_count for next iteration, I+1.
+				 * This second loop * is needed to keep the
+				 * complexity of phase I to O(nnz).
+				 */
+			i++;
+            di++;
+            }
+    
+            i = I * r + o_r;
+            if (I == -1) {
+                i = 0;
+                di = r - o_r;
+            }                                            
+            while (di < r) {
+				size_t k;
+				for (k = ptr[i]; k < ptr[i + 1]; k++) {
+					size_t j = ind[k];	/* column index */
+					size_t c;
+					for (size_t b_c = 1; b_c <= B; b_c++) {
+						for (size_t o_c = 0; o_c < b_c; o_c++) {
+							DEBUG_PRINT(("CLEANUP: row: %d, col %d, o_r: %d, o_c: %d\n", r, b_c, o_r, o_c));
+							int num_cols_to_add = b_c - o_c - 1;
+							int new_cols = n + num_cols_to_add;
+							size_t J;
+							if (o_c == 0) {
+								J = j / new_cols;
+							} else {
+								J = (j + o_c - 1) / new_cols;
+							}
+
+							ZERO_BC(block_count, b_c, o_c, J);
+						}
+					}
+				}
+                i++;
+                di++;
 			}
 		}
+	}
 
 	free(block_count);
 
@@ -292,6 +323,8 @@ estimate_fill(size_t m,
 	      double *fill,
 	      int verbose)
 {
+	DEBUG_PRINT(("nnz: %d\n", nnz));
+	DEBUG_PRINT(("m: %d, n: %d\n", m, n));
 	size_t i = 0;
 	int err;
 
@@ -303,10 +336,12 @@ estimate_fill(size_t m,
 		if (nb_est == NULL)
 		return -1;
 
+	DEBUG_PRINT(("MAX BLOCK SIZE: %d\n", B));
 	//try all sizes and offsets
 		for (size_t b_r = 1; b_r <= B; b_r++) {
 		size_t nnz_est = 0;
 		memset(nb_est, 0, sizeof(size_t) * tempspace);
+		DEBUG_PRINT(("row size: %d\n", b_r));
 
 		err = EstimateBlockCounts(ptr, ind, m, n, b_r, B, tempspace, &nnz_est, nb_est);
 		if (err) {
@@ -318,6 +353,7 @@ estimate_fill(size_t m,
 		for (size_t b_c = 1; b_c <= B; b_c++) {
 			for (size_t o_r = 0; o_r < b_r; o_r++) {
 				for (size_t o_c = 0; o_c < b_c; o_c++) {
+
 					size_t nb_nnz = nb_est[j] * b_r * b_c;
 					double ratio;
 					if (!nnz_est)
@@ -326,8 +362,11 @@ estimate_fill(size_t m,
 						ratio = (double)nb_nnz / nnz_est;
 
 					fill[i] = ratio;
-					//fill[i] = fill for b_r,b_c, o_r, o_c
-				    j++;
+					/*
+					 * fill[i] = fill for b_r ,b_c, o_r,
+					 * o_c
+					 */
+					j++;
 					i++;
 				}
 			}
@@ -335,14 +374,4 @@ estimate_fill(size_t m,
 	}
 	free(nb_est);
 	return 0;
-
-	/*
-	 * ======= int estimate_fill (size_t m, size_t n, size_t nnz, const
-	 * size_t *ptr, const size_t *ind, size_t B, double *fill, int
-	 * verbose){ size_t i = 0; for (size_t b_r = 1; b_r <= B; b_r++) {
-	 * for (size_t b_c = 1; b_c <= B; b_c++) { for (size_t o_r = 0; o_r <
-	 * b_r; o_r++) { for (size_t o_c = 0; o_c < b_c; o_c++) { fill[i] =
-	 * 0.5; i++; } } } } return 0; >>>>>>>
-	 * c2a6897cfe5cc098aec042d814023c69ad757bce
-	 */
 }

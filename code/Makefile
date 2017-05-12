@@ -1,6 +1,6 @@
 CC = gcc-7
-CFLAGS = -std=c99 -march=native -lm -g
-LDFLAGS = -lgsl
+CFLAGS = -std=c99 -march=native -lm -g `pkg-config --cflags glib-2.0`
+LDFLAGS = -lgsl `pkg-config --libs glib-2.0`
 
 all: reference asx oski
 clean:
@@ -8,6 +8,6 @@ clean:
 
 reference: run.c test.o reference.o
 
-asx: run.c test.o asx.o
+asx: run.c test.o asx.o util.o
 
 oski: run.c test.o oski.o

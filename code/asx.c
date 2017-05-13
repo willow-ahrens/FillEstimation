@@ -57,7 +57,7 @@ int estimate_fill (size_t m,
   int Y_1[B][W];
   int Y_2[B][B];
 
-  size_t s = 1000;
+  size_t s = 100000;
 
   //Sample K items without replacement
   s = min(s, nnz);

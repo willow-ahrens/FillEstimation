@@ -116,6 +116,7 @@ int estimate_fill (size_t m,
     }
 
     size_t fill_index = 0;
+#ifdef offsets
     for (size_t b_r = 1; b_r <= B; b_r++) {
       for (int r = B; r < B + b_r; r++) {
         size_t o_r = (i + r + 1 - B) % b_r;
@@ -138,6 +139,19 @@ int estimate_fill (size_t m,
         }
       }
     }
+#else
+    for (size_t b_r = 1; b_r <= B; b_r++) {
+      for (size_t b_c = 1; b_c <= B; b_c++) {
+        size_t r_hi = B + ((i + b_r - 1) % b_r);
+        size_t r_lo = r_hi - b_r;
+        size_t c_hi = B + ((j + b_c - 1) % b_c);
+        size_t c_lo = c_hi - b_c;
+        size_t y = Z[r_hi][c_hi] - Z[r_hi][c_lo] - Z[r_lo][c_hi] + Z[r_lo][c_lo];
+        fill[fill_index] += 1.0/y;
+        fill_index++;
+      }
+    }
+#endif
   }
 
   return 0;

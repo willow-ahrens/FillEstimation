@@ -1,5 +1,5 @@
 CC = gcc-7
-CFLAGS = -std=c99 -march=native -lm -O3 `pkg-config --cflags glib-2.0`
+CFLAGS = -std=c99 -lm -march=native -O3 -g3 `pkg-config --cflags glib-2.0`
 LDFLAGS = -lgsl `pkg-config --libs glib-2.0`
 
 all: reference asx oski

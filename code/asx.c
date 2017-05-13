@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "util.h"
+#define offsets
 
 char *name () {
   return "asx";
@@ -55,7 +56,7 @@ int estimate_fill (size_t m,
   int Y_1[B][2 * B];
   int Y_2[B][B];
 
-  size_t s = 1000;
+  size_t s = 10000;
 
   //Sample K items without replacement
   s = min(s, nnz);

@@ -33,7 +33,7 @@ def benchmark(name, matrix):
 
   return output["time_mean"]
 
-matrices = ["1138_bus.mtx"]
+matrices = ["freeFlyingRobot_5.mtx"]
 reference = np.array([benchmark("reference", matrix_path(matrix)) for matrix in matrices])
 oski = np.array([benchmark("oski", matrix_path(matrix)) for matrix in matrices])
 asx = np.array([benchmark("asx", matrix_path(matrix)) for matrix in matrices])

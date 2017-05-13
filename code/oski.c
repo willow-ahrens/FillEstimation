@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <string.h>
 
-#define prob_examine 0.2
+#define prob_examine 0.02
 #define DEBUG 0
 
 #ifdef DEBUG

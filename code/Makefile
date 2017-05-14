@@ -6,7 +6,7 @@ all: reference asx oski
 clean:
 	rm -rf reference asx oski *.o *.dSYM
 
-reference: run.c test.o reference.o
+reference: run.c test.o reference.o util.o
 
 asx: run.c test.o asx.o util.o
 

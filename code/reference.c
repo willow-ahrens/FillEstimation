@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "util.h"
 
 char *name () {
   return "reference";
@@ -50,16 +51,34 @@ int estimate_fill (size_t m,
                    size_t B,
                    double *fill,
                    int verbose){
-  size_t i = 0;
-  for (size_t b_r = 1; b_r <= B; b_r++) {
-   for (size_t b_c = 1; b_c <= B; b_c++) {
-     for (size_t o_r = 0; o_r < b_r; o_r++) {
-       for (size_t o_c = 0; o_c < b_c; o_c++) {
-         fill[i] = 0.5;
-         i++;
-       }
-     }
-   }
+  hash_t *table = hash_create();
+  int fill_index = 0;
+  for (int b_r = 1; b_r <= B; b_r++) {
+    for (int b_c = 1; b_c <= B; b_c++) {
+      for (int o_r = 0; o_r < b_r; o_r++) {
+        for (int o_c = 0; o_c < b_c; o_c++) {
+          size_t i = 0;
+          size_t j = 0;
+          size_t nnzb = 0;
+          for (size_t t = 0; t < nnz; t++){
+            while (ptr[i + 1] <= t) {
+              i++;
+            }
+            j = ind[t];
+            size_t block_i = (i + o_r)/b_r;
+            size_t block_j = (j + o_c)/b_c;
+            if (hash_get(table, block_i * m + block_j, 1)) {
+              hash_set(table, block_i * m + block_j, 0);
+              nnzb += 1;
+            }
+          }
+          fill[fill_index] = b_r * b_c * nnzb / (double)nnz;
+          fill_index++;
+          hash_clear(table);
+        }
+      }
+    }
   }
+  hash_destroy(table);
   return 0;
 }

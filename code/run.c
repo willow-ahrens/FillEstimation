@@ -39,7 +39,7 @@ static void usage () {
 
 int main (int argc, char **argv) {
 
-  size_t B = 5;
+  size_t B = 12;
   int trials = 1;
 
   /* Beware. Option parsing below. */
@@ -100,11 +100,11 @@ int main (int argc, char **argv) {
         break;
 
       case 'c':
-        results = 1;
+        clock = 1;
         break;
 
       case 'd':
-        results = 0;
+        clock = 0;
         break;
 
       case 'r':

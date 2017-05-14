@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "util.h"
-//#define offsets
 
 char *name () {
   return "asx";
@@ -54,13 +53,11 @@ int estimate_fill (size_t m,
                    int verbose){
   size_t W = 2 * B;
   int Z[W][W];
-  int Y_1[B][W];
-  int Y_2[B][B];
 
-  size_t s = 100000;
+  size_t s = 1000;
+  s = min(s, nnz);
 
   //Sample K items without replacement
-  s = min(s, nnz);
   size_t samples[s];
   size_t samples_i[s];
   size_t samples_j[s];
@@ -76,6 +73,26 @@ int estimate_fill (size_t m,
       }
       samples_i[t] = i;
       samples_j[t] = ind[samples[t]];
+    }
+  }
+
+  //Create a shifted scaled fill array
+  int fill_index = 0;
+  for (int b_r = 1; b_r <= B; b_r++) {
+    for (int b_c = 1; b_c <= B; b_c++) {
+      fill_index += b_r * b_c;
+    }
+  }
+  double ssfill[fill_index];
+  fill_index = 0;
+  for (int b_r = 1; b_r <= B; b_r++) {
+    for (int b_c = 1; b_c <= B; b_c++) {
+      for (int o_r = 0; o_r < b_r; o_r++) {
+        for (int o_c = 0; o_c < b_c; o_c++) {
+          ssfill[fill_index] = 0;
+          fill_index++;
+        }
+      }
     }
   }
 
@@ -117,65 +134,48 @@ int estimate_fill (size_t m,
       }
     }
 
-    size_t fill_index = 0;
-#ifdef offsets
-    for (size_t b_r = 1; b_r <= B; b_r++) {
-      for (int r = B; r < B + b_r; r++) {
-        size_t o_r = (i + r + 1 - B) % b_r;
+    fill_index = 0;
+    int Y_0[B][W];
+    int Y_1[B][B];
+    for (int b_r = 1; b_r <= B; b_r++) {
+      for (int r = 0; r < b_r; r++) {
+        int o_r = (i + r) % b_r;
+        int r_hi = B + r;
+        int r_lo = r_hi - b_r;
         for (int c = 0; c < W; c++) {
-          Y_1[o_r][c] = Z[r][c] - Z[r - b_r][c];
+          Y_0[o_r][c] = Z[r_hi][c] - Z[r_lo][c];
         }
       }
-      for (size_t b_c = 1; b_c <= B; b_c++) {
-        for (int c = B; c < B + b_c; c++) {
-          size_t o_c = (j + c + 1 - B) % b_c;
-          for (size_t o_r = 0; o_r < b_r; o_r++) {
-            Y_2[o_r][o_c] = Y_1[o_r][c] - Y_1[o_r][c - b_c];
+      for (int b_c = 1; b_c <= B; b_c++) {
+        for (int o_r = 0; o_r < b_r; o_r++) {
+          for (int c = 0; c < b_c; c++) {
+            int o_c = ((j + c) % b_c);
+            int c_hi = B + c;
+            int c_lo = c_hi - b_c;
+            Y_1[o_r][o_c] = Y_0[o_r][c_hi] - Y_0[o_r][c_lo];
           }
-        }
-        for (size_t o_r = 0; o_r < b_r; o_r++) {
-          for (size_t o_c = 0; o_c < b_c; o_c++) {
-            fill[fill_index] += 1.0/Y_2[o_r][o_c];
+          for (int o_c = 0; o_c < b_c; o_c++) {
+            ssfill[fill_index] += 1.0/Y_1[o_r][o_c];
             fill_index++;
           }
         }
       }
     }
-#else
-    int Y[W];
-    int c_hi[B + 1];
-    int c_lo[B + 1];
-    for (int b_c = 1; b_c <= B; b_c++) {
-      c_hi[b_c] = B + ((i + b_c - 1) % b_c);
-      c_lo[b_c] = c_hi[b_c] - b_c;
-    }
-    for (int b_r = 1; b_r <= B; b_r++) {
-      int r_hi = B + ((i + b_r - 1) % b_r);
-      int r_lo = r_hi - b_r;
-      for (int c = 0; c < W; c++) {
-        Y[c] = Z[r_hi][c] - Z[r_lo][c];
-      }
-      for (int b_c = 1; b_c <= B; b_c++) {
-        int y = Y[c_hi[b_c]] - Y[c_lo[b_c]];
-        fill[fill_index] += 1.0/y;
-        fill_index++;
-      }
-    }
+  }
 
-    /*
-    for (int b_r = 1; b_r <= B; b_r++) {
-      int r_hi = B + ((i + b_r - 1) % b_r);
-      int r_lo = r_hi - b_r;
-      for (int b_c = 1; b_c <= B; b_c++) {
-        int c_hi = B + ((i + b_c - 1) % b_c);
-        int c_lo = c_hi - b_c;
-        int y = Z[r_hi][c_hi] - Z[r_lo][c_hi] - Z[r_hi][c_lo] + Z[r_lo][c_lo];
-        fill[fill_index] += 1.0/y;
-        fill_index++;
+  fill_index = 0;
+  for (int b_r = 1; b_r <= B; b_r++) {
+    for (int b_c = 1; b_c <= B; b_c++) {
+      double factor = b_r * b_c / (double)s;
+      for (int r = 0; r < b_r; r++) {
+        int o_r = (b_r - r - 1) % b_r;
+        for (int c = 0; c < b_c; c++) {
+          int o_c = (b_c - c - 1) % b_c;
+          fill[fill_index + o_r * b_c + o_c] = ssfill[fill_index + r * b_c + c] * factor;
+        }
       }
+      fill_index += b_r * b_c;
     }
-    */
-#endif
   }
 
   return 0;

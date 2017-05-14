@@ -17,7 +17,12 @@ def fill_estimate(name, matrix, B = 12, trials = 1, clock = True, results = Fals
     command += ["-s"]
   command += [matrix]
   output = check_output(command)
-  return json.loads(output)
+  try:
+    return json.loads(output)
+  except ValueError as e:
+    print(output)
+    raise(e)
+
 
 def matrix_path(matrix):
   return os.path.join(os.path.dirname(os.path.realpath(__file__)), "matrix", matrix)
@@ -33,6 +38,10 @@ def benchmark(name, matrix):
 
   return output["time_mean"]
 
+def flat_results(name, matrix, trials = 1):
+  results = fill_estimate(name, matrix, clock = False, results = True, trials = trials)["output"]
+  return [[fill for c in result for b in c for a in b for fill in a] for result in results]
+
 matrices = ["freeFlyingRobot_5.mtx"]
 reference = np.array([benchmark("reference", matrix_path(matrix)) for matrix in matrices])
 oski = np.array([benchmark("oski", matrix_path(matrix)) for matrix in matrices])
@@ -43,3 +52,20 @@ print("            OSKI Time: %g" % np.mean(oski))
 print("             ASX Time: %g" % np.mean(asx))
 print("     ASX/OSKI Speedup: %g" % np.mean(oski/asx))
 print("ASX/Reference Speedup: %g" % np.mean(reference/asx))
+
+trials = 100;
+reference = []
+asx = []
+oski = []
+for matrix in matrices:
+  reference_results = flat_results("reference", matrix_path(matrix), trials = 1)
+  reference += [reference_results[0] for _ in range(trials)]
+  asx += flat_results("asx", matrix_path(matrix), trials = trials)
+  #oski += flat_results("oski", matrix_path(matrix), trials = trials)
+reference = np.array(reference)
+asx = np.array(asx)
+#oski = np.array(oski)
+print(type(asx[1]))
+print("        Over %d trials..." % trials)
+print(" Average asx max error: %g" % np.mean(np.max(np.abs(reference - asx)/reference, axis=1)))
+#print("Average oski max error: %g" % np.mean(np.max(np.abs(reference - oski)/reference, axis=1)))

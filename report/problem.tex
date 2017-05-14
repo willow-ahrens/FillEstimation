@@ -11,7 +11,7 @@
 
     We also define a sort of inverse function of $l$, $r$, which returns the range of numbers corresponding to the $j^{th}$ block.
     \[
-      r_{b, o}(j) = (o + j * (b - 1) + 1) \to (o + j * b)
+      r_{b, o}(j) = ((j - 1) * b + 1 - o) \to (j * b - o)
     \]
 
     We can extend this blocking concept to multiple dimensions. An $N$-dimensional \textbf{grid} $g = (b_1, b_2, ..., b_N, o_1, o_2, ..., o_N)$ is characterized by block dimensions $b_1, b_2, ..., b_N$ and block offsets $o_1, o_2, ..., o_N$ where $0 \leq o_n \leq b_n$ for all $1 \leq n \leq N$. We say that $g \leq B$ if $b_1, b_2, ..., b_N \leq B$. We extend our definitions of $l$ and $r$ to an $N$-dimensional grid $g$ as follows:

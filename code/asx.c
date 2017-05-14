@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "util.h"
@@ -10,7 +11,8 @@ char *name () {
  *  Given an m by n CSR matrix A, estimates the fill ratio if the matrix were
  *  converted into b_r by b_c BCSR format. The fill ratio is b_r times b_c times
  *  the number of nonzero blocks in the BCSR format divided by the number of
- *  nonzeros.
+ *  nonzeros. All estimates should be accurate to relative error epsilon with
+ *  probability at least (1 - delta).
  *
  *  The caller supplies this routine with a maximum row and column block size B,
  *  and this routine returns the estimated fill ratios for all
@@ -25,6 +27,8 @@ char *name () {
  *  \param[in] *ptr CSR row pointers.
  *  \param[in] *ind CSR column indices.
  *  \param[in] B Maximum desired block size
+ *  \param[in] epsilon Epsilon
+ *  \param[in] delta Delta
  *  \param[out] *fill Fill ratios for all specified b_r, b_c in order
  *  \param[in] verbose 0 if you should be quiet
  *
@@ -45,12 +49,16 @@ int estimate_fill (size_t m,
                    const size_t *ptr,
                    const size_t *ind,
                    size_t B,
+                   double epsilon,
+                   double delta,
                    double *fill,
                    int verbose){
   size_t W = 2 * B;
   int Z[W][W];
 
-  size_t s = 5000;
+  double lhs = 2 * log(B/delta) * B * B / (epsilon * epsilon);
+  size_t s;
+  s = ((lhs - lhs/nnz) + sqrt(lhs * (lhs + (2 * lhs + lhs / nnz) / nnz + 4)))/(2 + 2 * lhs / nnz);
   s = min(s, nnz);
 
   //Sample K items without replacement

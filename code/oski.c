@@ -4,10 +4,6 @@
 #include <string.h>
 #include "util.h"
 
-// set \sigma in the alg = probability a
-// block row gets sampled
-#define prob_examine 0.02
-
 /**
  *  \brief Given an \f$m\times n\f$ CSR matrix \f$A\f$,
  *  estimates the fill ratio if the matrix were converted
@@ -35,6 +31,7 @@
  *  \param[in] r Desired row block size
  *  \param[in] B Maximum desired column block size (\f$C\f$).
  *  examining each block row.
+ *  \param[in] prob_examine the probability a block gets examined.
  *  \param[in,out] p_nnz_est Used to return the number of
  *  non-zeros actually examined. Must be non-NULL.
  *  \param[in, out] p_nb_est Used to return the number of
@@ -52,7 +49,7 @@
 static int EstimateBlockCounts(const size_t * ptr, const size_t * ind,
     size_t m, size_t n,
     size_t r, size_t B,
-    size_t * p_nnz_est, size_t * p_nb_est)
+    double prob_examine, size_t * p_nnz_est, size_t * p_nb_est)
 {
   /* block dimensions */
   size_t M;
@@ -189,7 +186,8 @@ char * name() {
  *  Given an m by n CSR matrix A, estimates the fill ratio if the matrix were
  *  converted into b_r by b_c BCSR format. The fill ratio is b_r times b_c times
  *  the number of nonzero blocks in the BCSR format divided by the number of
- *  nonzeros.
+ *  nonzeros. All estimates should be accurate to relative error epsilon with
+ *  probability at least (1 - delta).
  *
  *  The caller supplies this routine with a maximum row and column block size B,
  *  and this routine returns the estimated fill ratios for all
@@ -204,6 +202,8 @@ char * name() {
  *  \param[in] *ptr CSR row pointers.
  *  \param[in] *ind CSR column indices.
  *  \param[in] B Maximum desired block size
+ *  \param[in] epsilon Epsilon
+ *  \param[in] delta Delta
  *  \param[out] *fill Fill ratios for all specified b_r, b_c in order
  *  \param[in] verbose 0 if you should be quiet
  *
@@ -219,13 +219,15 @@ char * name() {
  *  \returns On success, returns 0. On error, returns an error code.
  */
 int estimate_fill (size_t m,
-    size_t n,
-    size_t nnz,
-    const size_t *ptr,
-    const size_t *ind,
-    size_t B,
-    double *fill,
-    int verbose){
+                   size_t n,
+                   size_t nnz,
+                   const size_t *ptr,
+                   const size_t *ind,
+                   size_t B,
+                   double epsilon,
+                   double delta,
+                   double *fill,
+                   int verbose){
   int r;
   size_t *nb_est;
   int err;
@@ -242,7 +244,7 @@ int estimate_fill (size_t m,
     nnz_est = 0;
     memset(nb_est, 0, sizeof(size_t) * B);
     err = EstimateBlockCounts(ptr, ind,
-        m, n, r, B, &nnz_est, nb_est);
+        m, n, r, B, delta, &nnz_est, nb_est);
     if (err) {
       free(nb_est);
       return err;

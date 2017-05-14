@@ -1,52 +1,26 @@
-import json
-import os
-from subprocess import check_output
+from util import *
 import numpy as np
 
-def fill_estimate(name, matrix, B = 12, trials = 1, clock = True, results = False):
-  command = [os.path.join(os.path.dirname(os.path.realpath(__file__)), name)]
-  command += ["-B", "%d" % B]
-  command += ["-t", "%d" % trials]
-  if clock:
-    command += ["-c"]
-  else:
-    command += ["-d"]
-  if results:
-    command += ["-r"]
-  else:
-    command += ["-s"]
-  command += [matrix]
-  output = check_output(command)
-  try:
-    return json.loads(output)
-  except ValueError as e:
-    print(output)
-    raise(e)
-
-
-def matrix_path(matrix):
-  return os.path.join(os.path.dirname(os.path.realpath(__file__)), "matrix", matrix)
-
-def benchmark(name, matrix):
+def benchmark(name, matrices, B = 12, epsilon = 0.1, delta = 0.01):
   timeout = 0.1
   trials = 1
-  while True:
-    output = fill_estimate(name, matrix, trials = trials)
-    if output["time_total"] >= 0.1:
-      break
-    trials *= 10
+  times = []
+  for matrix in matrices:
+    while True:
+      result = fill_estimates(name, [matrix_path(matrix)], B = B, epsilon = epsilon, delta = delta, trials = trials)[0]
+      if result["time_total"] >= 0.1:
+        break
+      trials *= 10
+    times.append(result["time_mean"])
+  return np.array(times)
 
-  return output["time_mean"]
+matrices = ["freeFlyingRobot_5"]
+oski_kwargs= {"delta": 0.02}
+asx_kwargs= {"epsilon": 0.3, "delta": 0.01}
 
-def flat_results(name, matrix, trials = 1):
-  results = fill_estimate(name, matrix, clock = False, results = True, trials = trials)["output"]
-  return [[fill for a in result for fill in a] for result in results]
-
-matrices = ["tp-6.mtx"]
-#matrices = ["freeFlyingRobot_5.mtx"]
-reference = np.array([benchmark("reference", matrix_path(matrix)) for matrix in matrices])
-oski = np.array([benchmark("oski", matrix_path(matrix)) for matrix in matrices])
-asx = np.array([benchmark("asx", matrix_path(matrix)) for matrix in matrices])
+reference = benchmark("reference", matrices)
+oski = benchmark("oski", matrices, **oski_kwargs)
+asx = benchmark("asx", matrices, **asx_kwargs)
 
 print("       Reference Time: %g" % np.mean(reference))
 print("            OSKI Time: %g" % np.mean(oski))
@@ -55,20 +29,15 @@ print("     ASX/OSKI Speedup: %g" % np.mean(oski/asx))
 print("ASX/Reference Speedup: %g" % np.mean(reference/asx))
 
 trials = 100;
-reference = []
-asx = []
-oski = []
-for matrix in matrices:
-  reference_results = flat_results("reference", matrix_path(matrix), trials = 1)
-  reference += [reference_results[0] for _ in range(trials)]
-  asx += flat_results("asx", matrix_path(matrix), trials = trials)
-  oski += flat_results("oski", matrix_path(matrix), trials = trials)
-reference = np.array(reference)
-asx = np.array(asx)
-oski = np.array(oski)
-print(type(asx[1]))
+references = get_references(matrices)
+asx = fill_estimates("asx", matrices, results = True, trials = trials, **asx_kwargs)
+oski = fill_estimates("oski", matrices, results = True, trials = trials, **asx_kwargs)
+get_errors(asx, references)
+get_errors(oski, references)
+asx = np.concatenate([result["errors"] for result in asx], axis = 0)
+oski = np.concatenate([result["errors"] for result in oski], axis = 0)
 print("       Over %d trials..." % trials)
-print(" Median asx max error: %g" % np.median(np.max(np.abs(reference - asx)/reference, axis=1)))
-print("Median oski max error: %g" % np.median(np.max(np.abs(reference - oski)/reference, axis=1)))
-print("   Mean asx max error: %g" % np.mean(np.max(np.abs(reference - asx)/reference, axis=1)))
-print("  Mean oski max error: %g" % np.mean(np.max(np.abs(reference - oski)/reference, axis=1)))
+print(" Median asx max error: %g" % np.median(asx))
+print("Median oski max error: %g" % np.median(oski))
+print("   Mean asx max error: %g" % np.mean(asx))
+print("  Mean oski max error: %g" % np.mean(oski))

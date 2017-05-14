@@ -18,6 +18,8 @@ int estimate_fill (size_t m,
                    const size_t *ptr,
                    const size_t *ind,
                    size_t B,
+                   double epsilon,
+                   double delta,
                    double *fill,
                    int verbose);
 
@@ -27,6 +29,8 @@ int test (size_t m,
           const size_t *ptr,
           const size_t *ind,
           size_t B,
+          double epsilon,
+          double delta,
           int trials,
           int clock,
           int results,
@@ -38,7 +42,7 @@ int test (size_t m,
   }
 
   //Load problem into cache
-  estimate_fill(m, n, nnz, ptr, ind, B, fill, verbose);
+  estimate_fill(m, n, nnz, ptr, ind, B, epsilon, delta, fill, verbose);
   for (size_t i = 0; i < B * B; i++) {
     fill[i] = 0;
   }
@@ -47,14 +51,14 @@ int test (size_t m,
   //Benchmark some runs
   double time = -wall_time();
   for (int t = 0; t < trials; t++){
-    estimate_fill(m, n, nnz, ptr, ind, B, fill + t * B * B, verbose);
+    estimate_fill(m, n, nnz, ptr, ind, B, epsilon, delta, fill + t * B * B, verbose);
   }
   time += wall_time();
 
   printf("{\n");
   size_t i = 0;
   if (results) {
-    printf("  \"output\": [\n");
+    printf("  \"results\": [\n");
     for (int t = 0; t < trials; t++) {
       printf("    [\n");
       for (size_t b_r = 1; b_r <= B; b_r++) {

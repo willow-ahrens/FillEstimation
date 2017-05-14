@@ -7,7 +7,7 @@ def benchmark(name, matrices, B = 12, epsilon = 0.1, delta = 0.01):
   times = []
   for matrix in matrices:
     while True:
-      result = fill_estimates(name, [matrix_path(matrix)], B = B, epsilon = epsilon, delta = delta, trials = trials)[0]
+      result = fill_estimates(name, [matrix], B = B, epsilon = epsilon, delta = delta, trials = trials)[0]
       if result["time_total"] >= 0.1:
         break
       trials *= 10
@@ -15,8 +15,9 @@ def benchmark(name, matrices, B = 12, epsilon = 0.1, delta = 0.01):
   return np.array(times)
 
 matrices = ["freeFlyingRobot_5"]
+matrices = ["cont-300"]
 oski_kwargs= {"delta": 0.02}
-asx_kwargs= {"epsilon": 0.3, "delta": 0.01}
+asx_kwargs= {"epsilon": 0.4, "delta": 0.01}
 
 reference = benchmark("reference", matrices)
 oski = benchmark("oski", matrices, **oski_kwargs)

@@ -40,9 +40,10 @@ def benchmark(name, matrix):
 
 def flat_results(name, matrix, trials = 1):
   results = fill_estimate(name, matrix, clock = False, results = True, trials = trials)["output"]
-  return [[fill for c in result for b in c for a in b for fill in a] for result in results]
+  return [[fill for a in result for fill in a] for result in results]
 
-matrices = ["freeFlyingRobot_5.mtx"]
+matrices = ["tp-6.mtx"]
+#matrices = ["freeFlyingRobot_5.mtx"]
 reference = np.array([benchmark("reference", matrix_path(matrix)) for matrix in matrices])
 oski = np.array([benchmark("oski", matrix_path(matrix)) for matrix in matrices])
 asx = np.array([benchmark("asx", matrix_path(matrix)) for matrix in matrices])
@@ -61,11 +62,13 @@ for matrix in matrices:
   reference_results = flat_results("reference", matrix_path(matrix), trials = 1)
   reference += [reference_results[0] for _ in range(trials)]
   asx += flat_results("asx", matrix_path(matrix), trials = trials)
-  #oski += flat_results("oski", matrix_path(matrix), trials = trials)
+  oski += flat_results("oski", matrix_path(matrix), trials = trials)
 reference = np.array(reference)
 asx = np.array(asx)
-#oski = np.array(oski)
+oski = np.array(oski)
 print(type(asx[1]))
-print("        Over %d trials..." % trials)
-print(" Average asx max error: %g" % np.mean(np.max(np.abs(reference - asx)/reference, axis=1)))
-#print("Average oski max error: %g" % np.mean(np.max(np.abs(reference - oski)/reference, axis=1)))
+print("       Over %d trials..." % trials)
+print(" Median asx max error: %g" % np.median(np.max(np.abs(reference - asx)/reference, axis=1)))
+print("Median oski max error: %g" % np.median(np.max(np.abs(reference - oski)/reference, axis=1)))
+print("   Mean asx max error: %g" % np.mean(np.max(np.abs(reference - asx)/reference, axis=1)))
+print("  Mean oski max error: %g" % np.mean(np.max(np.abs(reference - oski)/reference, axis=1)))

@@ -32,34 +32,22 @@ int test (size_t m,
           int results,
           int verbose) {
 
-  size_t nfill = 0;
-  for (size_t b_r = 1; b_r <= B; b_r++) {
-    for (size_t b_c = 1; b_c <= B; b_c++) {
-      for (size_t o_r = 0; o_r < b_r; o_r++) {
-        for (size_t o_c = 0; o_c < b_c; o_c++) {
-          nfill++;
-        }
-      }
-    }
+  double *fill = (double*)malloc(sizeof(double) * B * B * trials);
+  for (size_t i = 0; i < B * B * trials; i++) {
+    fill[i] = 0;
   }
-
-  double *fills = (double*)malloc(sizeof(double) * nfill * trials);
 
   //Load problem into cache
-  for (size_t i = 0; i < nfill; i++) {
-    fills[i] = 0;
+  estimate_fill(m, n, nnz, ptr, ind, B, fill, verbose);
+  for (size_t i = 0; i < B * B; i++) {
+    fill[i] = 0;
   }
-  estimate_fill(m, n, nnz, ptr, ind, B, fills, verbose);
 
-  //Zero the output again
-  for (size_t i = 0; i < nfill * trials; i++) {
-    fills[i] = 0;
-  }
 
   //Benchmark some runs
   double time = -wall_time();
   for (int t = 0; t < trials; t++){
-    estimate_fill(m, n, nnz, ptr, ind, B, fills + t * nfill, verbose);
+    estimate_fill(m, n, nnz, ptr, ind, B, fill + t * B * B, verbose);
   }
   time += wall_time();
 
@@ -72,16 +60,8 @@ int test (size_t m,
       for (size_t b_r = 1; b_r <= B; b_r++) {
         printf("      [\n");
         for (size_t b_c = 1; b_c <= B; b_c++) {
-          printf("        [\n");
-          for (size_t o_r = 0; o_r < b_r; o_r++) {
-            printf("          [");
-            for (size_t o_c = 0; o_c < b_c; o_c++) {
-              printf("%.*e%s", DECIMAL_DIG, fills[i], o_c < b_c - 1 ? ", " : "");
-              i++;
-            }
-            printf("]%s\n", o_r < b_r - 1 ? "," : "");
-          }
-          printf("        ]%s\n", b_c <= B - 1 ? "," : "");
+          printf("%.*e%s", DECIMAL_DIG, fill[i], b_c <= B - 1 ? ", " : "");
+          i++;
         }
         printf("      ]%s\n", b_r <= B - 1 ? "," : "");
       }
@@ -95,6 +75,6 @@ int test (size_t m,
   }
   printf("\n}\n");
 
-  free(fills);
+  free(fill);
   return 0;
 }

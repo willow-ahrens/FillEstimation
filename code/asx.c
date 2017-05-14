@@ -8,13 +8,13 @@ char *name () {
 
 /**
  *  Given an m by n CSR matrix A, estimates the fill ratio if the matrix were
- *  converted into b_r by b_c (offset by o_r and o_c) BCSR format. The fill
- *  ratio is b_r times b_c times the number of nonzero blocks in the BCSR format
- *  divided by the number of nonzeros.
+ *  converted into b_r by b_c BCSR format. The fill ratio is b_r times b_c times
+ *  the number of nonzero blocks in the BCSR format divided by the number of
+ *  nonzeros.
  *
  *  The caller supplies this routine with a maximum row and column block size B,
  *  and this routine returns the estimated fill ratios for all
- *  1 <= b_r, b_c <= B and 0 <= o_r < b_r and 0 <= o_c < b_c
+ *  1 <= b_r, b_c <= B.
  *
  *  This routine assumes the CSR matrix uses full storage, and assumes that
  *  column indicies are sorted.
@@ -25,19 +25,15 @@ char *name () {
  *  \param[in] *ptr CSR row pointers.
  *  \param[in] *ind CSR column indices.
  *  \param[in] B Maximum desired block size
- *  \param[out] *fill Fill ratios for all specified b_r, b_c, o_r, o_c in order
+ *  \param[out] *fill Fill ratios for all specified b_r, b_c in order
  *  \param[in] verbose 0 if you should be quiet
  *
  *  Note that the fill ratios should be stored according to the following order:
  *  size_t i = 0;
  *  for (size_t b_r = 1; b_r <= B; b_r++) {
  *    for (size_t b_c = 1; b_c <= B; b_c++) {
- *      for (size_t o_r = 0; o_r < b_r; o_r++) {
- *        for (size_t o_c = 0; o_c < b_c; o_c++) {
- *          //fill[i] = fill for b_r, b_c, o_r, o_c
- *          i++;
- *        }
- *      }
+ *      //fill[i] = fill for b_r, b_c, o_r, o_c
+ *      i++;
  *    }
  *  }
  *
@@ -54,7 +50,7 @@ int estimate_fill (size_t m,
   size_t W = 2 * B;
   int Z[W][W];
 
-  size_t s = 10000;
+  size_t s = 5000;
   s = min(s, nnz);
 
   //Sample K items without replacement
@@ -73,26 +69,6 @@ int estimate_fill (size_t m,
       }
       samples_i[t] = i;
       samples_j[t] = ind[samples[t]];
-    }
-  }
-
-  //Create a shifted scaled fill array
-  int fill_index = 0;
-  for (int b_r = 1; b_r <= B; b_r++) {
-    for (int b_c = 1; b_c <= B; b_c++) {
-      fill_index += b_r * b_c;
-    }
-  }
-  double ssfill[fill_index];
-  fill_index = 0;
-  for (int b_r = 1; b_r <= B; b_r++) {
-    for (int b_c = 1; b_c <= B; b_c++) {
-      for (int o_r = 0; o_r < b_r; o_r++) {
-        for (int o_c = 0; o_c < b_c; o_c++) {
-          ssfill[fill_index] = 0;
-          fill_index++;
-        }
-      }
     }
   }
 
@@ -134,47 +110,48 @@ int estimate_fill (size_t m,
       }
     }
 
-    fill_index = 0;
-    int Y_0[B][W];
-    int Y_1[B][B];
-    for (int b_r = 1; b_r <= B; b_r++) {
-      for (int r = 0; r < b_r; r++) {
-        int o_r = (i + r) % b_r;
-        int r_hi = B + r;
+    #if 1
+      int fill_index = 0;
+      for (int b_r = 1; b_r <= B; b_r++) {
+        int r_hi = B + ((i + b_r - 1) % b_r);
+        int r_lo = r_hi - b_r;
+        for (int b_c = 1; b_c <= B; b_c++) {
+          int c_hi = B + ((j + b_c - 1) % b_c);
+          int c_lo = c_hi - b_c;
+          int y_0 = Z[r_hi][c_hi] - Z[r_lo][c_hi] - Z[r_hi][c_lo] + Z[r_lo][c_lo];
+          fill[fill_index] += 1.0/y_0;
+          fill_index++;
+        }
+      }
+    #else
+      int fill_index = 0
+      int Y_0[W];
+      int c_hi[B + 1];
+      int c_lo[B + 1];
+      for (int b_c = 1; b_c <= B; b_c++) {
+        c_hi[b_c] = B + ((j + b_c - 1) % b_c);
+        c_lo[b_c] = c_hi[b_c] - b_c;
+      }
+      for (int b_r = 1; b_r <= B; b_r++) {
+        int r_hi = B + ((i + b_r - 1) % b_r);
         int r_lo = r_hi - b_r;
         for (int c = 0; c < W; c++) {
-          Y_0[o_r][c] = Z[r_hi][c] - Z[r_lo][c];
+          Y_0[c] = Z[r_hi][c] - Z[r_lo][c];
+        }
+        for (int b_c = 1; b_c <= B; b_c++) {
+          int y_1 = Y_0[c_hi[b_c]] - Y_0[c_lo[b_c]];
+          fill[fill_index] += 1.0/y_1;
+          fill_index++;
         }
       }
-      for (int b_c = 1; b_c <= B; b_c++) {
-        for (int o_r = 0; o_r < b_r; o_r++) {
-          for (int c = 0; c < b_c; c++) {
-            int o_c = ((j + c) % b_c);
-            int c_hi = B + c;
-            int c_lo = c_hi - b_c;
-            Y_1[o_r][o_c] = Y_0[o_r][c_hi] - Y_0[o_r][c_lo];
-          }
-          for (int o_c = 0; o_c < b_c; o_c++) {
-            ssfill[fill_index] += 1.0/Y_1[o_r][o_c];
-            fill_index++;
-          }
-        }
-      }
-    }
+    #endif
   }
 
-  fill_index = 0;
+  int fill_index = 0;
   for (int b_r = 1; b_r <= B; b_r++) {
     for (int b_c = 1; b_c <= B; b_c++) {
-      double factor = b_r * b_c / (double)s;
-      for (int r = 0; r < b_r; r++) {
-        int o_r = (b_r - r - 1) % b_r;
-        for (int c = 0; c < b_c; c++) {
-          int o_c = (b_c - c - 1) % b_c;
-          fill[fill_index + o_r * b_c + o_c] = ssfill[fill_index + r * b_c + c] * factor;
-        }
-      }
-      fill_index += b_r * b_c;
+      fill[fill_index] *= b_r * b_c / (double)s;
+      fill_index++;
     }
   }
 

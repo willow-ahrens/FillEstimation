@@ -4,10 +4,10 @@ LDFLAGS = -lgsl `pkg-config --libs glib-2.0`
 
 all: reference asx oski
 clean:
-	rm -rf reference asx oski *.o *.dSYM
+	rm -rf reference asx oski *.o *.dSYM *.trace
 
 reference: run.c test.o reference.o util.o
 
 asx: run.c test.o asx.o util.o
 
-oski: run.c test.o oski.o
+oski: run.c test.o oski.o util.o

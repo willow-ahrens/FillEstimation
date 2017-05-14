@@ -40,6 +40,15 @@ size_t random_range (size_t lo, size_t hi) {
   return lo + gsl_rng_uniform_int(r, n);//todo this range might not be big enough/type issues may occur here.
 }
 
+double random_uniform () {
+  if (!r) {
+    gsl_rng_env_setup();
+    const gsl_rng_type *T = gsl_rng_default;
+    r = gsl_rng_alloc (T);
+  }
+  return gsl_rng_uniform(r);
+}
+
 void random_choose (size_t *samples, size_t n, size_t lo, size_t hi) {
   hash_t *table = hash_create();
   for (size_t i = 0; i < n; i++) {

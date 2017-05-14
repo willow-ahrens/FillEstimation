@@ -58,7 +58,31 @@ int size_t_cmp(const void *a, const void *b)
     return *ia  - *ib;
 }
 
+void quicksort(size_t *stuff, size_t n)
+{
+  if (n < 2) return;
+
+  size_t pivot = stuff[n / 2];
+
+  size_t i, j;
+  for (i = 0, j = n - 1; ; i++, j--)
+  {
+    while (stuff[i] < pivot) i++;
+    while (stuff[j] > pivot) j--;
+
+    if (i >= j) break;
+
+    size_t temp = stuff[i];
+    stuff[i]     = stuff[j];
+    stuff[j]     = temp;
+  }
+
+  quicksort(stuff, i);
+  quicksort(stuff + i, n - i);
+}
+
 void sort (size_t *stuff, size_t n) {
+  //quicksort(stuff, n);
   qsort(stuff, n, sizeof(size_t), size_t_cmp);
 }
 

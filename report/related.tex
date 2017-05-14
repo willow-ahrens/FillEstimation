@@ -1,4 +1,64 @@
 % !TEX root =  main.tex
 
 \section{Previous Work}
-    \todo{finish plz. Mainly this is Vuduc}~\cite{vuduc04}
+% \todo{finish plz. Mainly this is Vuduc}Vuduc thesis~\cite{vuduc04}
+Fill estimation is an important intermediate step for matrix computation optimization. 
+Specifically, it is commonly used in autotuning for sparse matrices to find the
+optimal blocking scheme for sparse matrix-vector multiplication~\cite{WillOlVu09, VuducDeYe02, YilmAkGa16, VuducMo05}.
+Previous work also includes autotuning for matrix computations on 
+GPUs~\cite{ChoiSiVu10} and performance tuning for sparse matrix kernels~\cite{ImYeVu04, ImYe01}. 
+
+To our knowledge, there has not been much theoretical work on the accuracy guarantees of fill estimation methods. We will describe
+a sampling-based algorithm in section~\ref{algorithm} for sampling from the nonzero elements of a sparse matrix and
+and show its accuracy bounds.
+
+\subsection{Heuristic for fill estimation}
+
+To our knowledge, there are no guarantees on the accuracy existing algorithms for fill estimation. The best known heuristic (due to Vuduc~\cite{vuduc04}) for computing the fill uses randomization, and does not calculate the optimal fill for offsets --- it only estimates the fill for block size pairs $(r,c)$. Furthermore, there is only an empirical study of the cost-accuracy tradeoff in fill estimation. At a high level, the algorithm tests all possible block sizes $(r,c)$ by looping through all possible row dimensions $r$ and dividing the matrix into $m/r$ ``row columns'', each composed of $r$ consecutive row. That is, the $i$-th ``row column'' is rows $ri$ through $r(i+1)-1$.
+
+For a fixed $r$, the algorithm randomly chooses (with probability $\sigma$) to evaluate a ``block row''. That is, it flips a coin (potentially biased) to determine whether or not to process a block row. In order to process a block row, it processes all non-zero elements by setting a relevant bit to keep track of which blocks have already been counted. The algorithm also counts how many nonzeros it has processed and the number of non-empty blocks found in each possible blocking scheme.
+
+The heuristic returns the maximum fill as the sample optimum blocking scheme.
+
+ \begin{samepage}
+    \begin{alg}
+      Given a sparse matrix of dimensions $m \times n$ and $B$, estimate the fill by evaluating a subset of the rows in each matrix
+      \begin{algorithmic}[1]
+        \Function{Oski Heuristic}{matrix $A$ (dimensions $m \times n$), max block size $B$, evaluation probability $\sigma$} \\
+       \State \texttt{max\_fill} $\gets$ max fill
+       \State \texttt{best\_pair} $\gets \emptyset$
+          \For{$r = 1 \to B$}
+          \State array \texttt{num\_blocks[1:$B$]} $\gets$ 0
+          \State \texttt{nnz\_visited} $\gets$ 0
+          \For{i from [1, m/r]}
+          \State flip a coin with heads probability $\sigma$
+          \State array \texttt{last\_block\_index}[1:B] $\gets -1$
+          \If the coin came up heads
+          \For{nonzero $A(i,j) \in A(ir, (i+1)r-1)$}
+          \State \texttt{nnz\_visited} $\gets$ \texttt{nnz\_visited} + 1
+          \For{$c = 1 \to B$}
+          \State \texttt{last\_block\_index}[c] $\gets j/c$
+          \State array \texttt{num\_blocks}[c] $\gets$ \texttt{num\_blocks}[c] + 1
+          \EndFor
+          \EndFor
+          \EndIf
+          \EndFor
+          \State $\hat{f}_{r,c}(A, \sigma) \gets rc\texttt{num\_blocks}[c]  /  \texttt{nnz\_visited} $
+          \EndFor
+        \EndFunction
+      \end{algorithmic}
+      \label{alg:oski}
+    \end{alg}
+    \end{samepage}
+
+According to the empirical study presented in~\cite{vuduc04}, the algorithm almost always find a blocking
+scheme that achieves within 5\% of the optimal (brute force) algorithm. 
+
+\subsection{Asymptotic Runtime Analysis}
+Let $k(A)$ be the number of nonzeros in $A$. To estimate the cost to test a single row $r$, we consider the loops.
+We expect to estimate the outer loop (choosing a block row) $\sigma m/r$ times. There are $k/m$ nonzeros
+per row on average for $rk/m$ nonzeros per block row on average. Therefore, the cost to do fill 
+estimation for all possible values of $c$ for one value of $r$ is $$O\left(B\sigma \frac{m}{r} \frac{rk}{m}\right) = O(Bk\sigma). $$
+
+The cost to estimate for all $B$ values of $r$ is therefore $O(B^2k\sigma).$ The expected cost is
+linear in $k$ and asymptotically the same as a sparse matrix vector multiply.

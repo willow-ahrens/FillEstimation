@@ -94,7 +94,7 @@ EstimateBlockCounts(const size_t * ptr, const size_t * ind,
 	memset(block_count, 0, sizeof(size_t) * B * n * n);
 
 //note(hjxu):might be able to go from B ^ 3 to B * r ^ 2
-		memset(p_nb_est, 0, sizeof(size_t) * tempsize);
+	memset(p_nb_est, 0, sizeof(size_t) * tempsize);
 	num_nonzeros = 0;
 
 	assert(p_nnz_est != NULL);
@@ -110,7 +110,7 @@ EstimateBlockCounts(const size_t * ptr, const size_t * ind,
 		DEBUG_PRINT(("\t\tnum_rows_to_add: %d\n", num_rows_to_add));
 
 		//number of total rows
-			int new_rows = m + num_rows_to_add;
+		int new_rows = m + num_rows_to_add;
 		int block_rows = new_rows / r;	/* # of full block-rows */
 
 		DEBUG_PRINT(("\t\tblock_rows: %d\n", block_rows));

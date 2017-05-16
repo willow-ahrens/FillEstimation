@@ -45,3 +45,16 @@ def get_errors(outputs, references):
   get_flat_results(outputs)
   for (i, reference) in enumerate(references):
     outputs[i]["errors"] = np.max(np.abs(np.array(outputs[i]["flat_results"]) - reference[np.newaxis, :])/reference[np.newaxis, :], axis = 1)
+
+def benchmark(name, matrices, B = 12, epsilon = 0.1, delta = 0.01):
+  timeout = 0.1
+  trials = 1
+  times = []
+  for matrix in matrices:
+    while True:
+      result = fill_estimates(name, [matrix], B = B, epsilon = epsilon, delta = delta, trials = trials)[0]
+      if result["time_total"] >= 0.1:
+        break
+      trials *= 10
+    times.append(result["time_mean"])
+  return np.array(times)

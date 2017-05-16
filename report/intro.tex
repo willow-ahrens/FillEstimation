@@ -4,6 +4,11 @@
 
   We present an algorithm to efficiently compute an important heuristic for autotuning sparse tensor operations. A tensor is a multidimensional array~\cite{KoldBa09}.  A sparse tensor is a tensor whose entries are mostly zeros, which do not have to be stored or operated on in most linear algebraic operations. Since sparse tensors typically contain more than 90\% zero entries, taking advantage of sparsity can provide substantial increases in performance. However, the increased complexity of datastructures that can describe the irregular locations of nonzeros in these tensors poses a significant challenge to performance engineers.
 
+Operations on tensors, which are multidimensional analogues of matrices and vectors, are fundamental to many computational fields, ranging from machine learning to computational climate modeling.
+Many tensors in application domains are sparse, and consist mostly of zero entries.
+Substantial performance gains can be realized by taking advantage of the sparse structure, by avoiding unnecessary work.
+However, the increased complexity of data structures for storing sparse tensors poses other performance challenges.
+
 These challenges are magnified in an era of increasing heterogeneity of processors. In order to write the most efficient sparse tensor code, the programmer must take into account both the target architecture and the relevant structural properties of the nonzeros of the sparse tensor. Writing custom code for each processor requires extensive engineering effort and the structure of nonzeros is usually known only at runtime. Therefore, autotuning (automatically generating customized code) has become a necessary part of writing efficient sparse code.
 
   Previous efforts in autotuning for sparse tensors focus on sparse matrices, which are more broadly applicable in fields ranging from scientific computing to machine learning. The diverse space of operations and nonzero patterns of sparse matrices have led to the development of a wide variety of sparse matrix formats that allow programmers to more efficiently operate on the matrices. 
@@ -15,6 +20,19 @@ These challenges are magnified in an era of increasing heterogeneity of processo
   We refer to the number of nonzeros in $A$ as $k(A)$. We refer to the number of blocks of size $r \times c$ which contain nonzeros in $A$ as $k_{r, c}(A)$.
   We can then define the \textit{fill} of the matrix to be $f(A) = rck_{r, c}(A)/k(A)$.
   Once per machine, we compute a profile of how the machine performs for a particular block size.
+  Let $P_{rc}(dense)$ be the performance of the machine (in $Mflop/s$) on a dense matrix stored with block size $r \times c$.
+  Then we can estimate $P_{rc}(A)$ as
+
+  \[
+    \tilde{P}_{rc}(A) = \frac{P_{rc}(dense)}{f_{rc}(A)}
+  \]
+
+  Thus, our task is to compute $f_{rc}$ for all $r$ and $c$ to within some tolerable relative accuracy, and to do so efficiently. Statistical sampling methods given by Vuduc et. al. provide no theoretical guarantee of accuracy, and take as long as 1 to 10 times the time it takes to perform a sparse matrix vector multiplication on the same matrix~\cite{vuduc04}. We describe an algorithm which provides estimates to within $\epsilon$ relative error with probability $1 - \delta$ in time \todo{$O(\log(\delta)/\epsilon^2)$}, and show that our algorithm runs efficiently and accurately on real-world cases. Note that our algorithm depends only on the desired accuracy, whereas the algorithm introduced by Vuduc et al.\ depends linearly upon the number of nonzeros.
+
+  Our algorithm estimates a more general notion of fill for tensors, where we divide the tensor into smaller subarrays (our blocks) and again only the nonzero blocks and their locations are stored in each row of the tensor. We further generalize this by allowing the user to offset the grid of blocks by some fixed amount, so that the block structure of the tensor does not have to align with the block size.
+
+  Finally, we note that estimating the fill can be an important part of any sparse datastructure which uses blocking, not just BCSR. In fact, any sparse datastructure can be adapted to a blocked regime by grouping a tensor into blocks and simply treating nonzero blocks as nonzeros of some sparse tensor.
+
   Let $P_{rc}(dense)$ be the performance of the machine (in $Mflop/s$) on a dense matrix stored with block size $r \times c$.
   Then we can estimate $P_{rc}(A)$ as
 

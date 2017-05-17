@@ -102,41 +102,42 @@ static int EstimateBlockCounts(const size_t * ptr, const size_t * ind,
 
     double rand_val = random_uniform();
 
-    if (rand_val > prob_examine)
+    if (rand_val > prob_examine){
       continue;	/* skip this block row */
-    else
-
-    /*
-     * Count the number of blocks within block-row I, and
-     * remember in 'block_count' which of the possible blocks
-     * have been 'visited' (i.e., contain at least 1 non-zero).
-     */
-    for (i = I * r, di = 0; di < r; di++, i++) {
-      size_t k;
+    }else{
 
       /*
-       * Invariant: block_count[J] == # of non-zeros
-       * encountered in rows I*r .. I*r+di that should be
-       * stored in column-block J (i.e., that have column
-       * indices J*c <= j < (J+1)*c).
+       * Count the number of blocks within block-row I, and
+       * remember in 'block_count' which of the possible blocks
+       * have been 'visited' (i.e., contain at least 1 non-zero).
        */
+      for (i = I * r, di = 0; di < r; di++, i++) {
+        size_t k;
 
-      /*
-       * Count the number of additional logical blocks
-       * needed to store non-zeros in row i, and mark the
-       * blocks in block row I that have been visited.
-       */
-      for (k = ptr[i]; k < ptr[i + 1]; k++) {
-        size_t j = ind[k];	/* column index */
-        size_t c;
+        /*
+         * Invariant: block_count[J] == # of non-zeros
+         * encountered in rows I*r .. I*r+di that should be
+         * stored in column-block J (i.e., that have column
+         * indices J*c <= j < (J+1)*c).
+         */
 
-        for (c = 1; c <= B; c++) {
-          size_t J = j / c;	/* block column index */
+        /*
+         * Count the number of additional logical blocks
+         * needed to store non-zeros in row i, and mark the
+         * blocks in block row I that have been visited.
+         */
+        for (k = ptr[i]; k < ptr[i + 1]; k++) {
+          size_t j = ind[k];	/* column index */
+          size_t c;
 
-          if (GET_BC(block_count, c, J) == 0) {
-            /* "create" (count) new block */
-            INC_BC(block_count, c, J);
-            p_nb_est[c - 1]++;
+          for (c = 1; c <= B; c++) {
+            size_t J = j / c;	/* block column index */
+
+            if (GET_BC(block_count, c, J) == 0) {
+              /* "create" (count) new block */
+              INC_BC(block_count, c, J);
+              p_nb_est[c - 1]++;
+            }
           }
         }
       }

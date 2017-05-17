@@ -5,46 +5,79 @@ from util import *
 B = 12
 trials = 100
 
-matrices = ["cont-300", "freeFlyingRobot_5", "3dtube_conv", "gupta1_conv", "ct20stif"]
-
+matrices = ["3dtube_conv", "gupta1_conv", "ct20stif", "cont-300", "freeFlyingRobot_5"]
+show_bound = False
 rate = 2.0**0.5
 bottom_error = 0.2
-
+oski_bottom_error = 0.2
 asx_delta = 0.01
 asx_epsilon_init = 0.5
-
 oski_top_error = 0.05
 oski_delta_init = 0.005
+oski_override_points = []
+override_ylim = 0.0
+"""
+
+matrices = ["pathological_asx"]
+show_bound = True
+rate = 2.0**0.25
+bottom_error = 0.5
+oski_bottom_error = 0.45
+asx_delta = 0.01
+asx_epsilon_init = 0.5
+oski_top_error = 0.10
+oski_delta_init = 0.1
+oski_override_points = []
+override_ylim = 0.0
+"""
+
+"""
+matrices = ["pathological_oski"]
+show_bound = True
+rate = 2.0**0.5
+bottom_error = 0.6
+oski_bottom_error = 1.5
+asx_delta = 0.01
+asx_epsilon_init = 0.5
+oski_top_error = 1.0
+oski_delta_init = 0.9
+oski_override_points = [{"delta": delta} for delta in 2**0.75 * 2**np.arange(-1.0, -6.0, -1.0)]
+override_ylim = 3.0
+"""
 
 references = get_references(matrices)
 for (reference, matrix) in zip(references, matrices):
   oski_points = []
   oski_delta = oski_delta_init
 
-  oski_error = 10000.0
-  results = fill_estimates("oski", [matrix], B = B, results = True, trials = trials, delta = oski_delta)
-  get_errors(results, [reference])
-  oski_error = np.mean(results[0]["errors"])
-  while oski_error > oski_top_error:
-    oski_delta *= rate
-    if oski_delta >= 1.0:
+  if len(oski_override_points) == 0:
+    oski_error = 10000.0
+    results = fill_estimates("oski", [matrix], B = B, results = True, trials = trials, delta = oski_delta)
+    get_errors(results, [reference])
+    oski_error = np.mean(results[0]["errors"])
+    while oski_error > oski_top_error:
+      print("decreasing oski error...", oski_error)
+      oski_delta *= rate
+      if oski_delta >= 1.0:
+        oski_delta /= rate
+        break
+      results = fill_estimates("oski", [matrix], B = B, results = True, trials = trials, delta = oski_delta)
+      get_errors(results, [reference])
+      oski_error = np.mean(results[0]["errors"])
+
+    oski_time = benchmark("oski", [matrix], B = B, delta = oski_delta)[0]
+
+    oski_error = 0.0
+    while oski_error < oski_bottom_error:
       oski_delta /= rate
-      break
-    results = fill_estimates("oski", [matrix], B = B, results = True, trials = trials, delta = oski_delta)
-    get_errors(results, [reference])
-    oski_error = np.mean(results[0]["errors"])
-    print("decreasing oski error...", oski_error)
-
-  oski_time = benchmark("oski", [matrix], B = B, delta = oski_delta)[0]
-
-  oski_error = 0.0
-  while oski_error < bottom_error:
-    oski_delta /= rate
-    oski_points.append({"delta":oski_delta})
-    results = fill_estimates("oski", [matrix], B = B, results = True, trials = trials, delta = oski_delta)
-    get_errors(results, [reference])
-    oski_error = np.mean(results[0]["errors"])
-    print("increasing oski error...", oski_error)
+      oski_points.append({"delta":oski_delta})
+      results = fill_estimates("oski", [matrix], B = B, results = True, trials = trials, delta = oski_delta)
+      get_errors(results, [reference])
+      oski_error = np.mean(results[0]["errors"])
+      print("increasing oski error...", oski_error)
+  else:
+    oski_time = benchmark("oski", [matrix], B = B, delta = oski_override_points[0]["delta"])[0]
+    oski_points = oski_override_points
 
   asx_points = []
   asx_epsilon = asx_epsilon_init
@@ -63,12 +96,13 @@ for (reference, matrix) in zip(references, matrices):
   methods = [{"name":"asx",
               "points":asx_points,
               "color":"red",
-              #"bound": (lambda point : point["epsilon"]),
-              #"bound_color":"green"
               },
              {"name":"oski",
               "points":oski_points,
               "color":"blue"}]
+  if show_bound:
+    methods[0]["bound"] = lambda point : point["epsilon"]
+    methods[0]["bound_color"] = "green"
 
   xmax = 100000
   for method in methods:
@@ -77,7 +111,7 @@ for (reference, matrix) in zip(references, matrices):
     hi_bars = []
     lo_bars = []
     for point in method["points"]:
-      results = fill_estimates(method["name"], matrices, B = B, results = True, trials = trials, **point)
+      results = fill_estimates(method["name"], [matrix], B = B, results = True, trials = trials, **point)
       get_errors(results, [reference])
       times.append(results[0]["time_mean"])
       errors.append(np.mean(results[0]["errors"]))
@@ -97,9 +131,11 @@ for (reference, matrix) in zip(references, matrices):
     xmax = min(xmax, times[0])
 
   plt.xlim([0, xmax])
+  if override_ylim != 0.0:
+    plt.ylim([0, override_ylim])
   plt.xlabel('Time To Compute Estimate (s)')
-  plt.ylabel('Median Of (Maximum Relative Error Over All Block Sizes)')
-  plt.title('Median Maximum Relative Error Vs. Time To Compute (%s)' % (matrix))
+  plt.ylabel('Mean (Maximum Relative Error Over Block Sizes)')
+  plt.title('Mean Maximum Relative Error Vs. Time To Compute (%s)' % (matrix))
   plt.legend(loc='best')
   plt.savefig("roi_%s" % (matrix))
   plt.clf()

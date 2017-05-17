@@ -6,4 +6,5 @@ import scipy.sparse
 with open(sys.argv[1]) as f:
   matrix = scipy.io.mmread(f)
   matrix = scipy.sparse.coo_matrix(matrix, dtype=numpy.float64)
+  matrix = scipy.sparse.csr_matrix(matrix)
   scipy.io.mmwrite(sys.argv[2], matrix)

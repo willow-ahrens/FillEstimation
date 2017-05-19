@@ -124,7 +124,7 @@ int estimate_fill (size_t m,
       int r_hi = B + b_r - 1 - (i % b_r);
       int r_lo = r_hi - b_r;
       for (int b_c = 1; b_c <= B; b_c++) {
-        int c_hi = B + b_c - 1 - (i % b_c);
+        int c_hi = B + b_c - 1 - (j % b_c);
         int c_lo = c_hi - b_c;
         int y_0 = Z[r_hi][c_hi] - Z[r_lo][c_hi] - Z[r_hi][c_lo] + Z[r_lo][c_lo];
         fill[fill_index] += 1.0/y_0;

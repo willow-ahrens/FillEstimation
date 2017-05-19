@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from util import *
 
-B = 4
+B = 12
 trials = 100
 
 """
@@ -17,6 +17,7 @@ oski_top_error = 0.05
 oski_delta_init = 0.005
 oski_override_points = []
 override_ylim = 0.0
+"""
 
 matrices = ["pathological_asx"]
 show_bound = True
@@ -28,9 +29,10 @@ asx_epsilon_init = 0.5
 oski_top_error = 0.10
 oski_delta_init = 0.1
 oski_override_points = []
+oski_override_points = [{"delta": delta} for delta in 2**0.9 * 2**np.arange(-1.0, -6.0, -1.0)]
 override_ylim = 0.0
-"""
 
+"""
 matrices = ["pathological_oski"]
 show_bound = True
 rate = 2.0**0.5
@@ -42,61 +44,12 @@ oski_top_error = 1.0
 oski_delta_init = 0.9
 oski_override_points = [{"delta": delta} for delta in 2**0.9 * 2**np.arange(-1.0, -6.0, -1.0)]
 override_ylim = 3.0
+"""
 
 references = get_references(matrices, B = B)
 for (reference, matrix) in zip(references, matrices):
-  """
-  oski_points = []
-  oski_delta = oski_delta_init
-
-  if len(oski_override_points) == 0:
-    oski_error = 10000.0
-    results = fill_estimates("oski", [matrix], B = B, results = True, trials = trials, delta = oski_delta)
-    get_errors(results, [reference])
-    oski_error = np.mean(results[0]["errors"])
-    while oski_error > oski_top_error:
-      print("decreasing oski error...", oski_error)
-      oski_delta *= rate
-      if oski_delta >= 1.0:
-        oski_delta /= rate
-        break
-      results = fill_estimates("oski", [matrix], B = B, results = True, trials = trials, delta = oski_delta)
-      get_errors(results, [reference])
-      oski_error = np.mean(results[0]["errors"])
-
-    oski_time = benchmark("oski", [matrix], B = B, delta = oski_delta)[0]
-
-    oski_error = 0.0
-    while oski_error < oski_bottom_error:
-      oski_delta /= rate
-      oski_points.append({"delta":oski_delta})
-      results = fill_estimates("oski", [matrix], B = B, results = True, trials = trials, delta = oski_delta)
-      get_errors(results, [reference])
-      oski_error = np.mean(results[0]["errors"])
-      print("increasing oski error...", oski_error)
-  else:
-    oski_time = benchmark("oski", [matrix], B = B, delta = oski_override_points[0]["delta"])[0]
-    oski_points = oski_override_points
-
-  asx_points = []
-  asx_epsilon = asx_epsilon_init
-  while benchmark("asx", [matrix], B = B, epsilon = asx_epsilon, delta = asx_delta)[0] < oski_time:
-    asx_epsilon /= rate
-    print("increasing asx runtime", asx_epsilon)
-  asx_error = 0.0
-  while asx_error < bottom_error:
-    asx_points.append({"epsilon":asx_epsilon, "delta":asx_delta})
-    results = fill_estimates("asx", [matrix], B = B, results = True, trials = trials, epsilon = asx_epsilon, delta = asx_delta)
-    get_errors(results, [reference])
-    asx_error = np.mean(results[0]["errors"])
-    asx_epsilon *= rate
-    print("increasing asx error", asx_error)
-  """
   asx_points = [{'epsilon': 0.044194173824159196, 'delta': 0.01}, {'epsilon': 0.06249999999999997, 'delta': 0.01}, {'epsilon': 0.0883883476483184, 'delta': 0.01}, {'epsilon': 0.12499999999999996, 'delta': 0.01}, {'epsilon': 0.17677669529663684, 'delta': 0.01}, {'epsilon': 0.24999999999999994, 'delta': 0.01}, {'epsilon': 0.35355339059327373, 'delta': 0.01}, {'epsilon': 0.5, 'delta': 0.01}, {'epsilon': 0.7071067811865476, 'delta': 0.01}, {'epsilon': 1.0000000000000002, 'delta': 0.01}, {'epsilon': 1.4142135623730954, 'delta': 0.01}, {'epsilon': 2.0000000000000004, 'delta': 0.01}, {'epsilon': 2.8284271247461907, 'delta': 0.01}, {'epsilon': 4.000000000000001, 'delta': 0.01}, {'epsilon': 5.6568542494923815, 'delta': 0.01}, {'epsilon': 8.000000000000002, 'delta': 0.01}]
   oski_points = [{'delta': 0.93303299153680741}, {'delta': 0.46651649576840371}, {'delta': 0.23325824788420185}, {'delta': 0.11662912394210093}, {'delta': 0.058314561971050463}]
-
-  print asx_points
-  print oski_points
 
   methods = [{"name":"asx",
               "points":asx_points,
@@ -119,7 +72,8 @@ for (reference, matrix) in zip(references, matrices):
       results = fill_estimates(method["name"], [matrix], B = B, results = True, trials = trials, **point)
       get_errors(results, [reference])
       times.append(results[0]["time_mean"])
-      #print(sorted(results[0]["errors"]))
+      print(len(results[0]["errors"]))
+      print(sorted(results[0]["errors"]))
       errors.append(np.mean(results[0]["errors"]))
       hi_bars.append(np.std(results[0]["errors"]))
       lo_bars.append(np.std(results[0]["errors"]))

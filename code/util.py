@@ -42,13 +42,17 @@ def get_flat_results(outputs):
 def get_references(matrices, B = 12):
   outputs = fill_estimates("reference", matrices, B = B, trials = 1, clock = False, results = True)
   get_flat_results(outputs)
-  references = [np.array(output["flat_results"]) for output in outputs]
+  references = [np.array(output["flat_results"][0]) for output in outputs]
   return references
 
 def get_errors(outputs, references):
   get_flat_results(outputs)
   for (i, reference) in enumerate(references):
-    outputs[i]["errors"] = np.max(np.abs(np.array(outputs[i]["flat_results"]) - reference[np.newaxis, :])/reference[np.newaxis, :], axis = 1)
+    fill_errors = np.abs(np.array(outputs[i]["flat_results"]) - reference[np.newaxis,:])/reference[np.newaxis,:]
+    print(reference)
+    print(outputs[i]["flat_results"][0])
+    outputs[i]["errors"] = np.max(fill_errors, axis = 1)
+
 
 def benchmark(name, matrices, B = 12, epsilon = 0.1, delta = 0.01):
   timeout = 0.1

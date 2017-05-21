@@ -63,9 +63,9 @@ int estimate_fill (size_t m,
   s = min(s, nnz);
 
   //Sample K items without replacement
-  size_t samples[s];
-  size_t samples_i[s];
-  size_t samples_j[s];
+  size_t *samples = (size_t*)malloc(s*sizeof(size_t));
+  size_t *samples_i = (size_t*)malloc(s*sizeof(size_t));
+  size_t *samples_j = (size_t*)malloc(s*sizeof(size_t));
   random_choose(samples, s, 0, nnz);
 
   //Create arrays of i and j
@@ -141,5 +141,8 @@ int estimate_fill (size_t m,
     }
   }
 
+  free(samples);
+  free(samples_i);
+  free(samples_j);
   return 0;
 }

@@ -17,8 +17,8 @@ matrix = scipy.sparse.coo_matrix((V, (I,J)), dtype=numpy.float64)
 matrix = scipy.sparse.csr_matrix(matrix)
 scipy.io.mmwrite("pathological_oski.mtx", matrix)
 
-asx_size = 100
-asx_entries = 50
+asx_size = 1000
+asx_entries = 500
 asx_block = 12
 indices = [i * asx_size + j for (i, j) in itertools.product(range(asx_size), range(asx_size))]
 indices = numpy.random.choice(indices, size=2 * asx_entries, replace=False)

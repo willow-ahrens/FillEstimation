@@ -2,9 +2,8 @@ from util import *
 import numpy as np
 
 matrices = ["freeFlyingRobot_5"]
-matrices = ["pathological_asx"]
 oski_kwargs= {"delta": 0.1}
-asx_kwargs= {"epsilon": 0.1, "delta": 0.01}
+asx_kwargs= {"epsilon": 0.5, "delta": 0.01}
 
 reference = benchmark("reference", matrices)
 oski = benchmark("oski", matrices, **oski_kwargs)

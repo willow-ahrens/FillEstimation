@@ -4,7 +4,7 @@ LDFLAGS = -lgsl `pkg-config --libs glib-2.0`
 
 all: reference asx oski
 clean:
-	rm -rf reference asx oski *.o *.dSYM *.trace
+	rm -rf reference asx oski *.o *.dSYM *.trace *.pyc
 
 reference: run.c test.o reference.o util.o
 

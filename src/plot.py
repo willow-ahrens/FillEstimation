@@ -16,11 +16,13 @@ n = 10
 asx_delta = 0.01
 
 methods = [{"name":"asx",
+            "label":"ASX",
             "color":"red",
             "bound" : lambda point : point["epsilon"],
             "bound_color": "green"
             },
            {"name":"oski",
+            "label":"OSKI",
             "color":"blue"}]
 
 matrices = [{"name": "3dtube_conv",
@@ -42,14 +44,14 @@ matrices = [{"name": "3dtube_conv",
              "ymax": 0.5
             },
             {"name": "pathological_asx",
-             "label": "pathological_asx",
+             "label": "pathological_ASX",
              "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(2, 1e-4, n)], "bound":True},
              "oski": {"points": [{"delta":d} for d in exprange(0.1, 1.0, n)]},
              "ymax": 0.5,
              "xmaxmax": True
             },
             {"name": "pathological_oski",
-             "label": "pathological_oski",
+             "label": "pathological_OSKI",
              "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(2, 1e-4, n)], "bound":True},
              "oski": {"points": [{"delta":d} for d in exprange(0.1, 1.0, n)]},
              "ymax": 4,
@@ -78,9 +80,9 @@ for (reference, matrix) in zip(references, matrices):
       hi_bars.append(np.std(results[0]["errors"]))
       lo_bars.append(np.std(results[0]["errors"]))
       print("Error: %g, Time: %g" % (errors[-1], times[-1]))
-    plt.plot(times, errors, color = method["color"], label = method["name"])
+    plt.plot(times, errors, color = method["color"], label = method["label"])
     if "bound" in matrix[method["name"]] and matrix[method["name"]]["bound"]:
-      plt.plot(times, [method["bound"](point) for point in matrix[method["name"]]["points"]], color = method["bound_color"], label = "%s bound" % method["name"])
+      plt.plot(times, [method["bound"](point) for point in matrix[method["name"]]["points"]], color = method["bound_color"], label = "%s bound" % method["label"])
     plt.errorbar(times, errors, yerr = [lo_bars, hi_bars], color = method["color"], linestyle="")
     xmax = min(xmax, max(times))
     xmaxmax = max(xmaxmax, max(times))
@@ -98,12 +100,14 @@ for (reference, matrix) in zip(references, matrices):
   plt.clf()
 
 methods = [{"name":"asx",
+            "label":"ASX",
             "color":"red",
             "point":{"epsilon":0.5, "delta":0.01},
             "bound" : lambda point : point["epsilon"],
             "bound_color": "green"
            },
            {"name":"oski",
+            "label":"OSKI",
             "color":"blue",
             "point":{"delta":0.02}
            }
@@ -119,10 +123,10 @@ matrices = [{"name": "3dtube_conv",
              "label": "ct20stif",
             },
             {"name": "pathological_asx",
-             "label": "patho..._asx",
+             "label": "patho..._ASX",
             },
             {"name": "pathological_oski",
-             "label": "patho..._oski",
+             "label": "patho..._OSKI",
             }
            ]
 
@@ -149,20 +153,20 @@ for method in methods:
     errors.append(np.mean(results[0]["errors"]))
     errors_std.append(np.std(results[0]["errors"]))
     print("Error: %g, Time: %g" % (errors[-1], times[-1]))
-  error_rects.append(axarr[0].bar(ind, errors, width, color = method["color"], yerr=errors_std, label = method["name"])[0])
-  time_rects.append(axarr[1].bar(ind, times, width, color = method["color"], label = method["name"])[0])
+  error_rects.append(axarr[0].bar(ind, errors, width, color = method["color"], yerr=errors_std, label = method["label"])[0])
+  time_rects.append(axarr[1].bar(ind, times, width, color = method["color"], label = method["label"])[0])
   ind += width
 
 axarr[0].set_ylabel('Mean (Maximum Relative Error)')
 axarr[0].set_ylim([0, 0.5])
 axarr[1].set_ylabel('Time To Compute Estimate (s)')
-axarr[0].set_title('Error and Time Vs. Matrix (Default asx And oski Settings)')
+axarr[0].set_title('Error and Time Vs. Matrix (Default ASX And OSKI Settings)')
 axarr[1].set_xlabel('Matrix')
 axarr[0].set_xticks(ind - totalwidth/2)
 axarr[0].set_xticklabels([matrix["label"] for matrix in matrices], rotation = rotation)
 axarr[1].set_xticks(ind - totalwidth/2)
 axarr[1].set_xticklabels([matrix["label"] for matrix in matrices], rotation = rotation)
-axarr[0].legend(error_rects, [method["name"] for method in methods])
-axarr[1].legend(time_rects, [method["name"] for method in methods])
+axarr[0].legend(error_rects, [method["label"] for method in methods])
+axarr[1].legend(time_rects, [method["label"] for method in methods])
 f.savefig("bar_default_settings.pdf")
 plt.clf()

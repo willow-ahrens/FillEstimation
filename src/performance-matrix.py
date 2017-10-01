@@ -9,7 +9,7 @@ import math
 # generate performance matrix
 _, outfile = argv
 
-MIN_DIMENSION = 1000
+MIN_DIMENSION = 2000
 MAX_BLOCK = 12
 baseline = 1
 # dense matrix, vector
@@ -35,7 +35,7 @@ if __name__ == "__main__":
             dim = MIN_DIMENSION
             if MIN_DIMENSION % m != 0:
                 k = math.ceil(MIN_DIMENSION / m) + 1
-                dim = k * m
+                dim = int(k * m)
             assert dim >= MIN_DIMENSION
             mat = np.ones((dim, dim))
             v = np.ones(dim)

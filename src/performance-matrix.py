@@ -14,6 +14,7 @@ MIN_X = 3000
 MIN_Y = 3000
 MAX_BLOCK = 12
 baseline = 1
+trials = 100
 # dense matrix, vector
 def lcm(x, y):
     if x > y:
@@ -49,11 +50,14 @@ if __name__ == "__main__":
             v = np.ones(y_dim)
 
             s_m = bsr_matrix(mat, blocksize = (i,j))
-            s_m.dot(v)
-            t0 = time.time()
-            s_m.dot(v)
-            t1 = time.time()
-            diff = (x_dim * y_dim) / float(t1 - t0)
+            diff = 0
+            for k in range(0, trials):
+                t0 = time.time()
+                s_m.dot(v)
+                t1 = time.time()
+                diff = diff + (x_dim * y_dim) / float(t1 - t0)
+            diff = diff / trials
+
             if i == 1 and j == 1:
                 baseline = diff
             r = diff / baseline

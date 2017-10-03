@@ -3,11 +3,11 @@ import numpy as np
 from util import *
 from sys import argv
 from blockutil import *
+import os
 
 B = 12
 trials = 100
-
-
+outdir = 'plot-inputs/'
 def exprange(a, b, n):
   r = (float(b) / float(a))**(1.0/(n - 1))
   return [a * r**i for i in range(n)]
@@ -29,6 +29,7 @@ methods = [{"name":"asx",
            {"name":"oski",
             "label":"OSKI",
             "color":"blue"}]
+'''
 matrices = [
             {"name": "pathological_oski",
              "label": "pathological_OSKI",
@@ -72,13 +73,16 @@ matrices = [{"name": "3dtube_conv",
              "xmaxmax": True
             }
            ]
-'''
-# references = get_references([matrix["name"] for matrix in matrices], B = B)
-# for (reference, matrix) in zip(references, matrices):
+
 for matrix in matrices:
   # generate local performance matrix 
-  spmv_runtimes = generate_spmv_runtimes(matrix['name'], trials, B)
-
+  filename = 'times_' + matrix['name']
+  if os.path.isfile(filename + '.npy'):
+      matrix_times = np.load(filename + '.npy')
+  else:
+      matrix_times = generate_times_profile(matrix['name'], trials, B)
+      np.save(filename, matrix_times)
+  
   print(matrix["name"])
   
   xmax = 100000
@@ -86,52 +90,52 @@ for matrix in matrices:
   for method in methods:
     print(method["name"])
     times = []
-    spmv_times = []
+    runtimes = []
     
     for point in matrix[method["name"]]["points"]:
       print(point)
-      trial_time = 0
-      blocksizes = []
-      spmv_time = 0
+      runtime = 0
+      # estimate the fill
+      results = fill_estimates(method["name"], [matrix["name"]], B = B, trials = trials, results = True, **point)
+      times.append(results[0]["time_mean"])
 
+      # print(perf_matrix)
       # estimate the fill + look up time to do spmv with the corresponding blocksize
-      for i in range(0, trials):
-          results = fill_estimates(method["name"], [matrix["name"]], B = B, results = True, **point)
-          # get_errors(results, [reference])
-          # time to estimate
-          trial_time = trial_time + results[0]["time_mean"] 
-
+      temp_trials = 0
+      for estimate in results[0]['results']:
+          temp_trials = temp_trials + 1
           # get block size
-          blocksize = get_blocksize(results, perf_matrix)
+          # print estimate
+          blocksize = get_blocksize(estimate, perf_matrix)
 
           # look up time that multiplying by with blocksize would take
-          spmv_time = spmv_time + spmv_runtimes[blocksize[0]-1][blocksize[1] - 1]
+          runtime = runtime + matrix_times[blocksize[0]-1][blocksize[1] - 1]
 
-      # time to estimate
-      times.append(trial_time / trials)
-      # 
-      spmv_times.append(spmv_time / trials)
+      runtimes.append(runtime / trials)
       # spmv time
-      print("spmv time: %g, estimate time: %g" % (spmv_times[-1], times[-1]))
-    plt.plot(times, spmv_times, color = method["color"], label = method["label"])
+      
+      print("runtime: %g, estimate time: %g" % (runtimes[-1], times[-1]))
+    assert temp_trials == trials
+    plt.plot(times, runtimes, color = method["color"], label = method["label"])
     xmax = min(xmax, max(times))
     xmaxmax = max(xmaxmax, max(times))
     outfile = method["name"] + '_' + matrix['name']
+    out_path = os.path.join(outdir, outfile)
 
     # output space separated in form
-    # [time to estimate] [spmv time] [block size] 
-    # with open(outfile, 'w') as out:
-    #    for i in range(0, len(spmv_times)):
-    #        out.write(str(times[i]) + ' ' + str(spmv_times[i]) + ' ' + str(blocksizes[i]))
+    # [time to estimate] [spmv time] 
+    assert len(times) == len(runtimes)
+    with open(out_path, 'w') as out:
+        for i in range(0, len(times)):
+            out.write(str(times[i]) + ' ' + str(runtimes[i]) + '\n')
 
   if "xmaxmax" in matrix and matrix["xmaxmax"]:
     plt.xlim([0, xmaxmax])
   else:
     plt.xlim([0, xmax])
-  # plt.ylim([0, matrix["ymax"]])
   plt.xlabel('Time To Compute Estimate (s)')
-  plt.ylabel('Mean spmv time (s)')
-  plt.title('Mean spmv time Vs. Time To Compute (%s)' % (matrix["label"]))
+  plt.ylabel('SpMV time (s)')
+  plt.title('SpMV Time Vs. Time To Compute (%s)' % (matrix["label"]))
   plt.legend(loc='best')
   plt.savefig("spmv_%s.pdf" % (matrix["name"]))
   plt.clf()

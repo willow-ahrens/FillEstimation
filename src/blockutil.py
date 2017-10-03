@@ -41,18 +41,11 @@ def get_estimate_from_file(estimate_file):
     # print trials
     return estimate
 
-# average estimate
+# average estimate from a single run
 def get_estimate(results):
     # calculate estimate
-    estimate = np.zeros((12,12))
-    trials = 0
-    fill_est = results[0]
-    for result in fill_est['results']:
-        trials = trials + 1
-        estimate = estimate + result
-
     # invert fill because 1/fill * perf matrix => argmax
-    estimate = [[1/(float(j)/trials) for j in i] for i in estimate]
+    estimate = [[1/float(j) for j in i] for i in results]
     return estimate
 
 # input = matrix, blocksize
@@ -81,7 +74,7 @@ def reshape_for_blocks(mat, blocksize):
     return matrix
 
 # input = coo matrix, blocksize
-# output timing of spmv with all ones vector for matrix w/ blocksize
+# output flops of spmv with all ones vector for matrix w/ blocksize
 def mul_test(mat, block, trials):
     # reshape
     reshape = reshape_for_blocks(mat, block)
@@ -98,14 +91,50 @@ def mul_test(mat, block, trials):
 
     # testing
     runtime = 0
+    x_dim = s_m.shape[0]
+    y_dim = s_m.shape[1]
+
     for i in range(0, trials):
         t0 = time.time()
         s_m.dot(v)
         t1 = time.time()
-        diff = t1 - t0
-        runtime = runtime + diff
+        # flops
+        runtime = runtime + float(t1 - t0)
+        
+    # total flops / trials
+    return runtime / trials
 
-    # total runtime / trials
+
+# input = coo matrix, blocksize
+# output flops of spmv with all ones vector for matrix w/ blocksize
+def mul_flops_test(mat, block, trials):
+    # reshape
+    reshape = reshape_for_blocks(mat, block)
+
+    # dense vector
+    v = np.ones(reshape.shape[1])
+    
+    # block and multiply
+    s_m = bsr_matrix(reshape, blocksize = block)
+
+    # warmup
+    for i in range(0, 5):
+        s_m.dot(v)
+
+    # testing
+    runtime = 0
+    x_dim = s_m.shape[0]
+    y_dim = s_m.shape[1]
+
+    for i in range(0, trials):
+        t0 = time.time()
+        s_m.dot(v)
+        t1 = time.time()
+        # flops
+        diff = (x_dim * y_dim) / float(t1 - t0)
+        runtime = runtime + diff
+        
+    # total flops / trials
     return runtime / trials
 
 def block_from_index(blocksize):
@@ -113,12 +142,25 @@ def block_from_index(blocksize):
 
 # input = matrix name, num trials, block dimension B
 # output = spmv times with blocking (B*B)
-def generate_spmv_runtimes(matrix_name, trials, B):
+def generate_times_profile(matrix_name, trials, B):
     output = np.zeros((B, B))
     mat = scipy.io.mmread(os.path.join(matrix_path, matrix_name))
-    print output
     for i in range(1, B+1):
         for j in range(1, B+1):
+            print (i,j)
+            output[i-1][j-1] = mul_test(mat, (i,j), trials)
+    print output
+    return output
+
+
+# input = matrix name, num trials, block dimension B
+# output = spmv times with blocking (B*B)
+def generate_flops_profile(matrix_name, trials, B):
+    output = np.zeros((B, B))
+    mat = scipy.io.mmread(os.path.join(matrix_path, matrix_name))
+    for i in range(1, B+1):
+        for j in range(1, B+1):
+            print (i,j)
             output[i-1][j-1] = mul_test(mat, (i,j), trials)
     print output
     return output
@@ -127,13 +169,14 @@ def generate_spmv_runtimes(matrix_name, trials, B):
 # return blocksize 
 def get_blocksize(fill_estimate, perf_matrix):
     estimate = get_estimate(fill_estimate)
-
+    
     # perf matrix * fill estimate
-    perf_profile = np.multiply(perf_matrix, estimate)
+    perf_profile = np.multiply(perf_matrix, fill_estimate)
 
     blocksize = np.unravel_index(perf_profile.argmax(), perf_profile.shape)
     block = block_from_index(blocksize) # (blocksize[0] + 1, blocksize[1] + 1)
     return block
+
 
 # run spmv for all trials
 def spmv_test(mat_name, fill_estimate, perf_matrix, trials):

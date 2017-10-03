@@ -55,6 +55,7 @@ if __name__ == "__main__":
                 t0 = time.time()
                 s_m.dot(v)
                 t1 = time.time()
+
                 diff = diff + (x_dim * y_dim) / float(t1 - t0)
             diff = diff / trials
 

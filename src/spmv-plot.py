@@ -29,6 +29,26 @@ methods = [{"name":"asx",
            {"name":"oski",
             "label":"OSKI",
             "color":"blue"}]
+matrices = [{"name": "soc-Slashdot0811",
+             "label": "slashdot",
+             "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(7, 0.2, n)]},
+             "oski": {"points": [{"delta":d} for d in exprange(0.001, 0.06, n)]},
+             # "ymax": 5
+            },
+            {"name": "roadNet-CA-conv",
+             "label": "roadnet",
+             "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(7, 0.2, n)]},
+             "oski": {"points": [{"delta":d} for d in exprange(0.001, 0.06, n)]},
+             #"ymax": 5
+            },
+            {"name": "web-Google-conv",
+             "label": "google",
+             "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(7, 0.2, n)]},
+             "oski": {"points": [{"delta":d} for d in exprange(0.001, 0.06, n)]},
+            # "ymax": 5
+            }
+            ]
+                      
 '''
 matrices = [
             {"name": "pathological_oski",
@@ -39,7 +59,6 @@ matrices = [
              "xmaxmax": True
             }
            ]
-'''           
 matrices = [{"name": "3dtube_conv",
              "label": "3dtube",
              "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(7, 0.2, n)]},
@@ -74,6 +93,7 @@ matrices = [{"name": "3dtube_conv",
             }
            ]
 
+'''           
 for matrix in matrices:
   # generate local performance matrix 
   filename = 'times_' + matrix['name']
@@ -109,10 +129,9 @@ for matrix in matrices:
           blocksize = get_blocksize(estimate, perf_matrix)
 
           # look up time that multiplying by with blocksize would take
-          runtime = runtime + matrix_times[blocksize[0]-1][blocksize[1] - 1]
+          runtime = runtime + matrix_times[blocksize[0]][blocksize[1]]
 
       runtimes.append(runtime / trials)
-      # spmv time
       
       print("runtime: %g, estimate time: %g" % (runtimes[-1], times[-1]))
     assert temp_trials == trials

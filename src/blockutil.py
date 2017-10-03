@@ -37,8 +37,6 @@ def get_estimate_from_file(estimate_file):
 
     # invert fill because 1/fill * perf matrix => argmax
     estimate = [[1/(float(j)/trials) for j in i] for i in estimate]
-    # print estimate
-    # print trials
     return estimate
 
 # average estimate from a single run
@@ -100,8 +98,6 @@ def mul_test(mat, block, trials):
         t1 = time.time()
         # flops
         runtime = runtime + float(t1 - t0)
-        
-    # total flops / trials
     return runtime / trials
 
 
@@ -174,8 +170,9 @@ def get_blocksize(fill_estimate, perf_matrix):
     perf_profile = np.multiply(perf_matrix, fill_estimate)
 
     blocksize = np.unravel_index(perf_profile.argmax(), perf_profile.shape)
-    block = block_from_index(blocksize) # (blocksize[0] + 1, blocksize[1] + 1)
-    return block
+    return blocksize
+    # block = block_from_index(blocksize) # (blocksize[0] + 1, blocksize[1] + 1)
+    # return block
 
 
 # run spmv for all trials

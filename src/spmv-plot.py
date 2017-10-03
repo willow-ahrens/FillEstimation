@@ -29,6 +29,7 @@ methods = [{"name":"asx",
            {"name":"oski",
             "label":"OSKI",
             "color":"blue"}]
+     
 matrices = [{"name": "soc-Slashdot0811",
              "label": "slashdot",
              "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(7, 0.2, n)]},
@@ -48,7 +49,6 @@ matrices = [{"name": "soc-Slashdot0811",
             # "ymax": 5
             }
             ]
-                      
 '''
 matrices = [
             {"name": "pathological_oski",
@@ -92,8 +92,7 @@ matrices = [{"name": "3dtube_conv",
              "xmaxmax": True
             }
            ]
-
-'''           
+'''
 for matrix in matrices:
   # generate local performance matrix 
   filename = 'times_' + matrix['name']
@@ -102,16 +101,28 @@ for matrix in matrices:
   else:
       matrix_times = generate_times_profile(matrix['name'], trials, B)
       np.save(filename, matrix_times)
-  
+  print(matrix_times) 
   print(matrix["name"])
+ 
+  # 1 x 1
+  # unit_block_time = matrix_times[0][0]
+  # plt.axhline(y=unit_block_time, color='magenta', linestyle = '-', label='1x1')
   
+  # reference
+  reference = get_references([matrix["name"]])
+  reference = np.reshape(reference, (12,12))
+  ref_block = get_blocksize(reference, perf_matrix)
+  ref_time = matrix_times[ref_block[0], ref_block[1]] 
+  plt.axhline(y=ref_time, color='black', linestyle = '-', label= 'ref')
+
   xmax = 100000
   xmaxmax = 0
   for method in methods:
     print(method["name"])
     times = []
     runtimes = []
-    
+    reference_time = []
+    max_x = 0
     for point in matrix[method["name"]]["points"]:
       print(point)
       runtime = 0
@@ -132,10 +143,11 @@ for matrix in matrices:
           runtime = runtime + matrix_times[blocksize[0]][blocksize[1]]
 
       runtimes.append(runtime / trials)
-      
       print("runtime: %g, estimate time: %g" % (runtimes[-1], times[-1]))
     assert temp_trials == trials
     plt.plot(times, runtimes, color = method["color"], label = method["label"])
+    if times[-1] > max_x:
+        max_x = times[-1]
     xmax = min(xmax, max(times))
     xmaxmax = max(xmaxmax, max(times))
     outfile = method["name"] + '_' + matrix['name']
@@ -152,6 +164,7 @@ for matrix in matrices:
     plt.xlim([0, xmaxmax])
   else:
     plt.xlim([0, xmax])
+
   plt.xlabel('Time To Compute Estimate (s)')
   plt.ylabel('SpMV time (s)')
   plt.title('SpMV Time Vs. Time To Compute (%s)' % (matrix["label"]))

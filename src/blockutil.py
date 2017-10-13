@@ -167,13 +167,10 @@ def get_blocksize(fill_estimate, perf_matrix):
     estimate = get_estimate(fill_estimate)
     
     # perf matrix * fill estimate
-    perf_profile = np.multiply(perf_matrix, fill_estimate)
+    perf_profile = np.multiply(perf_matrix, estimate)
 
     blocksize = np.unravel_index(perf_profile.argmax(), perf_profile.shape)
     return blocksize
-    # block = block_from_index(blocksize) # (blocksize[0] + 1, blocksize[1] + 1)
-    # return block
-
 
 # run spmv for all trials
 def spmv_test(mat_name, fill_estimate, perf_matrix, trials):
@@ -184,34 +181,3 @@ def spmv_test(mat_name, fill_estimate, perf_matrix, trials):
     mat = scipy.io.mmread(os.path.join(matrix_path, mat_name))
     spmv_time = mul_test(mat, block, trials)
     return spmv_time
-
-'''
-if __name__ == "__main__":
-    # read in performance matrix
-    perf_matrix = np.load(perf_file)
-    
-    for matrix in matrices:
-        oski_file = oski_prefix + matrix
-        asx_file = asx_prefix + matrix
-        ref_file = ref_prefix + matrix
-
-        # get fill estimates
-        oski_estimate = get_estimate(oski_file)
-        asx_estimate = get_estimate(asx_file)
-        
-        # performance matrix * fill estimate
-        oski = np.multiply(perf_matrix, oski_estimate)
-        asx = np.multiply(perf_matrix, asx_estimate)
-
-        oski_blocksize = np.unravel_index(oski.argmax(), oski.shape)
-        oski_block = (oski_blocksize[0] + 1, oski_blocksize[1] + 1)
-        asx_blocksize = np.unravel_index(asx.argmax(), asx.shape)
-        asx_block = (asx_blocksize[0] + 1, asx_blocksize[1] + 1)
-
-        # read in from infile
-        mat = scipy.io.mmread(os.path.join(matrix_path, matrix))
-        oski_time = mul_test(mat, oski_block)
-        print oski_time
-        if oski_block != asx_block:
-            asx_time = mul_test(mat, asx_block)
-''' 

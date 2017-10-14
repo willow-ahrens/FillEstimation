@@ -7,6 +7,8 @@ char *name () {
   return "asx";
 }
 
+#define REPLACEMENT
+
 /**
  *  Given an m by n CSR matrix A, estimates the fill ratio if the matrix were
  *  converted into b_r by b_c BCSR format. The fill ratio is b_r times b_c times
@@ -58,15 +60,33 @@ int estimate_fill (size_t m,
 
   double T = 2 * log(B/delta) * B * B / (epsilon * epsilon);
   size_t s;
+
+#ifdef REPLACEMENT
+  s = T;
+#else
   //s = ((T - T/nnz) + sqrt((T - T / nnz) * (T - T / nnz)  + 4 * T * (1 + T / N)))/(2 + 2 * T / nnz);
   s = ((T - T/nnz) + sqrt(T * (T + (2 * T + T / nnz) / nnz + 4)))/(2 + 2 * T / nnz);
+#endif
   s = min(s, nnz);
 
-  //Sample K items without replacement
+  //Sample s items
   size_t *samples = (size_t*)malloc(s*sizeof(size_t));
   size_t *samples_i = (size_t*)malloc(s*sizeof(size_t));
   size_t *samples_j = (size_t*)malloc(s*sizeof(size_t));
+
+#ifdef REPLACEMENT
+  if (s == nnz) {
+    for (size_t i = 0; i < nnz; i++) {
+      samples[i] = i;
+    }
+  } else {
+    for (size_t i = 0; i < s; i++) {
+      samples[i] = random_range(0, nnz);
+    }
+  }
+#else
   random_choose(samples, s, 0, nnz);
+#endif
 
   //Create arrays of i and j
   sort(samples, s);

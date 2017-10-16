@@ -1,4 +1,12 @@
 src/matrix
+src/*.mtx
+src/asx
+src/oski
+src/reference
+src/local-plot-inputs
+src/matrix-times
+src/performance-matrices
+src/*plot-inputs
 
 *.pdf
 *.DS_Store

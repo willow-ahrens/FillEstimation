@@ -145,9 +145,18 @@ def generate_times_profile(matrix_name, trials, B):
         for j in range(1, B+1):
             print (i,j)
             output[i-1][j-1] = mul_test(mat, (i,j), trials)
-    print output
     return output
 
+
+# input = matrix (not filename), num trials, block dimension B
+# output = spmv times with blocking (B*B)
+def generate_times_profile_2(mat, trials, B):
+    output = np.zeros((B, B))
+    for i in range(1, B+1):
+        for j in range(1, B+1):
+            print (i,j)
+            output[i-1][j-1] = mul_test(mat, (i,j), trials)
+    return output
 
 # input = matrix name, num trials, block dimension B
 # output = spmv times with blocking (B*B)

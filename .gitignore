@@ -1,3 +1,5 @@
+src/matrix
+
 *.pdf
 *.DS_Store
 *.deps

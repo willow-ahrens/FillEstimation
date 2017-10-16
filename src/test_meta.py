@@ -30,46 +30,6 @@ methods = [{"name":"asx",
            }
            ]
 
-'''
-    matrices = [{"name": "3dtube_conv",
-    "label": "3dtube",
-    },
-    {"name": "gupta1_conv",
-    "label": "gupta1",
-    },
-    {"name": "ct20stif",
-    "label": "ct20stif",
-    },
-    {"name": "cfd2_conv",
-    "label": "cfd2"
-    }
-    {"name": "pathological_asx",
-    "label": "patho..._ASX",
-    },
-    {"name": "pathological_oski",
-    "label": "patho..._OSKI",
-    }
-    
-    #index by numbers
-    matrices = [{"name": "3dtube_conv",
-    "label": "1",
-    },
-    {"name": "gupta1_conv",
-    "label": "2",
-    },
-    {"name": "ct20stif",
-    "label": "3",
-    },
-    {"name": "cfd2_conv",
-    "label": "4"
-    },
-    {"name": "pathological_asx",
-    "label": "5",
-    },
-    {"name": "pathological_oski",
-    "label": "6",
-    }
-
 # full matrix list
 matrices = [{"name": "cfd2_conv"},
             {"name": "parabolic_fem_conv"},
@@ -113,7 +73,7 @@ matrices = [ {"name": "3dtube_conv"},
             {"name": "pathological_asx"},
             {"name": "pathological_oski"}
             ]
-
+'''
 # given filename, ret filename_[index]
 def join_with_index(filename, index):
     return filename + '_' + str(index)

@@ -14,3 +14,7 @@ python generate_refs.py [basedir] [matrix_name]
 
 python bar-input.py [matrix_name]
 
+# past here in serial
+# make sure the script is ok to run esp. paths pointing to the right place (needs to be modified to take in basedir)
+# generates roi plot inputs in outdir
+python error-no-plot.py [basedir] [outdir]

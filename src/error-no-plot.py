@@ -1,17 +1,17 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from util import *
+from sys import argv
 
 B = 12
 trials = 100
-outdir = 'roi-plot-inputs/'
 def exprange(a, b, n):
   r = (float(b) / float(a))**(1.0/(n - 1))
   return [a * r**i for i in range(n)]
 
+_, basedir, outdir = argv
 n = 10
 asx_delta = 0.01
-matrix_times_dir = 'matrix-times/'
 
 methods = [{"name":"asx",
             "label":"ASX",
@@ -62,8 +62,8 @@ references = get_references([matrix["name"] for matrix in matrices], B = B)
 for (reference, matrix) in zip(references, matrices):
     
     # generate local performance matrix
-  filename = 'times_' + matrix['name'] + '.npy'
-  tfile = os.path.join(matrix_times_dir, filename)
+  filename =  matrix['name'] + '.npy'
+  tfile = os.path.join(spmv_times_dir, filename)
   assert os.path.isfile(tfile)
   matrix_times = np.load(tfile)
 

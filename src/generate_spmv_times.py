@@ -14,9 +14,11 @@ set_matrix_storage(os.path.join(basedir, 'matrix'))
 # generate times matrix
 matrix_times = generate_times_profile(matrix_name, trials, B)
 
-# generate output filename
-outdir = [basedir, spmv_times_dir, matrix['name']]
-outfile = os.path.join(*outdir)
+outdir = os.path.join(basedir, spmv_times_dir)
+if not os.path.isdir(outdir):
+    os.mkdir(outdir)
+
+outfile = os.path.join(outdir, matrix_name)
 
 # save
-np.save(outfile, spmv_times_dir)
+np.save(outfile, matrix_times)

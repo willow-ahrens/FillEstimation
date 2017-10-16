@@ -7,11 +7,13 @@ from test_meta import *
 
 n = 10
 asx_delta = 0.01
-#outfile prefix
 
 # basedir = something like workspace/
 # perf_file = something like perf-matrix.npy
 _, perf_file, basedir, matrix_name = argv
+
+# set matrix storage
+set_matrix_storage(os.path.join(basedir, 'matrix'))
 
 # load machine performance profile
 perf_matrix = np.load(perf_file)

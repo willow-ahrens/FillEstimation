@@ -4,9 +4,16 @@ from subprocess import check_output
 import numpy as np
 import random
 import sys
+from sys import argv
+
+_, basepath = argv
+wherematrix = ""
+
+def set_matrix_storage(path):
+  wherematrix = path
 
 def matrix_path(matrix):
-  return os.path.join(os.path.dirname(os.path.realpath(__file__)), "matrix", "%s.mtx" % (matrix))
+  return os.path.join(os.path.dirname(os.path.realpath(__file__)), wherematrix, "%s.mtx" % (matrix))
 
 def fill_estimates(name, matrices, B = 12, epsilon = 0.1, delta = 0.01, trials = 1, clock = True, results = False):
   outputs = []

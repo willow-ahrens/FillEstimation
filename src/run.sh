@@ -1,14 +1,16 @@
-cd matrix
-source download-dataset.sh
-cd ..
+# generate performance matrix
+python performance_matrix.py perf-matrix
 
-mkdir performance-matrices
+# the correct one is in perf-matrix.npy
+# this part you can do in parallel 
 
-python performance-matrix.py performance-matrices/perf-matrix
+# for each matrix_name in matrix
+# also need to edit this python file to generate the directory basedir / spmv_times_dir if does not exist
+# genrate_spmvtimes and generate_refs needs to happen before respective bar-input
+python generate_spmv_times.py [basedir] [matrix_name]
 
-mkdir default-plot-inputs
-mkdir matrix-times
-python bar-input.py performance-matrices/perf-matrix.npy
+# edit file directory to generate if not exist
+python generate_refs.py [basedir] [matrix_name]
 
-mkdir plot-inputs
-python error-no-plot.py 
+python bar-input.py [matrix_name]
+

@@ -10,11 +10,12 @@ import math
 # generate performance matrix
 _, outfile = argv
 
-MIN_X = 3000
-MIN_Y = 3000
+MIN_X = 4000
+MIN_Y = 4000
 MAX_BLOCK = 12
 baseline = 1
 trials = 100
+
 # dense matrix, vector
 def lcm(x, y):
     if x > y:

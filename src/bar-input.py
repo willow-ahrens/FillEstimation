@@ -1,106 +1,19 @@
-import matplotlib.pyplot as plt
 import numpy as np
 from util import *
 from blockutil import *
 import os
 from sys import argv
-from conv import *
+from test_meta import *
 
-B = 12
-trials = 100
-outdir = 'default-plot-inputs/'
 n = 10
 asx_delta = 0.01
-matrix_times_dir = 'matrix-times/'
-_, perf_file = argv
+#outfile prefix
+
+# basedir = something like workspace/
+# perf_file = something like perf-matrix.npy
+_, perf_file, basedir, matrix_name = argv
+
 perf_matrix = np.load(perf_file)
-
-methods = [{"name":"asx",
-            "label":"ASX",
-            "color":"red",
-            "point":{"epsilon":0.5, "delta":0.01},
-           },
-           {"name":"oski",
-            "label":"OSKI",
-            "color":"blue",
-            "point":{"delta":0.02}
-           }
-          ]
-'''
-matrices = [{"name": "3dtube_conv",
-             "label": "3dtube",
-            },
-            {"name": "gupta1_conv",
-             "label": "gupta1",
-            },
-            {"name": "ct20stif",
-             "label": "ct20stif",
-            },
-            {"name": "cfd2_conv",
-             "label": "cfd2"
-            }
-            {"name": "pathological_asx",
-             "label": "patho..._ASX",
-            },
-            {"name": "pathological_oski",
-             "label": "patho..._OSKI",
-            }
-
-#index by numbers
-matrices = [{"name": "3dtube_conv",
-             "label": "1",
-            },
-            {"name": "gupta1_conv",
-             "label": "2",
-            },
-            {"name": "ct20stif",
-             "label": "3",
-            },
-            {"name": "cfd2_conv",
-             "label": "4"
-            },
-            {"name": "pathological_asx",
-             "label": "5",
-            },
-            {"name": "pathological_oski",
-             "label": "6",
-            }
-'''
-#index by numbers
-matrices = [{"name": "cfd2_conv"},
-            {"name": "parabolic_fem_conv"},
-            {"name": "Ga41As41H72_conv"},
-            {"name": "ASIC_680k_conv"},
-            {"name": "G3_circuit_conv"},
-            {"name": "Hamrle3_conv"},
-            {"name": "rajat31_conv"},
-            {"name": "cage15_conv"},
-            {"name": "wb-edu_conv"},
-            {"name": "wikipedia-20061104_conv"},
-            {"name": "degme_conv"},
-            {"name": "rail4284_conv"},
-            {"name": "spal_004_conv"},
-            {"name": "bone010_conv"},
-            {"name": "kkt_power_conv"},
-            {"name": "largebasis_conv"},
-            {"name": "TSOPF_RS_b2383_conv"},
-            {"name": "af_shell10_conv"},
-            {"name": "audikw_1_conv"},
-            {"name": "F1_conv"},
-            {"name": "gearbox_conv"},
-            {"name": "inline_1_conv"},
-            {"name": "ldoor_conv"},
-            {"name": "pwtk_conv"},
-            {"name": "thermal2_conv"},
-            {"name": "nd24k_conv"},
-            {"name": "stomach_conv"},
-            {"name": "3dtube_conv"},
-            {"name": "gupta1_conv"},
-            {"name": "ct20stif"},
-            {"name": "pathological_asx"},
-            {"name": "pathological_oski"}
-            ]
-
 
 oski_times = []
 asx_times = []
@@ -111,24 +24,29 @@ asx_spmv = []
 oski_names = []
 asx_names = []
 
-references = get_references([matrix["name"] for matrix in matrices], B = B)
+mat_partition = get_input_matrices(num_processors, index)
+
+# make sure all the input files exist
+for matrix in matrices:
+    ref_temp = [basedir, ref_dir, matrix['name']]
+    times_temp = [basedir, spmv_times_dir, matrix['name']]
+    reffile = os.path.join(*ref_temp)
+    timesfile = os.path.join(*times_temp)
+    assert os.isfile(reffile)
+    assert os.isfile(timesfile)
 
 for method in methods:
   for (reference, matrix) in zip(references, matrices):
     point = method["point"]
     
     # generate local performance matrix
-    filename = 'times_' + matrix['name'] + '.npy'
+    filename = matrix['name'] + '.npy'
     tfile = os.path.join(matrix_times_dir, filename)
-    print tfile
 
-    print os.path.isfile(tfile) 
     # generate matrix spmv times
     if os.path.isfile(tfile):
-        print 'isfile'
         matrix_times = np.load(tfile)
     else:
-        print 'isnot'
         matrix_times = generate_times_profile(matrix['name'], trials, B)
         np.save(tfile[:-4], matrix_times)
     
@@ -195,9 +113,10 @@ assert len(oski_spmv) == len(asx_spmv)
 # matrix_name asx_val 
 # files (normalized time to estimate, error, normalized spmv time) in the form 
 # matrix_id asx oski
-time_path = os.path.join(outdir, 'default_times')
-err_path = os.path.join(outdir, 'default_err')
-spmv_path = os.path.join(outdir, 'default_spmv')
+outdir = os.path.join(basedir, bar_inputs_dir) 
+time_path = os.path.join(outdir, out_times_prefix + '_' + matrix_name)
+err_path = os.path.join(outdir, out_err_prefix + '_' + matrix_name)
+spmv_path = os.path.join(outdir, out_spmv_prefix + '_' + matrix_name)
 
 with open(time_path, 'w') as time_out:
     for i in range(0, len(oski_times)):

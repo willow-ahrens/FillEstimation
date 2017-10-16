@@ -95,12 +95,12 @@ for (reference, matrix) in zip(references, matrices):
       errors.append(np.mean(results[0]["errors"]))
       hi_bars.append(np.std(results[0]["errors"]))
       lo_bars.append(np.std(results[0]["errors"]))
-      # print("Error: %g, Time: %g" % (errors[-1], times[-1]))
 
-    if not os.path.isdir(outdir):
-        os.mkdir(outdir)
+    roidir = os.path.join(basedir, outdir)
+    if not os.path.isdir(roidir):
+        os.mkdir(roidir)
     outfile = 'error_' + method['name'] + '_' + matrix['name']
-    out_path = os.path.join(outdir, outfile)
+    out_path = os.path.join(roidir, outfile)
 
     # output in form
     # x y ylow yhigh

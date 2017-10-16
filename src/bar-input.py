@@ -28,17 +28,16 @@ asx_names = []
 # make sure all the input files exist
 ref_base = os.path.join(basedir, ref_dir)
 spmv_base = os.path.join(basedir, spmv_times_dir)
-reffile = os.path.join(ref_base, matrix_name)
-spmvfile = os.path.join(spmv_base, matrix_name)
+reffile = os.path.join(ref_base, matrix_name + '.npy')
+spmvfile = os.path.join(spmv_base, matrix_name + '.npy')
 assert os.isfile(reffile)
 assert os.isfile(spmvfile)
 
-for method in methods:
-    # load in reference and spmv times
-    reference = np.load(reffile + '.npy')
-    matrix_times = np.load(spmvfile + '.npy')
+# load in reference and spmv times
+reference = np.load(reffile)
+matrix_times = np.load(spmvfile)
 
-    # for (reference, matrix) in zip(references, matrices):
+for method in methods:
     point = method["point"]
     
     # get time to do spmv with (0,0)

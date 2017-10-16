@@ -9,7 +9,7 @@ python performance_matrix.py perf-matrix
 # genrate_spmvtimes and generate_refs needs to happen before respective bar-input
 python generate_spmv_times.py [basedir] [matrix_name]
 
-# edit file directory to generate if not exist
+# for example python generate_refs.py workspace ct20stif
 python generate_refs.py [basedir] [matrix_name]
 
 python bar-input.py perf-matrix.npy [basedir] [matrix_name]

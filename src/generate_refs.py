@@ -7,19 +7,19 @@ import os
 from sys import argv
 from test_meta import *
 
+# basedir = working dir
 _, basedir, matrix_name = argv
 
 set_matrix_storage(os.path.join(basedir, 'matrix'))
 
-# generate references for these matrices
-references = get_references([matrix_name])
+# generate references for matrix_name
+ref = get_references([matrix_name])
 
-# write reference fills each in a file
-for reference in references:
+outdir = os.path.join(basedir, ref_dir)
+if not os.path.isdir(outdir):
+    os.mkdir(outdir)
 
-    # generate output filename
-    outdir = [basedir, ref_dir, matrix['name']]
-    outfile = os.path.join(*outdir)
+outfile = os.path.join(outdir, matrix_name)
 
-    # save
-    np.save(outfile, [reference])
+# save
+np.save(outfile, ref)

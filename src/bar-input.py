@@ -18,22 +18,15 @@ set_matrix_storage(os.path.join(basedir, 'matrix'))
 # load machine performance profile
 perf_matrix = np.load(perf_file)
 
-oski_times = []
-asx_times = []
-oski_err = []
-asx_err = []
-oski_spmv = []
-asx_spmv = []
-oski_names = []
-asx_names = []
+oski_time = asx_time = oski_err = asx_err = oski_err_std =asx_err_std = oski_spmv = asx_spmv = oski_spmv_std = asx_spmv_std = 0
 
 # make sure all the input files exist
 ref_base = os.path.join(basedir, ref_dir)
 spmv_base = os.path.join(basedir, spmv_times_dir)
 reffile = os.path.join(ref_base, matrix_name + '.npy')
 spmvfile = os.path.join(spmv_base, matrix_name + '.npy')
-assert os.isfile(reffile)
-assert os.isfile(spmvfile)
+assert os.path.isfile(reffile)
+assert os.path.isfile(spmvfile)
 
 # load in reference and spmv times
 reference = np.load(reffile)
@@ -62,38 +55,27 @@ for method in methods:
     if method["name"] == 'oski':
         # update all oski lists
         # normalized time to estimate
-        oski_times.append(results[0]["time_mean"] / base_time)
+        oski_time = results[0]["time_mean"] / base_time
         
-        # error in tuple (error, std) 
-        oski_err.append((np.mean(results[0]["errors"]), np.std(results[0]["errors"])))
+        # error and std
+        oski_err = np.mean(results[0]["errors"])
+        oski_err_std = np.std(results[0]["errors"])
 
-        # spmv time in tuple (normalized_time, spmv)
-        oski_spmv.append((np.mean(spmv_times), np.std(spmv_times)))
-        oski_names.append(matrix['name'])
+        # spmv and std
+        oski_spmv = np.mean(spmv_times)
+        oski_spmv_std = np.std(spmv_times)
     else:
         # update all asx lists
         # normalized time to estimate
-        asx_times.append(results[0]["time_mean"] / base_time)
-        
-        # error in tuple (error, std) 
-        asx_err.append((np.mean(results[0]["errors"]), np.std(results[0]["errors"])))
+        asx_time = results[0]["time_mean"] / base_time
+        # error and std
+        asx_err = np.mean(results[0]["errors"])
+        asx_err_std = np.std(results[0]["errors"])
 
-        # spmv time in tuple (normalized_time, spmv)
-        asx_spmv.append((np.mean(spmv_times), np.std(spmv_times)))
-
-        # labels
-        # this is mostly a sanity check
-        asx_names.append(matrix['name'])
-try:
-  assert asx_names == oski_names
-except:
-    print asx_names
-    print oski_names
-
-assert len(oski_times) == len(asx_times)
-assert len(oski_err) == len(asx_err)
-assert len(oski_spmv) == len(asx_spmv)
-
+        # spmv and std
+        asx_spmv = np.mean(spmv_times)
+        asx_spmv_std = np.std(spmv_times)
+       
 # outputfiles
 # in the format 
 # for spmv times and 
@@ -104,20 +86,21 @@ assert len(oski_spmv) == len(asx_spmv)
 # matrix_name asx_val 
 # files (normalized time to estimate, error, normalized spmv time) in the form 
 # matrix_id asx oski
-outdir = os.path.join(basedir, bar_inputs_dir) 
+
+outdir = os.path.join(basedir, bar_inputs_dir)
+if not os.path.isdir(outdir):
+    os.mkdir(outdir)
+
 time_path = os.path.join(outdir, out_times_prefix + '_' + matrix_name)
 err_path = os.path.join(outdir, out_err_prefix + '_' + matrix_name)
 spmv_path = os.path.join(outdir, out_spmv_prefix + '_' + matrix_name)
 
 with open(time_path, 'w') as time_out:
-    for i in range(0, len(oski_times)):
-        time_out.write(str(oski_names[i]) + ' ' + str(asx_times[i]) + ' ' + str(oski_times[i]) + '\n')
+    time_out.write(matrix_name + ' ' + str(asx_time) + ' ' + str(oski_time) + '\n')
 
 with open(err_path, 'w') as err_out:
-    for i in range(0, len(oski_err)):
-        err_out.write(str(oski_names[i]) + ' ' + str(asx_err[i][0]) + ' ' + str(asx_err[i][1]) + ' ' + str(oski_err[i][0]) + ' ' + str(oski_err[i][1]) + '\n')
+    err_out.write(matrix_name + ' ' + str(asx_err) + ' ' + str(asx_err_std) + ' ' + str(oski_err) + ' ' + str(oski_err_std) + '\n')
 
 with open(spmv_path, 'w') as spmv_out:
-    for i in range(0, len(oski_spmv)):
-        spmv_out.write(str(oski_names[i]) + ' ' + str(asx_spmv[i][0]) + ' ' + str(asx_spmv[i][1]) + ' ' + str(oski_spmv[i][0]) + ' ' + str(oski_spmv[i][1]) + '\n')
+    spmv_out.write(matrix_name + ' ' + str(asx_spmv) + ' ' + str(asx_spmv_std) + ' ' + str(oski_spmv) + ' ' + str(oski_spmv_std) + '\n')
 

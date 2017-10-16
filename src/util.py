@@ -6,7 +6,7 @@ import random
 import sys
 from sys import argv
 
-_, basepath = argv
+# _, basedir, matrix_name = argv
 wherematrix = ""
 
 def set_matrix_storage(path):

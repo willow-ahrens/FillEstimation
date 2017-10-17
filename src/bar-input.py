@@ -10,10 +10,9 @@ asx_delta = 0.01
 
 # basedir = something like workspace/
 # perf_file = something like perf-matrix.npy
-_, perf_file, basedir, matrix_name = argv
+_, _, basedir, perf_file, matrix_id = argv
 
-# set matrix storage
-set_matrix_storage(os.path.join(basedir, 'matrix'))
+matrix_name = matrices[int(matrix_id)]["name"]
 
 # load machine performance profile
 perf_matrix = np.load(perf_file)

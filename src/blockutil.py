@@ -16,11 +16,9 @@ import scipy.io
 oski_prefix = 'oski_'
 asx_prefix = 'asx_'
 ref_prefix = 'ref_'
-matrices = ["freeFlyingRobot_5"]
-matrix_path = 'matrix/'
 
-# arg1 = performance profile of this architecture
-_, perf_file = argv
+base_path = argv[1]
+matrix_path = os.path.join(base_path, 'matrix')
 
 #input = name of json file
 def get_estimate_from_file(estimate_file):

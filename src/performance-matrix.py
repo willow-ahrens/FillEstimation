@@ -58,6 +58,7 @@ if __name__ == "__main__":
                 t1 = time.time()
 
                 diff = diff + (x_dim * y_dim) / float(t1 - t0)
+		print(t1 - t0)
             diff = diff / trials
 
             if i == 1 and j == 1:

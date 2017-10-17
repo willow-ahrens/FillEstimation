@@ -1,13 +1,15 @@
-CC = gcc-7
-CFLAGS = -std=c99 -lm -march=native -O3 -g3 `pkg-config --cflags glib-2.0`
-LDFLAGS = -lgsl `pkg-config --libs glib-2.0`
+CC = cc
+CFLAGS = -std=c99 -march=native -O3 `~/gsl-install/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0`
+LDLIBS = `~/gsl-install/bin/gsl-config --libs` `pkg-config --libs glib-2.0`
 
 all: reference asx oski
 clean:
 	rm -rf reference asx oski *.o *.dSYM *.trace *.pyc
 
-reference: run.c test.o reference.o util.o
+run.o: run.c
 
-asx: run.c test.o asx.o util.o
+reference: run.o test.o reference.o util.o
 
-oski: run.c test.o oski.o util.o
+asx: run.o test.o asx.o util.o
+
+oski: run.o test.o oski.o util.o

@@ -1,0 +1,22 @@
+Authors of the BeBOP OSKI Library:
+
+	Richard Vuduc <richie@eecs.berkeley.edu>
+	James Demmel <demmel@eecs.berkeley.edu>
+	Katherine Yelick <yelick@eecs.berkeley.edu>
+	Eun-Jin Im <ejim@kookmin.ac.kr>
+
+Significant code contributions from:
+
+	Rajesh Nishtala <rajeshn@eecs.berkeley.edu>
+		(Cache blocking)
+	Ben Lee <bclee@fas.harvard.edu>
+		(Sparse symmetric matrix-vector multiply)
+	Shoaib Kamil <skamil@nersc.gov>
+		(Sparse triangular solve)
+
+Current OSKI development team (alphabetical):
+
+	Rajesh Nishtala <rajeshn@eecs.berkeley.edu>
+	Hormozd Gahvari <hormozd@eecs.berkeley.edu>
+	Mark Hoemmen <mhoemmen@berkeley.edu>
+	Richard Vuduc <richie@eecs.berkeley.edu>

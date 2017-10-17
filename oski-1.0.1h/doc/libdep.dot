@@ -1,0 +1,89 @@
+/* Graph of shared library dependency structure */
+
+digraph G {
+	compound=true;
+	node [fontname="Palatino"];
+	rankdir=RL;
+	ratio=fill;
+	size="7,5"
+
+	subgraph cluster_core {
+		label="Core";
+		style=filled;
+		color=lightgrey;
+		node [style=filled,color=white];
+		oskilt [label="lt"];
+		oski_core [label="core"];
+		oski_core_Txy [label="core_T"];
+		oski_core_Txy -> oski_core;
+		oski_core -> oskilt;
+	}
+
+	subgraph cluster_refmat {
+		label="Reference Formats";
+		style=filled;
+		color=lightgrey;
+		node [style=filled,color=white];
+		oski_mat_CSR_Txy [label="CSR_T"];
+		oski_mat_CSC_Txy [label="CSC_T"];
+		oski_mat_CSC_Txy -> oski_mat_CSR_Txy;
+	}
+	subgraph cluster_main {
+		label="Main";
+		style=filled;
+		color=lightgrey;
+		node [style=filled,color=white];
+		oski [label="oski"];
+		oski_Txy [label="oski_T"];
+		oski_Txy -> oski;
+	}
+	subgraph cluster_heur {
+		label="Heuristics";
+		oski_heur_regprof_Txy [label="regprof_T"];
+		oski_heur_mregblock_Txy [label="mregblock_T"];
+		oski_heur_symmrb_Txy [label="symmrb_T"];
+	}
+	subgraph cluster_rb {
+		label="Register Blocked Formats";
+		oski_mat_BCSR_Txy [label="BCSR_T"];
+		oski_mat_MBCSR_Txy [label="MBCSR_T"];
+		oski_mat_MBCSR_Txy -> oski_mat_BCSR_Txy;
+	}
+	subgraph cluster_gcsr {
+		label="Generalized CSR";
+		oski_mat_GCSR_Txy [label="GCSR_T"];
+	}
+	subgraph cluster_cb {
+		label="Cache Blocked Format";
+		oski_mat_CB_Txy [label="CB_T"];
+	}
+	subgraph cluster_dense {
+		label="Dense Column Major";
+		oski_mat_DENSE_Txy [label="DENSE_T"];
+	}
+	subgraph cluster_vbr {
+		label="Variable Block Row";
+		oski_mat_VBR_Txy [label="VBR_T"];
+	}
+
+	oski_mat_CSR_Txy -> oski_core_Txy 
+		[lhead=cluster_core, ltail=cluster_refmat];
+	oski_Txy -> oski_core_Txy [lhead=cluster_core, ltail=cluster_main];
+	oski_Txy -> oski_mat_CSR_Txy [lhead=cluster_refmat, ltail=cluster_main];
+	oski_heur_mregblock_Txy -> oski_core_Txy
+		[lhead=cluster_core, ltail=cluster_heur];
+	oski_heur_mregblock_Txy -> oski_Txy
+		[lhead=cluster_main, ltail=cluster_heur];
+	oski_mat_MBCSR_Txy -> oski_core_Txy [lhead=cluster_core, ltail=cluster_rb];
+	oski_mat_MBCSR_Txy -> oski_mat_CSR_Txy [lhead=cluster_refmat, ltail=cluster_rb];
+	oski_mat_CB_Txy -> oski_core_Txy [lhead=cluster_core, ltail=cluster_cb];
+	oski_mat_CB_Txy -> oski_mat_CSR_Txy [lhead=cluster_refmat, ltail=cluster_cb];
+	oski_mat_GCSR_Txy -> oski_core_Txy [lhead=cluster_core, ltail=cluster_gcsr];
+	oski_mat_GCSR_Txy -> oski_mat_CSR_Txy [lhead=cluster_refmat, ltail=cluster_gcsr];
+	oski_mat_DENSE_Txy -> oski_core_Txy [lhead=cluster_core, ltail=cluster_dense];
+	oski_mat_DENSE_Txy -> oski_mat_CSR_Txy [lhead=cluster_refmat, ltail=cluster_dense];
+	oski_mat_VBR_Txy -> oski_core_Txy [lhead=cluster_core, ltail=cluster_vbr];
+	oski_mat_VBR_Txy -> oski_mat_CSR_Txy [lhead=cluster_refmat, ltail=cluster_vbr];
+}
+
+/* eof */

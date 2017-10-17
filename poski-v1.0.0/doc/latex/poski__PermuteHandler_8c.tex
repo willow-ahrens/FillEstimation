@@ -1,0 +1,55 @@
+\hypertarget{poski__PermuteHandler_8c}{\section{poski\-\_\-\-Permute\-Handler.\-c File Reference}
+\label{poski__PermuteHandler_8c}\index{poski\-\_\-\-Permute\-Handler.\-c@{poski\-\_\-\-Permute\-Handler.\-c}}
+}
+
+
+Handle the permuting routines.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-commontype.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-permute.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-matrixtype.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-vectortype.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{poski__PermuteHandler_8c_a2d6b2fe9a84ced73f4dfcc9476d7298b}{int \hyperlink{poski__PermuteHandler_8c_a2d6b2fe9a84ced73f4dfcc9476d7298b}{poski\-\_\-\-Init\-\_\-\-Global\-Permute} (poski\-\_\-index\-\_\-t $\ast$permute)}\label{poski__PermuteHandler_8c_a2d6b2fe9a84ced73f4dfcc9476d7298b}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Initialize permute object. \end{DoxyCompactList}\item 
+\hypertarget{poski__PermuteHandler_8c_ad5bf8ea959fe06d1b1a20acc24f6a4d8}{int \hyperlink{poski__PermuteHandler_8c_ad5bf8ea959fe06d1b1a20acc24f6a4d8}{poski\-\_\-report\-\_\-permute} (poski\-\_\-index\-\_\-t $\ast$permute, char $\ast$name)}\label{poski__PermuteHandler_8c_ad5bf8ea959fe06d1b1a20acc24f6a4d8}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Report the information of permutation. \end{DoxyCompactList}\item 
+int \hyperlink{poski__PermuteHandler_8c_adc209b7ba046c2fd27335bdfc5693b1b}{poski\-\_\-permute\-Mat\-Mult} (poski\-\_\-vec\-\_\-t vec)
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Perfoms a permuting operation for a matrix-\/vector kernel. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handle the permuting routines. This module implements the routines to permute a sparse matrix.
+
+\begin{DoxyAttention}{Attention}
+Should fix it! 
+\end{DoxyAttention}
+
+
+\subsection{Function Documentation}
+\hypertarget{poski__PermuteHandler_8c_adc209b7ba046c2fd27335bdfc5693b1b}{\index{poski\-\_\-\-Permute\-Handler.\-c@{poski\-\_\-\-Permute\-Handler.\-c}!poski\-\_\-permute\-Mat\-Mult@{poski\-\_\-permute\-Mat\-Mult}}
+\index{poski\-\_\-permute\-Mat\-Mult@{poski\-\_\-permute\-Mat\-Mult}!poski_PermuteHandler.c@{poski\-\_\-\-Permute\-Handler.\-c}}
+\subsubsection[{poski\-\_\-permute\-Mat\-Mult}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-permute\-Mat\-Mult} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-vec\-\_\-t}]{vec}
+\end{DoxyParamCaption}
+)}}\label{poski__PermuteHandler_8c_adc209b7ba046c2fd27335bdfc5693b1b}
+
+
+\mbox{[}library's internal use\mbox{]} Perfoms a permuting operation for a matrix-\/vector kernel. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em vec} & Vector view object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}

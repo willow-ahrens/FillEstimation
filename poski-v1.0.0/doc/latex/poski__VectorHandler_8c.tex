@@ -1,0 +1,164 @@
+\hypertarget{poski__VectorHandler_8c}{\section{poski\-\_\-\-Vector\-Handler.\-c File Reference}
+\label{poski__VectorHandler_8c}\index{poski\-\_\-\-Vector\-Handler.\-c@{poski\-\_\-\-Vector\-Handler.\-c}}
+}
+
+
+Handle the vector view object.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$math.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-vectorcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-partition.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-partitioncommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-malloc.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-print.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+poski\-\_\-vec\-\_\-t \hyperlink{poski__VectorHandler_8c_a875934cc5cc22a2711bd6b93468af04a}{poski\-\_\-\-Create\-Vec\-View} (poski\-\_\-value\-\_\-t $\ast$vec, poski\-\_\-index\-\_\-t length, poski\-\_\-int\-\_\-t inc, poski\-\_\-partitionvec\-\_\-t $\ast$partitionvec)
+\begin{DoxyCompactList}\small\item\em Create a vector-\/view object. \end{DoxyCompactList}\item 
+int \hyperlink{poski__VectorHandler_8c_a7cf270140357ffc03c3aaa004b121457}{poski\-\_\-\-Destroy\-Vec} (poski\-\_\-vec\-\_\-t vec)
+\begin{DoxyCompactList}\small\item\em Destroy a vector-\/view object. \end{DoxyCompactList}\item 
+int \hyperlink{poski__VectorHandler_8c_a465a42325af5b8581f51d6e8674c8c03}{poski\-\_\-check\-\_\-\-Two\-Vectors} (poski\-\_\-sparse\-\_\-matrix\-\_\-t $\ast$A, poski\-\_\-value\-\_\-t $\ast$vec1, poski\-\_\-value\-\_\-t $\ast$vec2, poski\-\_\-index\-\_\-t length)
+\begin{DoxyCompactList}\small\item\em Compare two vector data. \end{DoxyCompactList}\item 
+int \hyperlink{poski__VectorHandler_8c_aaedf3d718fefee908be347b1ae896963}{poski\-\_\-report\-\_\-vector} (poski\-\_\-value\-\_\-t $\ast$vec, poski\-\_\-index\-\_\-t length, char $\ast$name)
+\begin{DoxyCompactList}\small\item\em Report information of a vector data. \end{DoxyCompactList}\item 
+int \hyperlink{poski__VectorHandler_8c_aa944a61eaf7ea45347dac41715e18e17}{poski\-\_\-report\-\_\-vec} (poski\-\_\-vec\-\_\-t vec)
+\begin{DoxyCompactList}\small\item\em Report information of a vector-\/view object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handle the vector view object. This module implements the routines to hanle the vector view object.
+
+Also, refer 
+
+\subsection{Function Documentation}
+\hypertarget{poski__VectorHandler_8c_a875934cc5cc22a2711bd6b93468af04a}{\index{poski\-\_\-\-Vector\-Handler.\-c@{poski\-\_\-\-Vector\-Handler.\-c}!poski\-\_\-\-Create\-Vec\-View@{poski\-\_\-\-Create\-Vec\-View}}
+\index{poski\-\_\-\-Create\-Vec\-View@{poski\-\_\-\-Create\-Vec\-View}!poski_VectorHandler.c@{poski\-\_\-\-Vector\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Create\-Vec\-View}]{\setlength{\rightskip}{0pt plus 5cm}poski\-\_\-vec\-\_\-t {\bf poski\-\_\-\-Create\-Vec\-View} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-value\-\_\-t $\ast$}]{vec, }
+\item[{poski\-\_\-index\-\_\-t}]{length, }
+\item[{poski\-\_\-int\-\_\-t}]{inc, }
+\item[{poski\-\_\-partitionvec\-\_\-t $\ast$}]{partitionvec}
+\end{DoxyParamCaption}
+)}}\label{poski__VectorHandler_8c_a875934cc5cc22a2711bd6b93468af04a}
+
+
+Create a vector-\/view object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em vec} & Vector data \\
+\hline
+\mbox{\tt in}  & {\em length} & Logical vector length \\
+\hline
+\mbox{\tt in}  & {\em inc} & Physical stride between consecutive elements. \\
+\hline
+\mbox{\tt in}  & {\em partitionvec} & Partitionvector object.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A valid vector-\/view object if success, or an error message otherwise.
+\end{DoxyReturn}
+This routine performs as follows\-: (1) error-\/check for the input parameters.
+
+(2) allocate space for a new vector-\/view object, and initialize it.
+
+(3) create partitioned subvectors if partitionvector object is given.
+
+(4) return the vector-\/view object. \hypertarget{poski__VectorHandler_8c_a7cf270140357ffc03c3aaa004b121457}{\index{poski\-\_\-\-Vector\-Handler.\-c@{poski\-\_\-\-Vector\-Handler.\-c}!poski\-\_\-\-Destroy\-Vec@{poski\-\_\-\-Destroy\-Vec}}
+\index{poski\-\_\-\-Destroy\-Vec@{poski\-\_\-\-Destroy\-Vec}!poski_VectorHandler.c@{poski\-\_\-\-Vector\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Destroy\-Vec}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-\-Destroy\-Vec} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-vec\-\_\-t}]{vec}
+\end{DoxyParamCaption}
+)}}\label{poski__VectorHandler_8c_a7cf270140357ffc03c3aaa004b121457}
+
+
+Destroy a vector-\/view object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em vec} & A vector-\/view object.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}
+\hypertarget{poski__VectorHandler_8c_a465a42325af5b8581f51d6e8674c8c03}{\index{poski\-\_\-\-Vector\-Handler.\-c@{poski\-\_\-\-Vector\-Handler.\-c}!poski\-\_\-check\-\_\-\-Two\-Vectors@{poski\-\_\-check\-\_\-\-Two\-Vectors}}
+\index{poski\-\_\-check\-\_\-\-Two\-Vectors@{poski\-\_\-check\-\_\-\-Two\-Vectors}!poski_VectorHandler.c@{poski\-\_\-\-Vector\-Handler.\-c}}
+\subsubsection[{poski\-\_\-check\-\_\-\-Two\-Vectors}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-check\-\_\-\-Two\-Vectors} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-sparse\-\_\-matrix\-\_\-t $\ast$}]{A, }
+\item[{poski\-\_\-value\-\_\-t $\ast$}]{vec1, }
+\item[{poski\-\_\-value\-\_\-t $\ast$}]{vec2, }
+\item[{poski\-\_\-index\-\_\-t}]{length}
+\end{DoxyParamCaption}
+)}}\label{poski__VectorHandler_8c_a465a42325af5b8581f51d6e8674c8c03}
+
+
+Compare two vector data. 
+
+This routine compares that two vector data are equal or not.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em A} & The sparse matrix object in C\-S\-R format. \\
+\hline
+\mbox{\tt in}  & {\em vec1} & First vector data. \\
+\hline
+\mbox{\tt in}  & {\em vec2} & Second vector data. \\
+\hline
+\mbox{\tt in}  & {\em length} & Logical vector length.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}
+\hypertarget{poski__VectorHandler_8c_aaedf3d718fefee908be347b1ae896963}{\index{poski\-\_\-\-Vector\-Handler.\-c@{poski\-\_\-\-Vector\-Handler.\-c}!poski\-\_\-report\-\_\-vector@{poski\-\_\-report\-\_\-vector}}
+\index{poski\-\_\-report\-\_\-vector@{poski\-\_\-report\-\_\-vector}!poski_VectorHandler.c@{poski\-\_\-\-Vector\-Handler.\-c}}
+\subsubsection[{poski\-\_\-report\-\_\-vector}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-report\-\_\-vector} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-value\-\_\-t $\ast$}]{vec, }
+\item[{poski\-\_\-index\-\_\-t}]{length, }
+\item[{char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{poski__VectorHandler_8c_aaedf3d718fefee908be347b1ae896963}
+
+
+Report information of a vector data. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em vec} & Vector data \\
+\hline
+\mbox{\tt in}  & {\em length} & Logical vector length. \\
+\hline
+\mbox{\tt in}  & {\em name} & Specified vector name.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}
+\hypertarget{poski__VectorHandler_8c_aa944a61eaf7ea45347dac41715e18e17}{\index{poski\-\_\-\-Vector\-Handler.\-c@{poski\-\_\-\-Vector\-Handler.\-c}!poski\-\_\-report\-\_\-vec@{poski\-\_\-report\-\_\-vec}}
+\index{poski\-\_\-report\-\_\-vec@{poski\-\_\-report\-\_\-vec}!poski_VectorHandler.c@{poski\-\_\-\-Vector\-Handler.\-c}}
+\subsubsection[{poski\-\_\-report\-\_\-vec}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-report\-\_\-vec} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-vec\-\_\-t}]{vec}
+\end{DoxyParamCaption}
+)}}\label{poski__VectorHandler_8c_aa944a61eaf7ea45347dac41715e18e17}
+
+
+Report information of a vector-\/view object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em vec} & Vector-\/view object.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}

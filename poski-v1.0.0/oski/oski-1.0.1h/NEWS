@@ -1,0 +1,37 @@
+*************
+June 25, 2007
+*************
+
+OSKI 1.0.1h released. This maintenance release fixes the index-type
+settings in the oski/oski_Tl?.h headers.
+
+************
+June 8, 2007
+************
+
+OSKI 1.0.1g released. This maintenance release includes one minor bug
+fix related to linking under Darwin, and some internal interface
+changes.
+
+*****************
+December 21, 2006
+*****************
+
+OSKI 1.0.1e released. This maintenance release includes a number of
+minor bug fixes.
+
+*****************
+February 24, 2006
+*****************
+
+OSKI 1.0.1 released. This maintenance release fixes several memory
+leaks.
+
+
+*************
+June 26, 2005
+*************
+
+OSKI 1.0.0 is released.
+
+# eof

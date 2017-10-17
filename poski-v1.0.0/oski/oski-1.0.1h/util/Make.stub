@@ -1,0 +1,131 @@
+#
+# Make stub for liboski_util_Txy.la
+#
+# The following make variables must already be defined:
+#    pkglib_LTLIBRARIES
+#    util_sources_typedep
+#    utilcommon_cflags
+#    Txy_cflags
+#    release_ldflags
+#
+
+if BUILD_Tis
+pkglib_LTLIBRARIES += liboski_util_Tis.la
+liboski_util_Tis_la_SOURCES = $(util_sources_typedep)
+liboski_util_Tis_la_CFLAGS = $(utilcommon_cflags) $(Tis_cflags)
+liboski_util_Tis_la_LIBADD =
+liboski_util_Tis_la_LDFLAGS = $(release_ldflags)
+
+liboski_util_Tis_la_LIBADD += ../src/liboski.la
+liboski_util_Tis_la_LDFLAGS += -dlopen ../src/liboski.la
+liboski_util_Tis_la_LIBADD += ../src/liboski_Tis.la
+liboski_util_Tis_la_LDFLAGS += -dlopen ../src/liboski_Tis.la
+liboski_util_Tis_la_LIBADD += liboski_util.la
+liboski_util_Tis_la_LDFLAGS += -dlopen liboski_util.la
+endif
+
+if BUILD_Tid
+pkglib_LTLIBRARIES += liboski_util_Tid.la
+liboski_util_Tid_la_SOURCES = $(util_sources_typedep)
+liboski_util_Tid_la_CFLAGS = $(utilcommon_cflags) $(Tid_cflags)
+liboski_util_Tid_la_LIBADD =
+liboski_util_Tid_la_LDFLAGS = $(release_ldflags)
+
+liboski_util_Tid_la_LIBADD += ../src/liboski.la
+liboski_util_Tid_la_LDFLAGS += -dlopen ../src/liboski.la
+liboski_util_Tid_la_LIBADD += ../src/liboski_Tid.la
+liboski_util_Tid_la_LDFLAGS += -dlopen ../src/liboski_Tid.la
+liboski_util_Tid_la_LIBADD += liboski_util.la
+liboski_util_Tid_la_LDFLAGS += -dlopen liboski_util.la
+endif
+
+if BUILD_Tic
+pkglib_LTLIBRARIES += liboski_util_Tic.la
+liboski_util_Tic_la_SOURCES = $(util_sources_typedep)
+liboski_util_Tic_la_CFLAGS = $(utilcommon_cflags) $(Tic_cflags)
+liboski_util_Tic_la_LIBADD =
+liboski_util_Tic_la_LDFLAGS = $(release_ldflags)
+
+liboski_util_Tic_la_LIBADD += ../src/liboski.la
+liboski_util_Tic_la_LDFLAGS += -dlopen ../src/liboski.la
+liboski_util_Tic_la_LIBADD += ../src/liboski_Tic.la
+liboski_util_Tic_la_LDFLAGS += -dlopen ../src/liboski_Tic.la
+liboski_util_Tic_la_LIBADD += liboski_util.la
+liboski_util_Tic_la_LDFLAGS += -dlopen liboski_util.la
+endif
+
+if BUILD_Tiz
+pkglib_LTLIBRARIES += liboski_util_Tiz.la
+liboski_util_Tiz_la_SOURCES = $(util_sources_typedep)
+liboski_util_Tiz_la_CFLAGS = $(utilcommon_cflags) $(Tiz_cflags)
+liboski_util_Tiz_la_LIBADD =
+liboski_util_Tiz_la_LDFLAGS = $(release_ldflags)
+
+liboski_util_Tiz_la_LIBADD += ../src/liboski.la
+liboski_util_Tiz_la_LDFLAGS += -dlopen ../src/liboski.la
+liboski_util_Tiz_la_LIBADD += ../src/liboski_Tiz.la
+liboski_util_Tiz_la_LDFLAGS += -dlopen ../src/liboski_Tiz.la
+liboski_util_Tiz_la_LIBADD += liboski_util.la
+liboski_util_Tiz_la_LDFLAGS += -dlopen liboski_util.la
+endif
+
+if BUILD_Tls
+pkglib_LTLIBRARIES += liboski_util_Tls.la
+liboski_util_Tls_la_SOURCES = $(util_sources_typedep)
+liboski_util_Tls_la_CFLAGS = $(utilcommon_cflags) $(Tls_cflags)
+liboski_util_Tls_la_LIBADD =
+liboski_util_Tls_la_LDFLAGS = $(release_ldflags)
+
+liboski_util_Tls_la_LIBADD += ../src/liboski.la
+liboski_util_Tls_la_LDFLAGS += -dlopen ../src/liboski.la
+liboski_util_Tls_la_LIBADD += ../src/liboski_Tls.la
+liboski_util_Tls_la_LDFLAGS += -dlopen ../src/liboski_Tls.la
+liboski_util_Tls_la_LIBADD += liboski_util.la
+liboski_util_Tls_la_LDFLAGS += -dlopen liboski_util.la
+endif
+
+if BUILD_Tld
+pkglib_LTLIBRARIES += liboski_util_Tld.la
+liboski_util_Tld_la_SOURCES = $(util_sources_typedep)
+liboski_util_Tld_la_CFLAGS = $(utilcommon_cflags) $(Tld_cflags)
+liboski_util_Tld_la_LIBADD =
+liboski_util_Tld_la_LDFLAGS = $(release_ldflags)
+
+liboski_util_Tld_la_LIBADD += ../src/liboski.la
+liboski_util_Tld_la_LDFLAGS += -dlopen ../src/liboski.la
+liboski_util_Tld_la_LIBADD += ../src/liboski_Tld.la
+liboski_util_Tld_la_LDFLAGS += -dlopen ../src/liboski_Tld.la
+liboski_util_Tld_la_LIBADD += liboski_util.la
+liboski_util_Tld_la_LDFLAGS += -dlopen liboski_util.la
+endif
+
+if BUILD_Tlc
+pkglib_LTLIBRARIES += liboski_util_Tlc.la
+liboski_util_Tlc_la_SOURCES = $(util_sources_typedep)
+liboski_util_Tlc_la_CFLAGS = $(utilcommon_cflags) $(Tlc_cflags)
+liboski_util_Tlc_la_LIBADD =
+liboski_util_Tlc_la_LDFLAGS = $(release_ldflags)
+
+liboski_util_Tlc_la_LIBADD += ../src/liboski.la
+liboski_util_Tlc_la_LDFLAGS += -dlopen ../src/liboski.la
+liboski_util_Tlc_la_LIBADD += ../src/liboski_Tlc.la
+liboski_util_Tlc_la_LDFLAGS += -dlopen ../src/liboski_Tlc.la
+liboski_util_Tlc_la_LIBADD += liboski_util.la
+liboski_util_Tlc_la_LDFLAGS += -dlopen liboski_util.la
+endif
+
+if BUILD_Tlz
+pkglib_LTLIBRARIES += liboski_util_Tlz.la
+liboski_util_Tlz_la_SOURCES = $(util_sources_typedep)
+liboski_util_Tlz_la_CFLAGS = $(utilcommon_cflags) $(Tlz_cflags)
+liboski_util_Tlz_la_LIBADD =
+liboski_util_Tlz_la_LDFLAGS = $(release_ldflags)
+
+liboski_util_Tlz_la_LIBADD += ../src/liboski.la
+liboski_util_Tlz_la_LDFLAGS += -dlopen ../src/liboski.la
+liboski_util_Tlz_la_LIBADD += ../src/liboski_Tlz.la
+liboski_util_Tlz_la_LDFLAGS += -dlopen ../src/liboski_Tlz.la
+liboski_util_Tlz_la_LIBADD += liboski_util.la
+liboski_util_Tlz_la_LDFLAGS += -dlopen liboski_util.la
+endif
+

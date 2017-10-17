@@ -1,0 +1,54 @@
+\hypertarget{poski__Thread__common_8c}{\section{poski\-\_\-\-Thread\-\_\-common.\-c File Reference}
+\label{poski__Thread__common_8c}\index{poski\-\_\-\-Thread\-\_\-common.\-c@{poski\-\_\-\-Thread\-\_\-common.\-c}}
+}
+
+
+Commonly used routines in poski\-\_\-\-Thread\-Handler's routines.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-threadcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-partitioncommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-matrixcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-vectorcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-kernelcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-tunematcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-malloc.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-print.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{poski__Thread__common_8c_addcba662c3a6320e12b5babc2dfd80ad}{int \hyperlink{poski__Thread__common_8c_addcba662c3a6320e12b5babc2dfd80ad}{poski\-\_\-\-Check\-\_\-numthreads} (poski\-\_\-int\-\_\-t nthreads)}\label{poski__Thread__common_8c_addcba662c3a6320e12b5babc2dfd80ad}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Error-\/checking for the number of threads. \end{DoxyCompactList}\item 
+\hypertarget{poski__Thread__common_8c_aa6c518bc4b9a58760d165a6d8da26017}{int \hyperlink{poski__Thread__common_8c_aa6c518bc4b9a58760d165a6d8da26017}{poski\-\_\-\-Check\-\_\-threadingmodeltype} (poski\-\_\-threadtype\-\_\-t ttype)}\label{poski__Thread__common_8c_aa6c518bc4b9a58760d165a6d8da26017}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Error-\/checking for a threading model type. \end{DoxyCompactList}\item 
+\hypertarget{poski__Thread__common_8c_aae826fbe17958f5030f1404a64450d40}{char $\ast$ \hyperlink{poski__Thread__common_8c_aae826fbe17958f5030f1404a64450d40}{poski\-\_\-findthreadtype} (poski\-\_\-threadtype\-\_\-t ttype)}\label{poski__Thread__common_8c_aae826fbe17958f5030f1404a64450d40}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Find the threading model type for reporting. \end{DoxyCompactList}\item 
+\hypertarget{poski__Thread__common_8c_a237ac201aaef2e8d1bdeed1a511842aa}{int \hyperlink{poski__Thread__common_8c_a237ac201aaef2e8d1bdeed1a511842aa}{poski\-\_\-\-Copy\-\_\-threadargs} (poski\-\_\-threadarg\-\_\-t $\ast$dest, poski\-\_\-threadarg\-\_\-t $\ast$src)}\label{poski__Thread__common_8c_a237ac201aaef2e8d1bdeed1a511842aa}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Copy the thread object. \end{DoxyCompactList}\item 
+\hypertarget{poski__Thread__common_8c_a900459423a7f0cff90efa1deca1c696c}{int \hyperlink{poski__Thread__common_8c_a900459423a7f0cff90efa1deca1c696c}{poski\-\_\-\-Check\-\_\-threadargs} (poski\-\_\-threadarg\-\_\-t $\ast$threadargs)}\label{poski__Thread__common_8c_a900459423a7f0cff90efa1deca1c696c}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Error-\/checking for thread object. \end{DoxyCompactList}\item 
+\hypertarget{poski__Thread__common_8c_af12b5a9bedde1b66c5f95cad046fecb0}{static int \hyperlink{poski__Thread__common_8c_af12b5a9bedde1b66c5f95cad046fecb0}{poski\-\_\-\-Init\-\_\-threadpool} (poski\-\_\-threadpool\-\_\-t $\ast$thread, poski\-\_\-int\-\_\-t nthreads)}\label{poski__Thread__common_8c_af12b5a9bedde1b66c5f95cad046fecb0}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Initialize threadpool object. \end{DoxyCompactList}\item 
+\hypertarget{poski__Thread__common_8c_aa66779c1ea552ad7b3f9746df55f19d1}{poski\-\_\-threadpool\-\_\-t $\ast$ \hyperlink{poski__Thread__common_8c_aa66779c1ea552ad7b3f9746df55f19d1}{poski\-\_\-\-Create\-Thread\-Pool} (poski\-\_\-int\-\_\-t nthreads)}\label{poski__Thread__common_8c_aa66779c1ea552ad7b3f9746df55f19d1}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Operate a sparse matrix-\/vector computation in a single thread for Pthread\-Pool model. \end{DoxyCompactList}\item 
+\hypertarget{poski__Thread__common_8c_ae245679f2a54d8b6164b2be94643a563}{int \hyperlink{poski__Thread__common_8c_ae245679f2a54d8b6164b2be94643a563}{poski\-\_\-\-Destroy\-\_\-threadpool} (poski\-\_\-threadpool\-\_\-t $\ast$thread)}\label{poski__Thread__common_8c_ae245679f2a54d8b6164b2be94643a563}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Destroy the threadpool object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Commonly used routines in poski\-\_\-\-Thread\-Handler's routines. \begin{DoxyAttention}{Attention}
+These routines are usually for the library's internal use and should not normally be called directly by users. 
+
+Called by \hyperlink{poski__ThreadHandler_8c}{poski\-\_\-\-Thread\-Handler.\-c}
+\end{DoxyAttention}
+Also, refer 

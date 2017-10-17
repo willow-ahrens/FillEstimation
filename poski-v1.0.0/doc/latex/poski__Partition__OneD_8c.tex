@@ -1,0 +1,55 @@
+\hypertarget{poski__Partition__OneD_8c}{\section{poski\-\_\-\-Partition\-\_\-\-One\-D.\-c File Reference}
+\label{poski__Partition__OneD_8c}\index{poski\-\_\-\-Partition\-\_\-\-One\-D.\-c@{poski\-\_\-\-Partition\-\_\-\-One\-D.\-c}}
+}
+
+
+Handle One dimensional partitioning model.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-partitioncommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-threadcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-vectorcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-matrixcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-malloc.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-print.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{poski__Partition__OneD_8c_a554c3848cfc2fd2d4c4e14e14be9cfbc}{poski\-\_\-partitionmat\-\_\-t $\ast$ \hyperlink{poski__Partition__OneD_8c_a554c3848cfc2fd2d4c4e14e14be9cfbc}{poski\-\_\-\-Partition\-Mat\-C\-S\-R\-\_\-\-One\-D} (poski\-\_\-int\-\_\-t npartitions, poski\-\_\-index\-\_\-t nrows, poski\-\_\-index\-\_\-t ncols, poski\-\_\-index\-\_\-t nnz, poski\-\_\-index\-\_\-t $\ast$Aptr)}\label{poski__Partition__OneD_8c_a554c3848cfc2fd2d4c4e14e14be9cfbc}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Create a partition-\/matrix object using one dimensional partitioning model. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__OneD_8c_ab1db06787d3e23e4ecf08023a5532abb}{poski\-\_\-sparse\-\_\-matrix\-\_\-t $\ast$ \hyperlink{poski__Partition__OneD_8c_ab1db06787d3e23e4ecf08023a5532abb}{poski\-\_\-\-Create\-Sub\-Mat\-C\-S\-R\-\_\-\-One\-D} (poski\-\_\-partitionmat\-\_\-t $\ast$partitionmat, poski\-\_\-index\-\_\-t $\ast$Aptr, poski\-\_\-index\-\_\-t $\ast$Aind, poski\-\_\-value\-\_\-t $\ast$Aval, poski\-\_\-index\-\_\-t Anrows, poski\-\_\-index\-\_\-t Ancols, poski\-\_\-index\-\_\-t Annz, poski\-\_\-copymode\-\_\-t mode)}\label{poski__Partition__OneD_8c_ab1db06787d3e23e4ecf08023a5532abb}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Create a submatrix object. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__OneD_8c_abc2eaaef89325336d235b7fa9954fc25}{void $\ast$ \hyperlink{poski__Partition__OneD_8c_abc2eaaef89325336d235b7fa9954fc25}{Partition\-Mat\-\_\-\-Pthread\-One\-D} (void $\ast$poski\-\_\-thread)}\label{poski__Partition__OneD_8c_abc2eaaef89325336d235b7fa9954fc25}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Operate one dimensional partitioning for a matrix in a single thread for Pthread model. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__OneD_8c_a3aebd8fe268f2c0b0c933c0179f1aa92}{void \hyperlink{poski__Partition__OneD_8c_a3aebd8fe268f2c0b0c933c0179f1aa92}{Partition\-Mat\-\_\-\-Openmp\-One\-D} (void $\ast$poski\-\_\-thread)}\label{poski__Partition__OneD_8c_a3aebd8fe268f2c0b0c933c0179f1aa92}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Operate one dimensional partitioning for a matrix in a single thread for Open\-M\-P model. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__OneD_8c_a08058234143bbdea59c4e480fa371f8d}{int \hyperlink{poski__Partition__OneD_8c_a08058234143bbdea59c4e480fa371f8d}{poski\-\_\-\-Set\-\_\-pthreadarg} (poski\-\_\-thread\-\_\-t $\ast$thread, int tid, int num\-\_\-partitions, poski\-\_\-copymode\-\_\-t mode, int k, poski\-\_\-inmatprop\-\_\-t $\ast$in\-\_\-props, poski\-\_\-mat\-\_\-t A, poski\-\_\-partitionmat\-\_\-t $\ast$partitionmat, poski\-\_\-submat\-\_\-t $\ast$submat)}\label{poski__Partition__OneD_8c_a08058234143bbdea59c4e480fa371f8d}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__OneD_8c_a6d64801fc6c67d8639820dd6fbaa40dc}{poski\-\_\-submat\-\_\-t $\ast$ \hyperlink{poski__Partition__OneD_8c_a6d64801fc6c67d8639820dd6fbaa40dc}{poski\-\_\-\-Partition\-Mat\-\_\-\-Pthread\-One\-D} (poski\-\_\-mat\-\_\-t A, poski\-\_\-copymode\-\_\-t mode, int k, poski\-\_\-inmatprop\-\_\-t $\ast$in\-\_\-props)}\label{poski__Partition__OneD_8c_a6d64801fc6c67d8639820dd6fbaa40dc}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Create a submatrix object using one dimensional partitioning model for Pthread model. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__OneD_8c_a70f65465b59555d82e9667a12e54a026}{poski\-\_\-submat\-\_\-t $\ast$ \hyperlink{poski__Partition__OneD_8c_a70f65465b59555d82e9667a12e54a026}{poski\-\_\-\-Partition\-Mat\-\_\-\-Openmp\-One\-D} (poski\-\_\-mat\-\_\-t A, poski\-\_\-copymode\-\_\-t mode, int k, poski\-\_\-inmatprop\-\_\-t $\ast$in\-\_\-props)}\label{poski__Partition__OneD_8c_a70f65465b59555d82e9667a12e54a026}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Create a submatrix object using one dimensional partitioning model for Open\-M\-P model. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__OneD_8c_a083f7dbe03640b6833c222a53b36ce24}{poski\-\_\-subvec\-\_\-t $\ast$ \hyperlink{poski__Partition__OneD_8c_a083f7dbe03640b6833c222a53b36ce24}{poski\-\_\-\-Partition\-Vec\-\_\-\-Pthread\-One\-D\-Mat\-Mult\-Normal\-Input} (poski\-\_\-value\-\_\-t $\ast$vec, poski\-\_\-index\-\_\-t length, poski\-\_\-index\-\_\-t inc, poski\-\_\-mat\-\_\-t A)}\label{poski__Partition__OneD_8c_a083f7dbe03640b6833c222a53b36ce24}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Create a subvector object based on a tunable matrix object for input vector. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__OneD_8c_a6a37ecd0f52ac033de216185a15f2b27}{poski\-\_\-subvec\-\_\-t $\ast$ \hyperlink{poski__Partition__OneD_8c_a6a37ecd0f52ac033de216185a15f2b27}{poski\-\_\-\-Partition\-Vec\-\_\-\-Pthread\-One\-D\-Mat\-Mult\-Normal\-Output} (poski\-\_\-value\-\_\-t $\ast$vec, poski\-\_\-index\-\_\-t length, poski\-\_\-index\-\_\-t inc, poski\-\_\-mat\-\_\-t A)}\label{poski__Partition__OneD_8c_a6a37ecd0f52ac033de216185a15f2b27}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Create a subvector object based on a tunable matrix object for output vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handle One dimensional partitioning model. This module implments the routines to handle One dimensional partitioning model.
+
+\begin{DoxyAttention}{Attention}
+Called by \hyperlink{poski__PartitionHandler_8c}{poski\-\_\-\-Partition\-Handler.\-c}
+\end{DoxyAttention}
+Also, refer 

@@ -1,0 +1,18 @@
+#
+# Matrix type module naming convention:
+#
+#    liboski_mat_<mattype>_T<indtag><valtag>
+#
+# The matrix type module Makefile.am file must define the
+# macro 'mattype'.
+#
+matbasename = liboski_mat
+matname = $(matbasename)_$(mattype)
+matname_cflags = -DMOD_NAME=$(matname)
+
+#
+# List of matrix types
+#
+mattype_list = CSR CSC BCSR BDIAG1 MBCSR GCSR CB VBR DENSE
+
+# eof

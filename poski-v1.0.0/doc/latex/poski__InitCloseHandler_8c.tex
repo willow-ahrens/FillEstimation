@@ -1,0 +1,68 @@
+\hypertarget{poski__InitCloseHandler_8c}{\section{poski\-\_\-\-Init\-Close\-Handler.\-c File Reference}
+\label{poski__InitCloseHandler_8c}\index{poski\-\_\-\-Init\-Close\-Handler.\-c@{poski\-\_\-\-Init\-Close\-Handler.\-c}}
+}
+
+
+Initialize and clean-\/up the p\-O\-S\-K\-I library.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$oski/oski.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-version.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-system.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-print.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{poski__InitCloseHandler_8c_a464dc0d0596b57b14b8eb30c487b692c}{poski\-\_\-\-Init} (void)
+\begin{DoxyCompactList}\small\item\em Initialize the p\-O\-S\-K\-I library. \end{DoxyCompactList}\item 
+int \hyperlink{poski__InitCloseHandler_8c_a1c817f23490e4758eec24d1dffadd484}{poski\-\_\-\-Close} ()
+\begin{DoxyCompactList}\small\item\em Shut down the p\-O\-S\-K\-I library. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Initialize and clean-\/up the p\-O\-S\-K\-I library. This module implements the library initialization and clean-\/up.
+
+The library checks for an environment variable, whose name is defined by the compile-\/time macros P\-O\-S\-K\-I\-\_\-\-L\-O\-G\-\_\-\-F\-I\-L\-E, and P\-O\-S\-K\-I\-\_\-\-M\-E\-S\-S\-A\-G\-E\-\_\-\-L\-E\-V\-E\-L, for reporting messages.
+
+Also, refer \hyperlink{poski__LogFileHandler_8c}{poski\-\_\-\-Log\-File\-Handler.\-c} \hyperlink{poski__MessageHandler_8c}{poski\-\_\-\-Message\-Handler.\-c} 
+
+\subsection{Function Documentation}
+\hypertarget{poski__InitCloseHandler_8c_a464dc0d0596b57b14b8eb30c487b692c}{\index{poski\-\_\-\-Init\-Close\-Handler.\-c@{poski\-\_\-\-Init\-Close\-Handler.\-c}!poski\-\_\-\-Init@{poski\-\_\-\-Init}}
+\index{poski\-\_\-\-Init@{poski\-\_\-\-Init}!poski_InitCloseHandler.c@{poski\-\_\-\-Init\-Close\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Init}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-\-Init} (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{poski__InitCloseHandler_8c_a464dc0d0596b57b14b8eb30c487b692c}
+
+
+Initialize the p\-O\-S\-K\-I library. 
+
+\begin{DoxyReturn}{Returns}
+0 on success, an error message on error. 
+\end{DoxyReturn}
+(1) set P\-O\-S\-K\-I\-\_\-\-L\-O\-G\-\_\-\-F\-I\-L\-E
+
+(2) set P\-O\-S\-K\-I\-\_\-\-M\-E\-S\-S\-A\-G\-E\-\_\-\-L\-E\-V\-E\-L
+
+(3) check system configuration
+
+(4) initalize library \hypertarget{poski__InitCloseHandler_8c_a1c817f23490e4758eec24d1dffadd484}{\index{poski\-\_\-\-Init\-Close\-Handler.\-c@{poski\-\_\-\-Init\-Close\-Handler.\-c}!poski\-\_\-\-Close@{poski\-\_\-\-Close}}
+\index{poski\-\_\-\-Close@{poski\-\_\-\-Close}!poski_InitCloseHandler.c@{poski\-\_\-\-Init\-Close\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Close}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-\-Close} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{poski__InitCloseHandler_8c_a1c817f23490e4758eec24d1dffadd484}
+
+
+Shut down the p\-O\-S\-K\-I library. 
+
+\begin{DoxyReturn}{Returns}
+0 on success, an error message on error. 
+\end{DoxyReturn}
+(1) close library
+
+(2) close P\-O\-S\-K\-I\-\_\-\-L\-O\-G\-\_\-\-F\-I\-L\-E 

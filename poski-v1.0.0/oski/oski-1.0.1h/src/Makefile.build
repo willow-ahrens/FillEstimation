@@ -1,0 +1,17 @@
+#
+# Common BeBOP compile and library link options for program targets.
+#
+
+INCLUDES += @INCLTDL@
+
+oski_util_cflags = -I$(top_srcdir)/util
+
+# Define lists of all OSKI libraries
+include $(top_srcdir)/src/Make.extlibs
+
+# Remaining flags for linking programs
+oski_ldflags += $(support_ldflags)
+
+#
+# eof
+#

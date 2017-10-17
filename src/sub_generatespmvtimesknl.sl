@@ -1,15 +1,13 @@
 #!/bin/bash -l
 
 #SBATCH -N 1         #Use 2 nodes
-#SBATCH -t 02:00:00
+#SBATCH -t 04:00:00
 #SBATCH --mail-user=pahrens@mit.edu
 #SBATCH --mail-type=ALL
+#SBATCH --array=0-31
 #SBATCH -p regular   #Submit to the regular 'partition'
 #SBATCH -L SCRATCH   #Job requires $SCRATCH file system
 #SBATCH -C knl   #Use KNL nodes in quad cache format (default, recommended)
 
-export KMP_AFFINITY=disabled
-
 module load python
-python performance-matrix.py $SCRATCH/fill_estimation/knl/performance-matrix
-
+python generate_spmv_times.py $SCRATCH/fill_estimation $SCRATCH/fill_estimation/knl $SLURM_ARRAY_TASK_ID

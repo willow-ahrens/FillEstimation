@@ -1,0 +1,46 @@
+\hypertarget{poski__Matrix__getset_8c}{\section{poski\-\_\-\-Matrix\-\_\-getset.\-c File Reference}
+\label{poski__Matrix__getset_8c}\index{poski\-\_\-\-Matrix\-\_\-getset.\-c@{poski\-\_\-\-Matrix\-\_\-getset.\-c}}
+}
+
+
+Get/\-Set values routines in Matrix Handler's modules.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$stdarg.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-threadcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-matrixcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-partition.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-partitioncommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-malloc.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-print.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{poski__Matrix__getset_8c_af7e25f1d0f87a78e8977b63e8d5631be}{static int \hyperlink{poski__Matrix__getset_8c_af7e25f1d0f87a78e8977b63e8d5631be}{poski\-\_\-\-Check\-\_\-partition\-Num} (poski\-\_\-mat\-\_\-t A\-\_\-tunable, poski\-\_\-int\-\_\-t row, poski\-\_\-int\-\_\-t col)}\label{poski__Matrix__getset_8c_af7e25f1d0f87a78e8977b63e8d5631be}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Check the partition of the specified matrix element. \end{DoxyCompactList}\item 
+\hypertarget{poski__Matrix__getset_8c_a19bb90c2a9ad121921c7e777b94c95ae}{static int \hyperlink{poski__Matrix__getset_8c_a19bb90c2a9ad121921c7e777b94c95ae}{Set\-Mat\-Entry} (const oski\-\_\-matspecific\-\_\-t $\ast$mat, const oski\-\_\-matcommon\-\_\-t $\ast$props, poski\-\_\-int\-\_\-t row, poski\-\_\-int\-\_\-t col, poski\-\_\-value\-\_\-t new\-\_\-val)}\label{poski__Matrix__getset_8c_a19bb90c2a9ad121921c7e777b94c95ae}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Change the value of the specified matrix element. \end{DoxyCompactList}\item 
+\hypertarget{poski__Matrix__getset_8c_a6871d1bf084a84f7324ac30bd09acce7}{static int \hyperlink{poski__Matrix__getset_8c_a6871d1bf084a84f7324ac30bd09acce7}{Get\-Mat\-Entry} (const oski\-\_\-matspecific\-\_\-t $\ast$mat, const oski\-\_\-matcommon\-\_\-t $\ast$props, poski\-\_\-int\-\_\-t row, poski\-\_\-int\-\_\-t col, poski\-\_\-value\-\_\-t $\ast$p\-\_\-aij)}\label{poski__Matrix__getset_8c_a6871d1bf084a84f7324ac30bd09acce7}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Returns the value of the specified matrix element in A(row,col). \end{DoxyCompactList}\item 
+\hypertarget{poski__Matrix__getset_8c_a183256ab3283d5fe0edbbf23f88ef5b8}{static int \hyperlink{poski__Matrix__getset_8c_a183256ab3283d5fe0edbbf23f88ef5b8}{poski\-\_\-\-Set\-Mat\-Subset\-\_\-\-Array\-All} (poski\-\_\-mat\-\_\-t A\-\_\-tunable, const int num\-Rows, const int num\-Cols, const poski\-\_\-value\-\_\-t $\ast$\-\_\-\-\_\-restrict vals, const int row\-Stride, const int col\-Stride, const poski\-\_\-int\-\_\-t $\ast$\-\_\-\-\_\-restrict rows, const poski\-\_\-int\-\_\-t $\ast$\-\_\-\-\_\-restrict cols)}\label{poski__Matrix__getset_8c_a183256ab3283d5fe0edbbf23f88ef5b8}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Set a subset of non-\/zero values as a clique or indexed list. \end{DoxyCompactList}\item 
+\hypertarget{poski__Matrix__getset_8c_accbfbbf8838446d38b52f129ee556194}{static int \hyperlink{poski__Matrix__getset_8c_accbfbbf8838446d38b52f129ee556194}{poski\-\_\-\-Get\-Mat\-Subset\-\_\-\-Array\-All} (poski\-\_\-mat\-\_\-t A\-\_\-tunable, const int num\-Rows, const int num\-Cols, poski\-\_\-value\-\_\-t $\ast$vals, const int row\-Stride, const int col\-Stride, const poski\-\_\-int\-\_\-t $\ast$\-\_\-\-\_\-restrict rows, const poski\-\_\-int\-\_\-t $\ast$\-\_\-\-\_\-restrict cols)}\label{poski__Matrix__getset_8c_accbfbbf8838446d38b52f129ee556194}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Get a subset of values as a clique or indexed list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Get/\-Set values routines in Matrix Handler's modules. This module implements the routines to get/set values in matrix handler's modules.
+
+\begin{DoxyAttention}{Attention}
+These routines are usually for the library's internal use and should not normally be called directly by users. 
+
+Called by \hyperlink{poski__MatrixHandler_8c}{poski\-\_\-\-Matrix\-Handler.\-c}
+\end{DoxyAttention}
+Also, refer 

@@ -1,0 +1,59 @@
+\hypertarget{poski__Malloc_8c}{\section{poski\-\_\-\-Malloc.\-c File Reference}
+\label{poski__Malloc_8c}\index{poski\-\_\-\-Malloc.\-c@{poski\-\_\-\-Malloc.\-c}}
+}
+
+
+Customized memory allocation routines in the p\-O\-S\-K\-I library.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-config.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-malloc.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{poski__Malloc_8c_acfd27e2b976ff77747bd05c48d67c20e}{poski\-\_\-\-Zero\-Mem} (void $\ast$buf, size\-\_\-t num\-\_\-bytes)
+\begin{DoxyCompactList}\small\item\em Initialize buffer with zeros. \end{DoxyCompactList}\item 
+char $\ast$ \hyperlink{poski__Malloc_8c_aea6f00b038c1cbab4ed20ce66fc4ae26}{poski\-\_\-\-Duplicate\-String} (const char $\ast$s)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Customized memory allocation routines in the p\-O\-S\-K\-I library. 
+
+\subsection{Function Documentation}
+\hypertarget{poski__Malloc_8c_acfd27e2b976ff77747bd05c48d67c20e}{\index{poski\-\_\-\-Malloc.\-c@{poski\-\_\-\-Malloc.\-c}!poski\-\_\-\-Zero\-Mem@{poski\-\_\-\-Zero\-Mem}}
+\index{poski\-\_\-\-Zero\-Mem@{poski\-\_\-\-Zero\-Mem}!poski_Malloc.c@{poski\-\_\-\-Malloc.\-c}}
+\subsubsection[{poski\-\_\-\-Zero\-Mem}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf poski\-\_\-\-Zero\-Mem} (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{buf, }
+\item[{size\-\_\-t}]{num\-\_\-bytes}
+\end{DoxyParamCaption}
+)}}\label{poski__Malloc_8c_acfd27e2b976ff77747bd05c48d67c20e}
+
+
+Initialize buffer with zeros. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in,out}  & {\em buf} & Buffer to zero out. \\
+\hline
+\mbox{\tt in}  & {\em num\-\_\-bytes} & Number of bytes to clear. \\
+\hline
+\end{DoxyParams}
+\hypertarget{poski__Malloc_8c_aea6f00b038c1cbab4ed20ce66fc4ae26}{\index{poski\-\_\-\-Malloc.\-c@{poski\-\_\-\-Malloc.\-c}!poski\-\_\-\-Duplicate\-String@{poski\-\_\-\-Duplicate\-String}}
+\index{poski\-\_\-\-Duplicate\-String@{poski\-\_\-\-Duplicate\-String}!poski_Malloc.c@{poski\-\_\-\-Malloc.\-c}}
+\subsubsection[{poski\-\_\-\-Duplicate\-String}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ {\bf poski\-\_\-\-Duplicate\-String} (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{s}
+\end{DoxyParamCaption}
+)}}\label{poski__Malloc_8c_aea6f00b038c1cbab4ed20ce66fc4ae26}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em s} & String to duplicate.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to a newly allocated buffer containing a copy of the input string, s. If s == N\-U\-L\-L, returns N\-U\-L\-L. If an error occurs, returns N\-U\-L\-L but does not call the error handler. 
+\end{DoxyReturn}

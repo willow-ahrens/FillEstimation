@@ -1,0 +1,208 @@
+
+# BEGIN CSC MatTrisolve Lower normal Tis
+if BUILD_Tis
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_LowerMatTrisolve_Tis.dat
+profile_CSC_LowerMatTrisolve_Tis.dat: oskibench_Tis \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Lower Tis normal
+endif
+endif
+# END CSC MatTrisolve Lower normal Tis
+
+# BEGIN CSC MatTrisolve Upper normal Tis
+if BUILD_Tis
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_UpperMatTrisolve_Tis.dat
+profile_CSC_UpperMatTrisolve_Tis.dat: oskibench_Tis \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Upper Tis normal
+endif
+endif
+# END CSC MatTrisolve Upper normal Tis
+
+# BEGIN CSC MatTrisolve Lower normal Tid
+if BUILD_Tid
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_LowerMatTrisolve_Tid.dat
+profile_CSC_LowerMatTrisolve_Tid.dat: oskibench_Tid \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Lower Tid normal
+endif
+endif
+# END CSC MatTrisolve Lower normal Tid
+
+# BEGIN CSC MatTrisolve Upper normal Tid
+if BUILD_Tid
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_UpperMatTrisolve_Tid.dat
+profile_CSC_UpperMatTrisolve_Tid.dat: oskibench_Tid \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Upper Tid normal
+endif
+endif
+# END CSC MatTrisolve Upper normal Tid
+
+# BEGIN CSC MatTrisolve Lower normal Tic
+if BUILD_Tic
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_LowerMatTrisolve_Tic.dat
+profile_CSC_LowerMatTrisolve_Tic.dat: oskibench_Tic \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Lower Tic normal
+endif
+endif
+# END CSC MatTrisolve Lower normal Tic
+
+# BEGIN CSC MatTrisolve Upper normal Tic
+if BUILD_Tic
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_UpperMatTrisolve_Tic.dat
+profile_CSC_UpperMatTrisolve_Tic.dat: oskibench_Tic \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Upper Tic normal
+endif
+endif
+# END CSC MatTrisolve Upper normal Tic
+
+# BEGIN CSC MatTrisolve Lower normal Tiz
+if BUILD_Tiz
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_LowerMatTrisolve_Tiz.dat
+profile_CSC_LowerMatTrisolve_Tiz.dat: oskibench_Tiz \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Lower Tiz normal
+endif
+endif
+# END CSC MatTrisolve Lower normal Tiz
+
+# BEGIN CSC MatTrisolve Upper normal Tiz
+if BUILD_Tiz
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_UpperMatTrisolve_Tiz.dat
+profile_CSC_UpperMatTrisolve_Tiz.dat: oskibench_Tiz \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Upper Tiz normal
+endif
+endif
+# END CSC MatTrisolve Upper normal Tiz
+
+# BEGIN CSC MatTrisolve Lower normal Tls
+if BUILD_Tls
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_LowerMatTrisolve_Tls.dat
+profile_CSC_LowerMatTrisolve_Tls.dat: oskibench_Tls \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Lower Tls normal
+endif
+endif
+# END CSC MatTrisolve Lower normal Tls
+
+# BEGIN CSC MatTrisolve Upper normal Tls
+if BUILD_Tls
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_UpperMatTrisolve_Tls.dat
+profile_CSC_UpperMatTrisolve_Tls.dat: oskibench_Tls \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Upper Tls normal
+endif
+endif
+# END CSC MatTrisolve Upper normal Tls
+
+# BEGIN CSC MatTrisolve Lower normal Tld
+if BUILD_Tld
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_LowerMatTrisolve_Tld.dat
+profile_CSC_LowerMatTrisolve_Tld.dat: oskibench_Tld \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Lower Tld normal
+endif
+endif
+# END CSC MatTrisolve Lower normal Tld
+
+# BEGIN CSC MatTrisolve Upper normal Tld
+if BUILD_Tld
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_UpperMatTrisolve_Tld.dat
+profile_CSC_UpperMatTrisolve_Tld.dat: oskibench_Tld \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Upper Tld normal
+endif
+endif
+# END CSC MatTrisolve Upper normal Tld
+
+# BEGIN CSC MatTrisolve Lower normal Tlc
+if BUILD_Tlc
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_LowerMatTrisolve_Tlc.dat
+profile_CSC_LowerMatTrisolve_Tlc.dat: oskibench_Tlc \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Lower Tlc normal
+endif
+endif
+# END CSC MatTrisolve Lower normal Tlc
+
+# BEGIN CSC MatTrisolve Upper normal Tlc
+if BUILD_Tlc
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_UpperMatTrisolve_Tlc.dat
+profile_CSC_UpperMatTrisolve_Tlc.dat: oskibench_Tlc \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Upper Tlc normal
+endif
+endif
+# END CSC MatTrisolve Upper normal Tlc
+
+# BEGIN CSC MatTrisolve Lower normal Tlz
+if BUILD_Tlz
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_LowerMatTrisolve_Tlz.dat
+profile_CSC_LowerMatTrisolve_Tlz.dat: oskibench_Tlz \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Lower Tlz normal
+endif
+endif
+# END CSC MatTrisolve Lower normal Tlz
+
+# BEGIN CSC MatTrisolve Upper normal Tlz
+if BUILD_Tlz
+if BENCH_CSC_MatTrisolve
+benchdata_files += profile_CSC_UpperMatTrisolve_Tlz.dat
+profile_CSC_UpperMatTrisolve_Tlz.dat: oskibench_Tlz \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatTrisolve-MATSTD.sh \
+			CSC Upper Tlz normal
+endif
+endif
+# END CSC MatTrisolve Upper normal Tlz

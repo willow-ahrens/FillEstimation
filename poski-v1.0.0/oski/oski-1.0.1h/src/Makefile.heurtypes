@@ -1,0 +1,6 @@
+#
+# List of matrix types
+#
+heurtype_list = mregblock symmrb regprof
+
+# eof

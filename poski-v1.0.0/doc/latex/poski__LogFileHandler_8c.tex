@@ -1,0 +1,82 @@
+\hypertarget{poski__LogFileHandler_8c}{\section{poski\-\_\-\-Log\-File\-Handler.\-c File Reference}
+\label{poski__LogFileHandler_8c}\index{poski\-\_\-\-Log\-File\-Handler.\-c@{poski\-\_\-\-Log\-File\-Handler.\-c}}
+}
+
+
+Handle the message output file.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$stdbool.\-h$>$}\\*
+{\ttfamily \#include $<$assert.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-print.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-system.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{poski__LogFileHandler_8c_a60ee68c1b70cffd7f0c4661c18fe52ba}{poski\-\_\-\-Init\-Set\-Log\-File} ()
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Set the output file $<$poski\-\_\-logfile$>$. \end{DoxyCompactList}\item 
+void \hyperlink{poski__LogFileHandler_8c_a9e8dedcc79fe4ae3116bf984673235e4}{poski\-\_\-\-Close\-Log\-File} ()
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Unset the output file $<$poski\-\_\-logfile$>$. \end{DoxyCompactList}\item 
+int \hyperlink{poski__LogFileHandler_8c_a5de9af44cc0e4385d875e272e612e5aa}{test\-\_\-main\-\_\-poski\-\_\-\-Log\-File\-Handler} ()
+\begin{DoxyCompactList}\small\item\em Test the poski\-\_\-\-Log\-File\-Handler's routines. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{poski__LogFileHandler_8c_a253ea9294c0a7546f6fb1fdc3f6d9335}{F\-I\-L\-E $\ast$ \hyperlink{poski__LogFileHandler_8c_a253ea9294c0a7546f6fb1fdc3f6d9335}{poski\-\_\-logfile}}\label{poski__LogFileHandler_8c_a253ea9294c0a7546f6fb1fdc3f6d9335}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} File to where output messages should be directed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handle the message output file. This module implements the message output file $<$poski\-\_\-logfile$>$ support routines based on the environment variable P\-O\-S\-K\-I\-\_\-\-L\-O\-G\-\_\-\-F\-I\-L\-E.
+
+This module sets $<$poski\-\_\-logfile$>$ to \char`\"{}poski\-\_\-log.\-txt\char`\"{} if P\-O\-S\-K\-I\-\_\-\-L\-O\-G\-\_\-\-F\-I\-L\-E==1, or to stderr otherwise.
+
+N\-O\-T\-E\-: If the library is build with pthread support, these routines are thread-\/safe using pthread mutex.
+
+\begin{DoxyAttention}{Attention}
+These routines are usually for the library's internal use and should not normally be called directly by users. 
+
+Called by \hyperlink{poski__InitCloseHandler_8c}{poski\-\_\-\-Init\-Close\-Handler.\-c}
+\end{DoxyAttention}
+Also, refer \hyperlink{poski__MessageHandler_8c}{poski\-\_\-\-Message\-Handler.\-c} 
+
+\subsection{Function Documentation}
+\hypertarget{poski__LogFileHandler_8c_a60ee68c1b70cffd7f0c4661c18fe52ba}{\index{poski\-\_\-\-Log\-File\-Handler.\-c@{poski\-\_\-\-Log\-File\-Handler.\-c}!poski\-\_\-\-Init\-Set\-Log\-File@{poski\-\_\-\-Init\-Set\-Log\-File}}
+\index{poski\-\_\-\-Init\-Set\-Log\-File@{poski\-\_\-\-Init\-Set\-Log\-File}!poski_LogFileHandler.c@{poski\-\_\-\-Log\-File\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Init\-Set\-Log\-File}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf poski\-\_\-\-Init\-Set\-Log\-File} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{poski__LogFileHandler_8c_a60ee68c1b70cffd7f0c4661c18fe52ba}
+
+
+\mbox{[}library's internal use\mbox{]} Set the output file $<$poski\-\_\-logfile$>$. 
+
+N\-O\-T\-E\-: This routine is for the library's internal use only and should not normally be called directly by users. \hypertarget{poski__LogFileHandler_8c_a9e8dedcc79fe4ae3116bf984673235e4}{\index{poski\-\_\-\-Log\-File\-Handler.\-c@{poski\-\_\-\-Log\-File\-Handler.\-c}!poski\-\_\-\-Close\-Log\-File@{poski\-\_\-\-Close\-Log\-File}}
+\index{poski\-\_\-\-Close\-Log\-File@{poski\-\_\-\-Close\-Log\-File}!poski_LogFileHandler.c@{poski\-\_\-\-Log\-File\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Close\-Log\-File}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf poski\-\_\-\-Close\-Log\-File} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{poski__LogFileHandler_8c_a9e8dedcc79fe4ae3116bf984673235e4}
+
+
+\mbox{[}library's internal use\mbox{]} Unset the output file $<$poski\-\_\-logfile$>$. 
+
+N\-O\-T\-E\-: This routine is for the library's internal use only and should not normally be called directly by users. \hypertarget{poski__LogFileHandler_8c_a5de9af44cc0e4385d875e272e612e5aa}{\index{poski\-\_\-\-Log\-File\-Handler.\-c@{poski\-\_\-\-Log\-File\-Handler.\-c}!test\-\_\-main\-\_\-poski\-\_\-\-Log\-File\-Handler@{test\-\_\-main\-\_\-poski\-\_\-\-Log\-File\-Handler}}
+\index{test\-\_\-main\-\_\-poski\-\_\-\-Log\-File\-Handler@{test\-\_\-main\-\_\-poski\-\_\-\-Log\-File\-Handler}!poski_LogFileHandler.c@{poski\-\_\-\-Log\-File\-Handler.\-c}}
+\subsubsection[{test\-\_\-main\-\_\-poski\-\_\-\-Log\-File\-Handler}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf test\-\_\-main\-\_\-poski\-\_\-\-Log\-File\-Handler} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{poski__LogFileHandler_8c_a5de9af44cc0e4385d875e272e612e5aa}
+
+
+Test the poski\-\_\-\-Log\-File\-Handler's routines. 
+
+This routine is for testing the functionality of the poski\-\_\-\-Log\-File\-Handler's routines. \begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}

@@ -1,0 +1,104 @@
+
+# BEGIN CSR MatMult no normal Tis
+if BUILD_Tis
+if BENCH_CSR_MatMult
+benchdata_files += profile_CSR_MatMult_Tis.dat
+profile_CSR_MatMult_Tis.dat: oskibench_Tis \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			CSR  Tis normal
+endif
+endif
+# END CSR MatMult no normal Tis
+
+# BEGIN CSR MatMult no normal Tid
+if BUILD_Tid
+if BENCH_CSR_MatMult
+benchdata_files += profile_CSR_MatMult_Tid.dat
+profile_CSR_MatMult_Tid.dat: oskibench_Tid \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			CSR  Tid normal
+endif
+endif
+# END CSR MatMult no normal Tid
+
+# BEGIN CSR MatMult no normal Tic
+if BUILD_Tic
+if BENCH_CSR_MatMult
+benchdata_files += profile_CSR_MatMult_Tic.dat
+profile_CSR_MatMult_Tic.dat: oskibench_Tic \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			CSR  Tic normal
+endif
+endif
+# END CSR MatMult no normal Tic
+
+# BEGIN CSR MatMult no normal Tiz
+if BUILD_Tiz
+if BENCH_CSR_MatMult
+benchdata_files += profile_CSR_MatMult_Tiz.dat
+profile_CSR_MatMult_Tiz.dat: oskibench_Tiz \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			CSR  Tiz normal
+endif
+endif
+# END CSR MatMult no normal Tiz
+
+# BEGIN CSR MatMult no normal Tls
+if BUILD_Tls
+if BENCH_CSR_MatMult
+benchdata_files += profile_CSR_MatMult_Tls.dat
+profile_CSR_MatMult_Tls.dat: oskibench_Tls \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			CSR  Tls normal
+endif
+endif
+# END CSR MatMult no normal Tls
+
+# BEGIN CSR MatMult no normal Tld
+if BUILD_Tld
+if BENCH_CSR_MatMult
+benchdata_files += profile_CSR_MatMult_Tld.dat
+profile_CSR_MatMult_Tld.dat: oskibench_Tld \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			CSR  Tld normal
+endif
+endif
+# END CSR MatMult no normal Tld
+
+# BEGIN CSR MatMult no normal Tlc
+if BUILD_Tlc
+if BENCH_CSR_MatMult
+benchdata_files += profile_CSR_MatMult_Tlc.dat
+profile_CSR_MatMult_Tlc.dat: oskibench_Tlc \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			CSR  Tlc normal
+endif
+endif
+# END CSR MatMult no normal Tlc
+
+# BEGIN CSR MatMult no normal Tlz
+if BUILD_Tlz
+if BENCH_CSR_MatMult
+benchdata_files += profile_CSR_MatMult_Tlz.dat
+profile_CSR_MatMult_Tlz.dat: oskibench_Tlz \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-MATSTD.sh \
+			CSR  Tlz normal
+endif
+endif
+# END CSR MatMult no normal Tlz

@@ -7,9 +7,9 @@ import os
 from sys import argv
 from test_meta import *
 
-_, basedir, matrix_name = argv
+_, _, basedir, matrix_id = argv
 
-set_matrix_storage(os.path.join(basedir, 'matrix'))
+matrix_name = matrices[int(matrix_id)]["name"]
 
 # generate times matrix
 matrix_times = generate_times_profile(matrix_name, trials, B)

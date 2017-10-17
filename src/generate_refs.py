@@ -7,10 +7,10 @@ import os
 from sys import argv
 from test_meta import *
 
-# basedir = working dir
-_, basedir, matrix_name = argv
+_, _, basedir, matrix_id = argv
 
-set_matrix_storage(os.path.join(basedir, 'matrix'))
+matrix_name = matrices[int(matrix_id)]["name"]
+print(matrix_name)
 
 # generate references for matrix_name
 ref = get_references([matrix_name])

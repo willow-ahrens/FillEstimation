@@ -10,7 +10,7 @@ def exprange(a, b, n):
   r = (float(b) / float(a))**(1.0/(n - 1))
   return [a * r**i for i in range(n)]
 
-_, basedir, outdir = argv
+_, _, basedir, outdir = argv
 
 n = 10
 asx_delta = 0.01
@@ -25,14 +25,6 @@ methods = [{"name":"asx",
             "label":"OSKI",
             "color":"blue"}]
 
-matrices = [ {"name": "ct20stif",
-             "label": "ct20stif",
-             "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(7, 0.2, n)]},
-             "oski": {"points": [{"delta":d} for d in exprange(0.001, 0.06, n)]},
-             "ymax": 0.5
-            }
-           ]
-'''
 matrices = [{"name": "3dtube_conv",
              "label": "3dtube",
              "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(7, 0.2, n)]},
@@ -53,20 +45,19 @@ matrices = [{"name": "3dtube_conv",
             },
             {"name": "pathological_asx",
              "label": "pathological_ASX",
-             "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(2, 1e-4, n)], "bound":True},
+             "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(2, 0.07, n)], "bound":True},
              "oski": {"points": [{"delta":d} for d in exprange(0.1, 1.0, n)]},
              "ymax": 0.5,
              "xmaxmax": True
             },
             {"name": "pathological_oski",
              "label": "pathological_OSKI",
-             "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(2, 1e-4, n)], "bound":True},
+             "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(2, 0.07, n)], "bound":True},
              "oski": {"points": [{"delta":d} for d in exprange(0.1, 1.0, n)]},
              "ymax": 4,
              "xmaxmax": True
             }
            ]
-'''
 
 references = get_references([matrix["name"] for matrix in matrices], B = B)
 for (reference, matrix) in zip(references, matrices):

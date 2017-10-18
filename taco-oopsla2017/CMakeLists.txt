@@ -41,7 +41,7 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   set(CMAKE_MACOSX_RPATH 1)
 endif()
 
-option(TACO_SHARED_LIBRARY "Build as a shared library" ON)
+option(TACO_SHARED_LIBRARY "Build as a shared library" OFF)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 

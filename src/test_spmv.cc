@@ -37,28 +37,33 @@ int test (size_t m,
   size_t nn = bn * c;
 ;
   // Create tensors
-  Tensor<double> A({bm, bn, r, c}, bcsr);
-  Tensor<double> b({bm,r},   bdv);
-  Tensor<double> x({bn,c},     bdv);
+  Tensor<double> A({(int)bm, (int)bn, (int)r, (int)c}, bcsr);
+  Tensor<double> b({(int)bm,(int)r},   bdv);
+  Tensor<double> x({(int)bn,(int)c},     bdv);
 
-  Tensor<double> Ap({m, n}, csr);
-  Tensor<double> bp({m}, dv);
-  Tensor<double> xp({n}, dv);
+  Tensor<double> Ap({(int)m, (int)n}, csr);
+  Tensor<double> bp({(int)m}, dv);
+  Tensor<double> xp({(int)n}, dv);
 
   for(size_t h = 0; h < nnz; h++){
-    A.insert({ind[h]/r, ptr[h]/c, ind[h]%r, ptr[h]%c}, data[h]);
+    A.insert({(int)(ind[h]/r),
+              (int)(ptr[h]/c),
+              (int)(ind[h]%r),
+              (int)(ptr[h]%c)}, data[h]);
   }
 
   for(size_t h = 0; h < nnz; h++){
-    Ap.insert({ind[h], ptr[h]}, data[h]);
+    Ap.insert({(int)(ind[h]),
+               (int)(ptr[h])}, data[h]);
   }
 
   for(size_t h = 0; h < nn; h ++){
-    x.insert({h/c, h%c}, 1.0);
+    x.insert({(int)(h/c),
+              (int)(h%c)}, 1.0);
   }
 
   for(size_t h = 0; h < n; h ++){
-    xp.insert({h}, 1.0);
+    xp.insert({(int)h}, 1.0);
   }
 
   A.pack();

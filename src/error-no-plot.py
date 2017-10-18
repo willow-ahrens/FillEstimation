@@ -62,15 +62,6 @@ matrices = [{"name": "3dtube_conv",
 references = get_references([matrix["name"] for matrix in matrices], B = B)
 for (reference, matrix) in zip(references, matrices):
     
-    # generate local performance matrix
-  filename =  matrix['name'] + '.npy'
-  spmv_dir = os.path.join(basedir, spmv_times_dir)
-  tfile = os.path.join(spmv_dir, filename)
-  assert os.path.isfile(tfile)
-  matrix_times = np.load(tfile)
-
-  # get time to do spmv with (0,0)
-  base_time = matrix_times[0][0]
   # print(matrix["name"])
   for method in methods:
     # print(method["name"])
@@ -82,7 +73,7 @@ for (reference, matrix) in zip(references, matrices):
       # print(point)
       results = fill_estimates(method["name"], [matrix["name"]], B = B, results = True, trials = trials, **point)
       get_errors(results, [reference])
-      times.append(results[0]["time_mean"] / base_time)
+      times.append(results[0]["time_mean"])
       errors.append(np.mean(results[0]["errors"]))
       hi_bars.append(np.std(results[0]["errors"]))
       lo_bars.append(np.std(results[0]["errors"]))

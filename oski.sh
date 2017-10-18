@@ -4,9 +4,7 @@ export CFLAGS="-O3"
 mkdir oski_build
 mkdir oski_out
 cd oski-1.0.1h
-aclocal
-autoconf
-autoheader
+autoreconf
 automake --add-missing
 cd ..
 cd oski_build

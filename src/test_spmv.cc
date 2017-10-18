@@ -15,6 +15,7 @@ double wall_time (void) {
   return 1.0*t.tv_sec + 1.0e-6*t.tv_usec;
 }
 
+extern "C" {
 int test (size_t m,
 	  size_t n,
 	  size_t r,
@@ -113,4 +114,5 @@ int test (size_t m,
   printf("\n}\n");
 
   return 0;
+}
 }

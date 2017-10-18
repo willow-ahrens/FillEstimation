@@ -1,8 +1,8 @@
 CC = cc
 CXX = CC
-CFLAGS = -std=c99 -march=native -O3 `~/gsl-install/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include
-CXXFLAGS = -O3 `~/gsl-install/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include
-LDLIBS = `~/gsl-install/bin/gsl-config --libs` `pkg-config --libs glib-2.0` -L../taco/lib/ -ltaco
+CFLAGS = -std=c99 -march=native -g `~/gsl-install/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include
+CXXFLAGS = -g `~/gsl-install/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include
+LDLIBS = `~/gsl-install/bin/gsl-config --libs` `pkg-config --libs glib-2.0` -L../taco/lib/ -ltaco -ldl
 
 all: reference asx oski spmv
 clean:

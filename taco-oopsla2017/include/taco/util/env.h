@@ -22,7 +22,7 @@ inline std::string getFromEnv(std::string flag, std::string dflt) {
 
 inline std::string getTmpdir() {
   // use POSIX logic for finding a temp dir
-  auto tmpdir = getFromEnv("TMPDIR", "/tmp/");
+  auto tmpdir = getFromEnv("TACO_TMPDIR", getFromEnv("TMPDIR", "/tmp/"));
   
   // if the directory does not have a trailing slash, add one
   if (tmpdir.back() != '/') {

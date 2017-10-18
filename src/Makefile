@@ -1,8 +1,8 @@
 CC = gcc
 CXX = g++
-CFLAGS = -std=c99 -march=native `../gsl/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include
-CXXFLAGS = -std=c++11 `../gsl/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include -DDECIMAL_DIG=17
-LDLIBS = `../gsl/bin/gsl-config --libs` `pkg-config --libs glib-2.0` -L../taco/lib/ -ltaco -ldl
+CFLAGS = -g -std=c99 -march=native `../gsl/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include
+CXXFLAGS = -g -std=c++11 `../gsl/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include -DDECIMAL_DIG=17
+LDLIBS = `../gsl/bin/gsl-config --libs` `pkg-config --libs glib-2.0` -L../taco/lib -ltaco -ldl
 
 all: reference asx oski spmv
 clean:

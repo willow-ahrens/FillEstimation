@@ -22,9 +22,9 @@ int test (size_t m,
 static void usage () {
   fprintf(stderr,"usage: spmv [options] <input>\n"
   "  <input>                    MatrixMarket file (multiply this matrix)\n"
-  "  -t, --trials <arg>         Number of trials to run\n"
   "  -r, --block_r <arg>        Row block size\n"
   "  -c, --block_c <arg>        Column block size\n"
+  "  -t, --trials <arg>         Number of trials to run\n"
   "  -v, --verbose              Verbose mode\n"
   "  -q, --quiet                Quiet mode\n"
   "  -h, --help                 Display help message\n");
@@ -32,15 +32,15 @@ static void usage () {
 
 int main (int argc, char **argv) {
 
-  size_t r = 1;
-  size_t c = 1;
+  size_t b_r = 1;
+  size_t b_c = 1;
   int trials = 1;
 
   /* Beware. Option parsing below. */
   long longarg;
   double doublearg;
   while (1) {
-    static char *options = "B:e:d:t:cCrRvqh";
+    static char *options = "r:c:t:vqh";
     static struct option long_options[] = {
         {"block_r",  required_argument, 0, 'r'},
         {"block_c",  required_argument, 0, 'c'},
@@ -73,22 +73,22 @@ int main (int argc, char **argv) {
         errno = 0;
         longarg = strtol(optarg, 0, 10);
         if (errno != 0 || longarg < 1) {
-          printf("option -r takes an integer maximum block size >= 1\n");
+          printf("option -r takes an integer column block size >= 1\n");
           usage();
           return 1;
         }
-        r = longarg;
+        b_r = longarg;
         break;
 
       case 'c':
         errno = 0;
         longarg = strtol(optarg, 0, 10);
         if (errno != 0 || longarg < 1) {
-          printf("option -c takes an integer maximum block size >= 1\n");
+          printf("option -c takes an integer column block size >= 1\n");
           usage();
           return 1;
         }
-        r = longarg;
+        b_c = longarg;
         break;
 
       case 't':
@@ -157,7 +157,7 @@ int main (int argc, char **argv) {
     return 1;
   }
 
-  int ret = test(triples->size1, triples->size2, r, c, triples->nz, triples->i, triples->p, triples->data, trials, verbose);
+  int ret = test(triples->size1, triples->size2, b_r, b_c, triples->nz, triples->i, triples->p, triples->data, trials, verbose);
 
   gsl_spmatrix_free(triples);
 

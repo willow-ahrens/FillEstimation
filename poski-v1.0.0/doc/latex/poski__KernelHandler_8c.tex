@@ -1,0 +1,141 @@
+\hypertarget{poski__KernelHandler_8c}{\section{poski\-\_\-\-Kernel\-Handler.\-c File Reference}
+\label{poski__KernelHandler_8c}\index{poski\-\_\-\-Kernel\-Handler.\-c@{poski\-\_\-\-Kernel\-Handler.\-c}}
+}
+
+
+Handle the Sparse matrix kernels.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-kernelcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-partitioncommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-matrixcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-vectorcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-vector.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-print.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{poski__KernelHandler_8c_aece8aacf5671cc732923b71a0118fa10}{poski\-\_\-\-Set\-\_\-\-Mat\-Mult} (poski\-\_\-mat\-\_\-t A, poski\-\_\-operation\-\_\-t op, poski\-\_\-value\-\_\-t alpha, poski\-\_\-vec\-\_\-t x, poski\-\_\-value\-\_\-t beta, poski\-\_\-vec\-\_\-t y)
+\begin{DoxyCompactList}\small\item\em Set parameters for sparse matrix-\/vector multiply. \end{DoxyCompactList}\item 
+int \hyperlink{poski__KernelHandler_8c_a20b59f5f26b99d3ef4ae59b0b639df57}{poski\-\_\-\-Mat\-Mult} (poski\-\_\-mat\-\_\-t A, poski\-\_\-operation\-\_\-t op, poski\-\_\-value\-\_\-t alpha, poski\-\_\-vec\-\_\-t x, poski\-\_\-value\-\_\-t beta, poski\-\_\-vec\-\_\-t y)
+\begin{DoxyCompactList}\small\item\em Sparse matrix-\/vector multiply implementation. \end{DoxyCompactList}\item 
+int \hyperlink{poski__KernelHandler_8c_aab908c8e36f11e399d63d12df3acf373}{poski\-\_\-report\-\_\-\-Mat\-Mult\-C\-S\-R} (poski\-\_\-sparse\-\_\-matrix\-\_\-t $\ast$A, poski\-\_\-value\-\_\-t alpha, poski\-\_\-value\-\_\-t $\ast$x, poski\-\_\-value\-\_\-t beta, poski\-\_\-value\-\_\-t $\ast$y)
+\begin{DoxyCompactList}\small\item\em Report the information related with sparse matrix-\/vector multiply computation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handle the Sparse matrix kernels. This module implements the library's support kernels which perform error-\/checking first and then calls the appropriate kernel implementation.
+
+\begin{DoxyAttention}{Attention}
+Currently, only support Ax and A$^\wedge$\-Tx kernels.
+\end{DoxyAttention}
+Also, refer \hyperlink{poski__Kernel__common_8c}{poski\-\_\-\-Kernel\-\_\-common.\-c}, \hyperlink{poski__Kernel__matmult_8c}{poski\-\_\-\-Kernel\-\_\-matmult.\-c} 
+
+\subsection{Function Documentation}
+\hypertarget{poski__KernelHandler_8c_aece8aacf5671cc732923b71a0118fa10}{\index{poski\-\_\-\-Kernel\-Handler.\-c@{poski\-\_\-\-Kernel\-Handler.\-c}!poski\-\_\-\-Set\-\_\-\-Mat\-Mult@{poski\-\_\-\-Set\-\_\-\-Mat\-Mult}}
+\index{poski\-\_\-\-Set\-\_\-\-Mat\-Mult@{poski\-\_\-\-Set\-\_\-\-Mat\-Mult}!poski_KernelHandler.c@{poski\-\_\-\-Kernel\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Set\-\_\-\-Mat\-Mult}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-\-Set\-\_\-\-Mat\-Mult} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-mat\-\_\-t}]{A, }
+\item[{poski\-\_\-operation\-\_\-t}]{op, }
+\item[{poski\-\_\-value\-\_\-t}]{alpha, }
+\item[{poski\-\_\-vec\-\_\-t}]{x, }
+\item[{poski\-\_\-value\-\_\-t}]{beta, }
+\item[{poski\-\_\-vec\-\_\-t}]{y}
+\end{DoxyParamCaption}
+)}}\label{poski__KernelHandler_8c_aece8aacf5671cc732923b71a0118fa10}
+
+
+Set parameters for sparse matrix-\/vector multiply. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em A} & Sparse matrix object. \\
+\hline
+\mbox{\tt in}  & {\em op} & Specifies the transpose operations, $op(A)$ in \{O\-P\-\_\-\-N\-O\-R\-M\-A\-L, O\-P\-\_\-\-T\-R\-A\-N\-S\}. \\
+\hline
+\mbox{\tt in}  & {\em alpha} & Scalar multiplier. \\
+\hline
+\mbox{\tt in}  & {\em x} & Vector view object. \\
+\hline
+\mbox{\tt in}  & {\em beta} & Scalar multiplier. \\
+\hline
+\mbox{\tt in}  & {\em y} & Vector view object.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}
+\hypertarget{poski__KernelHandler_8c_a20b59f5f26b99d3ef4ae59b0b639df57}{\index{poski\-\_\-\-Kernel\-Handler.\-c@{poski\-\_\-\-Kernel\-Handler.\-c}!poski\-\_\-\-Mat\-Mult@{poski\-\_\-\-Mat\-Mult}}
+\index{poski\-\_\-\-Mat\-Mult@{poski\-\_\-\-Mat\-Mult}!poski_KernelHandler.c@{poski\-\_\-\-Kernel\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Mat\-Mult}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-\-Mat\-Mult} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-mat\-\_\-t}]{A, }
+\item[{poski\-\_\-operation\-\_\-t}]{op, }
+\item[{poski\-\_\-value\-\_\-t}]{alpha, }
+\item[{poski\-\_\-vec\-\_\-t}]{x, }
+\item[{poski\-\_\-value\-\_\-t}]{beta, }
+\item[{poski\-\_\-vec\-\_\-t}]{y}
+\end{DoxyParamCaption}
+)}}\label{poski__KernelHandler_8c_a20b59f5f26b99d3ef4ae59b0b639df57}
+
+
+Sparse matrix-\/vector multiply implementation. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em A} & Sparse matrix object. \\
+\hline
+\mbox{\tt in}  & {\em op} & Specifies the transpose operations, $op(A)$ in \{O\-P\-\_\-\-N\-O\-R\-M\-A\-L, O\-P\-\_\-\-T\-R\-A\-N\-S\}. \\
+\hline
+\mbox{\tt in}  & {\em alpha} & Scalar multiplier. \\
+\hline
+\mbox{\tt in}  & {\em x} & Vector view object. \\
+\hline
+\mbox{\tt in}  & {\em beta} & Scalar multiplier. \\
+\hline
+\mbox{\tt in}  & {\em y} & Vector view object.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise.
+\end{DoxyReturn}
+This routine performs as follows\-: (1) error-\/check for the input parameters.
+
+(2) run an appropriate kernel operation, currently only support ${A, A^T}$ transpose operations.
+
+(3) run an appropriate permute operation if required.
+
+(4) run an appropriate reduction operation if required. \hypertarget{poski__KernelHandler_8c_aab908c8e36f11e399d63d12df3acf373}{\index{poski\-\_\-\-Kernel\-Handler.\-c@{poski\-\_\-\-Kernel\-Handler.\-c}!poski\-\_\-report\-\_\-\-Mat\-Mult\-C\-S\-R@{poski\-\_\-report\-\_\-\-Mat\-Mult\-C\-S\-R}}
+\index{poski\-\_\-report\-\_\-\-Mat\-Mult\-C\-S\-R@{poski\-\_\-report\-\_\-\-Mat\-Mult\-C\-S\-R}!poski_KernelHandler.c@{poski\-\_\-\-Kernel\-Handler.\-c}}
+\subsubsection[{poski\-\_\-report\-\_\-\-Mat\-Mult\-C\-S\-R}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-report\-\_\-\-Mat\-Mult\-C\-S\-R} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-sparse\-\_\-matrix\-\_\-t $\ast$}]{A, }
+\item[{poski\-\_\-value\-\_\-t}]{alpha, }
+\item[{poski\-\_\-value\-\_\-t $\ast$}]{x, }
+\item[{poski\-\_\-value\-\_\-t}]{beta, }
+\item[{poski\-\_\-value\-\_\-t $\ast$}]{y}
+\end{DoxyParamCaption}
+)}}\label{poski__KernelHandler_8c_aab908c8e36f11e399d63d12df3acf373}
+
+
+Report the information related with sparse matrix-\/vector multiply computation. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em A} & Sparse matrix object in C\-S\-R format. \\
+\hline
+\mbox{\tt in}  & {\em alpha} & Scalar multiplier. \\
+\hline
+\mbox{\tt in}  & {\em x} & Vector data pointer. \\
+\hline
+\mbox{\tt in}  & {\em beta} & Scalar multiplier. \\
+\hline
+\mbox{\tt in}  & {\em y} & Vector data pointer.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}

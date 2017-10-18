@@ -1,0 +1,104 @@
+
+# BEGIN CB MatMult no normal Tis
+if BUILD_Tis
+if BENCH_CB_MatMult
+benchdata_files += profile_CB_MatMult_Tis.dat
+profile_CB_MatMult_Tis.dat: oskibench_Tis \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh \
+			CB  Tis normal "$(CB_R_LIST)" "$(CB_C_LIST)"
+endif
+endif
+# END CB MatMult no normal Tis
+
+# BEGIN CB MatMult no normal Tid
+if BUILD_Tid
+if BENCH_CB_MatMult
+benchdata_files += profile_CB_MatMult_Tid.dat
+profile_CB_MatMult_Tid.dat: oskibench_Tid \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh \
+			CB  Tid normal "$(CB_R_LIST)" "$(CB_C_LIST)"
+endif
+endif
+# END CB MatMult no normal Tid
+
+# BEGIN CB MatMult no normal Tic
+if BUILD_Tic
+if BENCH_CB_MatMult
+benchdata_files += profile_CB_MatMult_Tic.dat
+profile_CB_MatMult_Tic.dat: oskibench_Tic \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh \
+			CB  Tic normal "$(CB_R_LIST)" "$(CB_C_LIST)"
+endif
+endif
+# END CB MatMult no normal Tic
+
+# BEGIN CB MatMult no normal Tiz
+if BUILD_Tiz
+if BENCH_CB_MatMult
+benchdata_files += profile_CB_MatMult_Tiz.dat
+profile_CB_MatMult_Tiz.dat: oskibench_Tiz \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh \
+			CB  Tiz normal "$(CB_R_LIST)" "$(CB_C_LIST)"
+endif
+endif
+# END CB MatMult no normal Tiz
+
+# BEGIN CB MatMult no normal Tls
+if BUILD_Tls
+if BENCH_CB_MatMult
+benchdata_files += profile_CB_MatMult_Tls.dat
+profile_CB_MatMult_Tls.dat: oskibench_Tls \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh \
+			CB  Tls normal "$(CB_R_LIST)" "$(CB_C_LIST)"
+endif
+endif
+# END CB MatMult no normal Tls
+
+# BEGIN CB MatMult no normal Tld
+if BUILD_Tld
+if BENCH_CB_MatMult
+benchdata_files += profile_CB_MatMult_Tld.dat
+profile_CB_MatMult_Tld.dat: oskibench_Tld \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh \
+			CB  Tld normal "$(CB_R_LIST)" "$(CB_C_LIST)"
+endif
+endif
+# END CB MatMult no normal Tld
+
+# BEGIN CB MatMult no normal Tlc
+if BUILD_Tlc
+if BENCH_CB_MatMult
+benchdata_files += profile_CB_MatMult_Tlc.dat
+profile_CB_MatMult_Tlc.dat: oskibench_Tlc \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh \
+			CB  Tlc normal "$(CB_R_LIST)" "$(CB_C_LIST)"
+endif
+endif
+# END CB MatMult no normal Tlc
+
+# BEGIN CB MatMult no normal Tlz
+if BUILD_Tlz
+if BENCH_CB_MatMult
+benchdata_files += profile_CB_MatMult_Tlz.dat
+profile_CB_MatMult_Tlz.dat: oskibench_Tlz \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh
+	env $(benchcommon_env)  \
+		$(top_srcdir)/bench/genprof-MatMult-CB.sh \
+			CB  Tlz normal "$(CB_R_LIST)" "$(CB_C_LIST)"
+endif
+endif
+# END CB MatMult no normal Tlz

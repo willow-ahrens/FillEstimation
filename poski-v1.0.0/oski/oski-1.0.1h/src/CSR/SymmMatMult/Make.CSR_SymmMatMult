@@ -1,0 +1,13 @@
+mattype_sources += CSR_SymmMatMult.h
+mattype_sources += CSR_SymmMatMult_v1_a1_b1_xs1_ys1.c
+mattype_sources += CSR_SymmMatMult_v1_a1_b1_xs1_ysX.c
+mattype_sources += CSR_SymmMatMult_v1_a1_b1_xsX_ys1.c
+mattype_sources += CSR_SymmMatMult_v1_a1_b1_xsX_ysX.c
+mattype_sources += CSR_SymmMatMult_v1_aN1_b1_xs1_ys1.c
+mattype_sources += CSR_SymmMatMult_v1_aN1_b1_xs1_ysX.c
+mattype_sources += CSR_SymmMatMult_v1_aN1_b1_xsX_ys1.c
+mattype_sources += CSR_SymmMatMult_v1_aN1_b1_xsX_ysX.c
+mattype_sources += CSR_SymmMatMult_v1_aX_b1_xs1_ys1.c
+mattype_sources += CSR_SymmMatMult_v1_aX_b1_xs1_ysX.c
+mattype_sources += CSR_SymmMatMult_v1_aX_b1_xsX_ys1.c
+mattype_sources += CSR_SymmMatMult_v1_aX_b1_xsX_ysX.c

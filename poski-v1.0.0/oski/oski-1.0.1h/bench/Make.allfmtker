@@ -1,0 +1,38 @@
+# ----- Rules to generate format/kernel-specific benchmarks -----
+
+# ----- CSR -----
+include Make.CSR_MatMult
+include Make.CSR_MatTrisolve
+include Make.CSR_SymmMatMult
+
+# ----- CSC -----
+include Make.CSC_MatMult
+include Make.CSC_MatTrisolve
+
+# ----- BCSR -----
+BCSR_B_LIST = 1 2 3 4 5 6 7 8
+include Make.BCSR_MatMult
+include Make.BCSR_MatTransMatMult
+
+# ----- MBCSR -----
+MBCSR_B_LIST = 1 2 3 4 5 6 7 8
+include Make.MBCSR_MatMult
+include Make.MBCSR_SymmMatMult
+include Make.MBCSR_MatTrisolve
+include Make.MBCSR_MatTransMatMult
+include Make.MBCSR_MatMultAndMatTransMult
+
+# ----- GCSR -----
+include Make.GCSR_MatMult
+
+# ----- CB -----
+EXTRA_DIST += genprof-MatMult-CB.sh
+CB_R_LIST = 5000
+CB_C_LIST = 4000 8000 16000 32000 64000 128000 256000 512000 1024000 2048000 4096000 8192000
+include Make.CB_MatMult
+
+# ----- DENSE -----
+EXTRA_DIST += genprof-MatMult-DENSE.sh genprof-MatTrisolve-DENSE.sh
+DENSE_N_LIST = 100 200 300 400 500 600 700 800 900 1000 1200 1500 2000 2500 3000
+include Make.DENSE_MatMult
+include Make.DENSE_MatTrisolve

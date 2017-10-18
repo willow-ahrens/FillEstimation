@@ -1,0 +1,41 @@
+\hypertarget{poski__Kernel__matmult_8c}{\section{poski\-\_\-\-Kernel\-\_\-matmult.\-c File Reference}
+\label{poski__Kernel__matmult_8c}\index{poski\-\_\-\-Kernel\-\_\-matmult.\-c@{poski\-\_\-\-Kernel\-\_\-matmult.\-c}}
+}
+
+
+Handle the Sparse matrix-\/vector computations.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-config.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-partition.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-partitioncommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-kernelcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-threadcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-matrixcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-malloc.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-print.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{poski__Kernel__matmult_8c_ad2fcbfe8226fa02ae27c02c51fda48eb}{static int \hyperlink{poski__Kernel__matmult_8c_ad2fcbfe8226fa02ae27c02c51fda48eb}{poski\-\_\-\-Mat\-Mult\-\_\-threadpool} (poski\-\_\-mat\-\_\-t A, poski\-\_\-operation\-\_\-t op, poski\-\_\-value\-\_\-t alpha, poski\-\_\-vec\-\_\-t x, poski\-\_\-value\-\_\-t beta, poski\-\_\-vec\-\_\-t y)}\label{poski__Kernel__matmult_8c_ad2fcbfe8226fa02ae27c02c51fda48eb}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Perform an sparse matrix-\/vector computation using the threadpool. \end{DoxyCompactList}\item 
+\hypertarget{poski__Kernel__matmult_8c_ad4301c237a3f4e6fe4dba9bfecbc334e}{int \hyperlink{poski__Kernel__matmult_8c_ad4301c237a3f4e6fe4dba9bfecbc334e}{poski\-\_\-\-Mat\-Mult\-\_\-run} (poski\-\_\-mat\-\_\-t A, poski\-\_\-operation\-\_\-t op, poski\-\_\-value\-\_\-t alpha, poski\-\_\-vec\-\_\-t x, poski\-\_\-value\-\_\-t beta, poski\-\_\-vec\-\_\-t y)}\label{poski__Kernel__matmult_8c_ad4301c237a3f4e6fe4dba9bfecbc334e}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Perform an sparse matrix-\/vector computation using the selected threading model. \end{DoxyCompactList}\item 
+\hypertarget{poski__Kernel__matmult_8c_a7a61cb71c49192f5ed7c514b5c122a2c}{int \hyperlink{poski__Kernel__matmult_8c_a7a61cb71c49192f5ed7c514b5c122a2c}{poski\-\_\-\-Check\-\_\-\-Partition\-Vec\-Mat\-Mult} (poski\-\_\-mat\-\_\-t A, poski\-\_\-operation\-\_\-t op, poski\-\_\-kernel\-\_\-t ktype, poski\-\_\-vec\-\_\-t x, poski\-\_\-vec\-\_\-t y)}\label{poski__Kernel__matmult_8c_a7a61cb71c49192f5ed7c514b5c122a2c}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Partition-\/check for an appropriate kernel operation $op(A)$. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handle the Sparse matrix-\/vector computations. This module implements the sparse mtarix-\/vector computations.
+
+\begin{DoxyAttention}{Attention}
+These routines are for the library's internal use only and should not normally be called directly by users. 
+
+Called by \hyperlink{poski__KernelHandler_8c}{poski\-\_\-\-Kernel\-Handler.\-c}
+\end{DoxyAttention}
+Also, refer \hyperlink{poski__Kernel__common_8c}{poski\-\_\-\-Kernel\-\_\-common.\-c} 

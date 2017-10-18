@@ -1,0 +1,48 @@
+\hypertarget{poski__LoadMatrix__MM__to__CSR_8c}{\section{poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R.\-c File Reference}
+\label{poski__LoadMatrix__MM__to__CSR_8c}\index{poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R.\-c@{poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R.\-c}}
+}
+
+
+Read the pattern of a file stored in Matrix-\/\-Market format.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-loadmatcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-malloc.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-print.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{poski__LoadMatrix__MM__to__CSR_8c_aa293ed70cc97fe556b22026a7161ba7a}{poski\-\_\-sparse\-\_\-matrix\-\_\-t $\ast$ \hyperlink{poski__LoadMatrix__MM__to__CSR_8c_aa293ed70cc97fe556b22026a7161ba7a}{poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R} (char $\ast$fname, poski\-\_\-index\-\_\-t Make\-Unsymmetric)}\label{poski__LoadMatrix__MM__to__CSR_8c_aa293ed70cc97fe556b22026a7161ba7a}
+
+\begin{DoxyCompactList}\small\item\em Read the pattern of a file stored in Matrix-\/\-Market format. \end{DoxyCompactList}\item 
+int \hyperlink{poski__LoadMatrix__MM__to__CSR_8c_a3406c2d5e25acd4cd0aadbad97e87a28}{test\-\_\-main\-\_\-poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R} (char $\ast$fname)
+\begin{DoxyCompactList}\small\item\em Test the poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R's routine. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Read the pattern of a file stored in Matrix-\/\-Market format. This module implemets the routines to read the pattern of a file stored in Matrix-\/\-Market format.
+
+\begin{DoxyAttention}{Attention}
+Called by \hyperlink{poski__LoadMatrixHandler_8c}{poski\-\_\-\-Load\-Matrix\-Handler.\-c}
+\end{DoxyAttention}
+Also, refer \hyperlink{poski__LoadMatrix__common_8c}{poski\-\_\-\-Load\-Matrix\-\_\-common.\-c} 
+
+\subsection{Function Documentation}
+\hypertarget{poski__LoadMatrix__MM__to__CSR_8c_a3406c2d5e25acd4cd0aadbad97e87a28}{\index{poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R.\-c@{poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R.\-c}!test\-\_\-main\-\_\-poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R@{test\-\_\-main\-\_\-poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R}}
+\index{test\-\_\-main\-\_\-poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R@{test\-\_\-main\-\_\-poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R}!poski_LoadMatrix_MM_to_CSR.c@{poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R.\-c}}
+\subsubsection[{test\-\_\-main\-\_\-poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf test\-\_\-main\-\_\-poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R} (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{fname}
+\end{DoxyParamCaption}
+)}}\label{poski__LoadMatrix__MM__to__CSR_8c_a3406c2d5e25acd4cd0aadbad97e87a28}
+
+
+Test the poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R's routine. 
+
+This routine is for testing the functionality of the poski\-\_\-\-Load\-Matrix\-\_\-\-M\-M\-\_\-to\-\_\-\-C\-S\-R's routine.
+
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}

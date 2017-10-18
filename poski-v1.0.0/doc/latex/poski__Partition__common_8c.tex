@@ -1,0 +1,198 @@
+\hypertarget{poski__Partition__common_8c}{\section{poski\-\_\-\-Partition\-\_\-common.\-c File Reference}
+\label{poski__Partition__common_8c}\index{poski\-\_\-\-Partition\-\_\-common.\-c@{poski\-\_\-\-Partition\-\_\-common.\-c}}
+}
+
+
+Commonly used routines in poski\-\_\-\-Partition\-Handler's routines.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-common.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-partitioncommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-threadcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-kernelcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-matrixcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-vectorcommon.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-malloc.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-print.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-permute.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{poski__Partition__common_8c_a6d45ee39932ba5972ce339be9f108d19}{int \hyperlink{poski__Partition__common_8c_a6d45ee39932ba5972ce339be9f108d19}{poski\-\_\-\-Init\-\_\-partitionargs} (poski\-\_\-partitionarg\-\_\-t $\ast$dst, poski\-\_\-partitionarg\-\_\-t $\ast$src, poski\-\_\-int\-\_\-t nthreads)}\label{poski__Partition__common_8c_a6d45ee39932ba5972ce339be9f108d19}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Initialize or copy a partition object. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__common_8c_ae5e2db7a0beb6089e001601c52689259}{int \hyperlink{poski__Partition__common_8c_ae5e2db7a0beb6089e001601c52689259}{poski\-\_\-\-Initpartitionmat} (poski\-\_\-partitionmat\-\_\-t $\ast$partitionmat)}\label{poski__Partition__common_8c_ae5e2db7a0beb6089e001601c52689259}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Initialize a partition-\/matrix object. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__common_8c_aba095721bb87328582126bc1ecc0b00f}{static poski\-\_\-int\-\_\-t \hyperlink{poski__Partition__common_8c_aba095721bb87328582126bc1ecc0b00f}{poski\-\_\-adjust\-\_\-npartition} (poski\-\_\-int\-\_\-t npartitions, poski\-\_\-index\-\_\-t nrows)}\label{poski__Partition__common_8c_aba095721bb87328582126bc1ecc0b00f}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Adjust the number of partitions. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__common_8c_aef34a67fd39d982479c2a686d0c374ef}{int \hyperlink{poski__Partition__common_8c_aef34a67fd39d982479c2a686d0c374ef}{poski\-\_\-\-Adjust\-\_\-args} (poski\-\_\-partitiontype\-\_\-t ptype, poski\-\_\-int\-\_\-t $\ast$npartitions, poski\-\_\-int\-\_\-t $\ast$nthreads, poski\-\_\-index\-\_\-t nrows, poski\-\_\-index\-\_\-t ncols, poski\-\_\-index\-\_\-t nnz)}\label{poski__Partition__common_8c_aef34a67fd39d982479c2a686d0c374ef}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Adjust the number of threads and partitions. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__common_8c_a37ff15414a1cd06a1a268902a763ff22}{poski\-\_\-subvec\-\_\-t $\ast$ \hyperlink{poski__Partition__common_8c_a37ff15414a1cd06a1a268902a763ff22}{poski\-\_\-\-Partition\-Vec} (poski\-\_\-value\-\_\-t $\ast$vec, poski\-\_\-index\-\_\-t length, poski\-\_\-int\-\_\-t inc, poski\-\_\-partitionvec\-\_\-t $\ast$partitionvec)}\label{poski__Partition__common_8c_a37ff15414a1cd06a1a268902a763ff22}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Create a partition-\/subvector object. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__common_8c_a30b893bdd2fdcc5bbfd7134b55f4aada}{poski\-\_\-partitionmat\-\_\-funcpt \hyperlink{poski__Partition__common_8c_a30b893bdd2fdcc5bbfd7134b55f4aada}{poski\-\_\-find\-\_\-partitionmat\-\_\-funcpt} (poski\-\_\-threadtype\-\_\-t ttype, poski\-\_\-partitiontype\-\_\-t ptype)}\label{poski__Partition__common_8c_a30b893bdd2fdcc5bbfd7134b55f4aada}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Find the appropriate function pointer for partitioning a matrix. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__common_8c_adfcc83736ce95175e4453a8f89cd0923}{poski\-\_\-partitionvec\-\_\-funcpt \hyperlink{poski__Partition__common_8c_adfcc83736ce95175e4453a8f89cd0923}{poski\-\_\-find\-\_\-partitionvec\-\_\-funcpt} (poski\-\_\-threadtype\-\_\-t ttype, poski\-\_\-partitiontype\-\_\-t ptype, poski\-\_\-kernel\-\_\-t kernel, poski\-\_\-operation\-\_\-t op, poski\-\_\-vecprop\-\_\-t vecprop)}\label{poski__Partition__common_8c_adfcc83736ce95175e4453a8f89cd0923}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Find the appropriate function pointer for partitioning a vector. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__common_8c_af8f2f3b43abcad06d9ebb85dc5c94715}{char $\ast$ \hyperlink{poski__Partition__common_8c_af8f2f3b43abcad06d9ebb85dc5c94715}{poski\-\_\-findpartitiontype} (poski\-\_\-partitiontype\-\_\-t ptype)}\label{poski__Partition__common_8c_af8f2f3b43abcad06d9ebb85dc5c94715}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Find the partitioning model type for reporing. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__common_8c_a5657423a6a5c581e320e2d2201f371e7}{int \hyperlink{poski__Partition__common_8c_a5657423a6a5c581e320e2d2201f371e7}{poski\-\_\-\-Check\-\_\-partitionargs} (poski\-\_\-partitionarg\-\_\-t $\ast$partitionargs)}\label{poski__Partition__common_8c_a5657423a6a5c581e320e2d2201f371e7}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Error-\/checking for partition object. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__common_8c_a8925ff03edcda2d2f1602fd9e700e9c4}{int \hyperlink{poski__Partition__common_8c_a8925ff03edcda2d2f1602fd9e700e9c4}{poski\-\_\-\-Check\-\_\-numpartitions} (poski\-\_\-int\-\_\-t npartitions)}\label{poski__Partition__common_8c_a8925ff03edcda2d2f1602fd9e700e9c4}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Error-\/checking for the number of partitions. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__common_8c_af999dc27188ebb684ffd9f6bbbf39946}{int \hyperlink{poski__Partition__common_8c_af999dc27188ebb684ffd9f6bbbf39946}{poski\-\_\-\-Check\-\_\-partitioningmodeltype} (poski\-\_\-partitiontype\-\_\-t ptype)}\label{poski__Partition__common_8c_af999dc27188ebb684ffd9f6bbbf39946}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Error-\/checking for a partitioning model type. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__common_8c_af337b3e8164d0cb02c42cb453e960c3b}{int \hyperlink{poski__Partition__common_8c_af337b3e8164d0cb02c42cb453e960c3b}{poski\-\_\-\-Check\-\_\-partitionvec} (poski\-\_\-partitionvec\-\_\-t $\ast$partitionvec)}\label{poski__Partition__common_8c_af337b3e8164d0cb02c42cb453e960c3b}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Error-\/checking for a partition-\/vector object. \end{DoxyCompactList}\item 
+\hypertarget{poski__Partition__common_8c_a6936783b7cae3b490c2ecc8d8e4eb654}{int \hyperlink{poski__Partition__common_8c_a6936783b7cae3b490c2ecc8d8e4eb654}{poski\-\_\-\-Check\-\_\-partitioned\-Vec} (poski\-\_\-mat\-\_\-t A, poski\-\_\-vec\-\_\-t vec, poski\-\_\-kernel\-\_\-t kernel, poski\-\_\-operation\-\_\-t op, poski\-\_\-vecprop\-\_\-t vecprop)}\label{poski__Partition__common_8c_a6936783b7cae3b490c2ecc8d8e4eb654}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Error-\/checking input parameters for creating a partition-\/vector object. \end{DoxyCompactList}\item 
+int \hyperlink{poski__Partition__common_8c_a76df6fa8c09d57a9545f8c06e236a73d}{poski\-\_\-report\-\_\-partitionmodel} (poski\-\_\-partitionarg\-\_\-t $\ast$partitionargs, poski\-\_\-mat\-\_\-t A)
+\begin{DoxyCompactList}\small\item\em Report information of partitioning model. \end{DoxyCompactList}\item 
+void \hyperlink{poski__Partition__common_8c_aeb32fc9cf174f4f7624421a71e85962c}{poski\-\_\-report\-\_\-partitioned} (poski\-\_\-partitionmat\-\_\-t $\ast$partitionmat)
+\begin{DoxyCompactList}\small\item\em Report information of a single partition-\/matrix object. \end{DoxyCompactList}\item 
+void \hyperlink{poski__Partition__common_8c_a3a28d322d9787b22485122d59b294d40}{poski\-\_\-report\-\_\-allpartitioned} (poski\-\_\-partitionmat\-\_\-t $\ast$partitionmat)
+\begin{DoxyCompactList}\small\item\em Report information of all partition-\/matrix object. \end{DoxyCompactList}\item 
+void \hyperlink{poski__Partition__common_8c_a1c832856b952eaac33294fee20c5e389}{poski\-\_\-report\-\_\-partitionvec} (poski\-\_\-partitionvec\-\_\-t $\ast$partitionvec)
+\begin{DoxyCompactList}\small\item\em Report information of a partition-\/vector object. \end{DoxyCompactList}\item 
+int \hyperlink{poski__Partition__common_8c_aff0c0564a8ed205b051a788d32782ab6}{poski\-\_\-report\-\_\-partitionmat\-\_\-va} (poski\-\_\-partitionmat\-\_\-t $\ast$partitionmat, poski\-\_\-int\-\_\-t pid)
+\begin{DoxyCompactList}\small\item\em Report information of a partition-\/matrix object. \end{DoxyCompactList}\item 
+int \hyperlink{poski__Partition__common_8c_aec07182d4a5a8f13b49e2438015cd6c0}{poski\-\_\-report\-\_\-partitionmat} (poski\-\_\-submat\-\_\-t $\ast$submat, poski\-\_\-int\-\_\-t npartitions)
+\begin{DoxyCompactList}\small\item\em Report information of a partition-\/matrix object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Commonly used routines in poski\-\_\-\-Partition\-Handler's routines. \begin{DoxyAttention}{Attention}
+These routines are usually for the library's internal use and should not normally be called directly by users. 
+
+Called by \hyperlink{poski__PartitionHandler_8c}{poski\-\_\-\-Partition\-Handler.\-c}
+\end{DoxyAttention}
+Also, refer \hyperlink{poski__Partition__OneD_8c}{poski\-\_\-\-Partition\-\_\-\-One\-D.\-c}, \hyperlink{poski__Partition__SemiOneD_8c}{poski\-\_\-\-Partition\-\_\-\-Semi\-One\-D.\-c} 
+
+\subsection{Function Documentation}
+\hypertarget{poski__Partition__common_8c_a76df6fa8c09d57a9545f8c06e236a73d}{\index{poski\-\_\-\-Partition\-\_\-common.\-c@{poski\-\_\-\-Partition\-\_\-common.\-c}!poski\-\_\-report\-\_\-partitionmodel@{poski\-\_\-report\-\_\-partitionmodel}}
+\index{poski\-\_\-report\-\_\-partitionmodel@{poski\-\_\-report\-\_\-partitionmodel}!poski_Partition_common.c@{poski\-\_\-\-Partition\-\_\-common.\-c}}
+\subsubsection[{poski\-\_\-report\-\_\-partitionmodel}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-report\-\_\-partitionmodel} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-partitionarg\-\_\-t $\ast$}]{partitionargs, }
+\item[{poski\-\_\-mat\-\_\-t}]{A}
+\end{DoxyParamCaption}
+)}}\label{poski__Partition__common_8c_a76df6fa8c09d57a9545f8c06e236a73d}
+
+
+Report information of partitioning model. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em partitionargs} & Partition object. \\
+\hline
+\mbox{\tt in}  & {\em A} & Tunable matrix object.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if success, or an error message otherwise. 
+\end{DoxyReturn}
+\hypertarget{poski__Partition__common_8c_aeb32fc9cf174f4f7624421a71e85962c}{\index{poski\-\_\-\-Partition\-\_\-common.\-c@{poski\-\_\-\-Partition\-\_\-common.\-c}!poski\-\_\-report\-\_\-partitioned@{poski\-\_\-report\-\_\-partitioned}}
+\index{poski\-\_\-report\-\_\-partitioned@{poski\-\_\-report\-\_\-partitioned}!poski_Partition_common.c@{poski\-\_\-\-Partition\-\_\-common.\-c}}
+\subsubsection[{poski\-\_\-report\-\_\-partitioned}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf poski\-\_\-report\-\_\-partitioned} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-partitionmat\-\_\-t $\ast$}]{partitionmat}
+\end{DoxyParamCaption}
+)}}\label{poski__Partition__common_8c_aeb32fc9cf174f4f7624421a71e85962c}
+
+
+Report information of a single partition-\/matrix object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em partitionmat} & Partition-\/matrix object. \\
+\hline
+\end{DoxyParams}
+\hypertarget{poski__Partition__common_8c_a3a28d322d9787b22485122d59b294d40}{\index{poski\-\_\-\-Partition\-\_\-common.\-c@{poski\-\_\-\-Partition\-\_\-common.\-c}!poski\-\_\-report\-\_\-allpartitioned@{poski\-\_\-report\-\_\-allpartitioned}}
+\index{poski\-\_\-report\-\_\-allpartitioned@{poski\-\_\-report\-\_\-allpartitioned}!poski_Partition_common.c@{poski\-\_\-\-Partition\-\_\-common.\-c}}
+\subsubsection[{poski\-\_\-report\-\_\-allpartitioned}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf poski\-\_\-report\-\_\-allpartitioned} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-partitionmat\-\_\-t $\ast$}]{partitionmat}
+\end{DoxyParamCaption}
+)}}\label{poski__Partition__common_8c_a3a28d322d9787b22485122d59b294d40}
+
+
+Report information of all partition-\/matrix object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em partitionmat} & Partition-\/matrix object. \\
+\hline
+\end{DoxyParams}
+\hypertarget{poski__Partition__common_8c_a1c832856b952eaac33294fee20c5e389}{\index{poski\-\_\-\-Partition\-\_\-common.\-c@{poski\-\_\-\-Partition\-\_\-common.\-c}!poski\-\_\-report\-\_\-partitionvec@{poski\-\_\-report\-\_\-partitionvec}}
+\index{poski\-\_\-report\-\_\-partitionvec@{poski\-\_\-report\-\_\-partitionvec}!poski_Partition_common.c@{poski\-\_\-\-Partition\-\_\-common.\-c}}
+\subsubsection[{poski\-\_\-report\-\_\-partitionvec}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf poski\-\_\-report\-\_\-partitionvec} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-partitionvec\-\_\-t $\ast$}]{partitionvec}
+\end{DoxyParamCaption}
+)}}\label{poski__Partition__common_8c_a1c832856b952eaac33294fee20c5e389}
+
+
+Report information of a partition-\/vector object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em partitionvec} & Partition-\/vector object. \\
+\hline
+\end{DoxyParams}
+\hypertarget{poski__Partition__common_8c_aff0c0564a8ed205b051a788d32782ab6}{\index{poski\-\_\-\-Partition\-\_\-common.\-c@{poski\-\_\-\-Partition\-\_\-common.\-c}!poski\-\_\-report\-\_\-partitionmat\-\_\-va@{poski\-\_\-report\-\_\-partitionmat\-\_\-va}}
+\index{poski\-\_\-report\-\_\-partitionmat\-\_\-va@{poski\-\_\-report\-\_\-partitionmat\-\_\-va}!poski_Partition_common.c@{poski\-\_\-\-Partition\-\_\-common.\-c}}
+\subsubsection[{poski\-\_\-report\-\_\-partitionmat\-\_\-va}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-report\-\_\-partitionmat\-\_\-va} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-partitionmat\-\_\-t $\ast$}]{partitionmat, }
+\item[{poski\-\_\-int\-\_\-t}]{pid}
+\end{DoxyParamCaption}
+)}}\label{poski__Partition__common_8c_aff0c0564a8ed205b051a788d32782ab6}
+
+
+Report information of a partition-\/matrix object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em partitionmat} & A single partition-\/matrix object. \\
+\hline
+\mbox{\tt in}  & {\em pid} & Specified partitions.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}
+\hypertarget{poski__Partition__common_8c_aec07182d4a5a8f13b49e2438015cd6c0}{\index{poski\-\_\-\-Partition\-\_\-common.\-c@{poski\-\_\-\-Partition\-\_\-common.\-c}!poski\-\_\-report\-\_\-partitionmat@{poski\-\_\-report\-\_\-partitionmat}}
+\index{poski\-\_\-report\-\_\-partitionmat@{poski\-\_\-report\-\_\-partitionmat}!poski_Partition_common.c@{poski\-\_\-\-Partition\-\_\-common.\-c}}
+\subsubsection[{poski\-\_\-report\-\_\-partitionmat}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf poski\-\_\-report\-\_\-partitionmat} (
+\begin{DoxyParamCaption}
+\item[{poski\-\_\-submat\-\_\-t $\ast$}]{submat, }
+\item[{poski\-\_\-int\-\_\-t}]{npartitions}
+\end{DoxyParamCaption}
+)}}\label{poski__Partition__common_8c_aec07182d4a5a8f13b49e2438015cd6c0}
+
+
+Report information of a partition-\/matrix object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em submat} & A submatrix object. \\
+\hline
+\mbox{\tt in}  & {\em npartitions} & Number of partitions.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if success, or an error message otherwise. 
+\end{DoxyReturn}

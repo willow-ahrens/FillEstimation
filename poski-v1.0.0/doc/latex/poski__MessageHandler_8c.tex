@@ -1,0 +1,124 @@
+\hypertarget{poski__MessageHandler_8c}{\section{poski\-\_\-\-Message\-Handler.\-c File Reference}
+\label{poski__MessageHandler_8c}\index{poski\-\_\-\-Message\-Handler.\-c@{poski\-\_\-\-Message\-Handler.\-c}}
+}
+
+
+Handle the output messages.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$assert.\-h$>$}\\*
+{\ttfamily \#include $<$stdarg.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-print.\-h$>$}\\*
+{\ttfamily \#include $<$poski/poski\-\_\-system.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{poski__MessageHandler_8c_a6f4398a3bdde40152954b285eab4993a}{poski\-\_\-\-Init\-Set\-Message\-Level} (void)
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Set message level based on the environment variable P\-O\-S\-K\-I\-\_\-\-M\-E\-S\-S\-A\-G\-E\-\_\-\-L\-E\-V\-E\-L. \end{DoxyCompactList}\item 
+void \hyperlink{poski__MessageHandler_8c_a3925f4c524f50f6af610ce873489b7f7}{poski\-\_\-print\-Message} (unsigned level, const char $\ast$fmt,...)
+\begin{DoxyCompactList}\small\item\em Print an message. \end{DoxyCompactList}\item 
+void \hyperlink{poski__MessageHandler_8c_ad9c3ed04d222202b375764324a1c9416}{poski\-\_\-error} (const char $\ast$func\-\_\-name, const char $\ast$msg,...)
+\begin{DoxyCompactList}\small\item\em Report an error message. \end{DoxyCompactList}\item 
+void \hyperlink{poski__MessageHandler_8c_ab7fe336bbc2ef509457eaeb61acb44e7}{poski\-\_\-warning} (const char $\ast$func\-\_\-name, const char $\ast$msg,...)
+\begin{DoxyCompactList}\small\item\em Report a warning message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{poski__MessageHandler_8c_a253ea9294c0a7546f6fb1fdc3f6d9335}{F\-I\-L\-E $\ast$ \hyperlink{poski__MessageHandler_8c_a253ea9294c0a7546f6fb1fdc3f6d9335}{poski\-\_\-logfile}}\label{poski__MessageHandler_8c_a253ea9294c0a7546f6fb1fdc3f6d9335}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} File to where output messages should be directed. \end{DoxyCompactList}\item 
+\hypertarget{poski__MessageHandler_8c_accc49e6eb767e0775c1050c57fc7e4f6}{static unsigned \hyperlink{poski__MessageHandler_8c_accc49e6eb767e0775c1050c57fc7e4f6}{g\-\_\-curr\-\_\-message\-\_\-level} = 0}\label{poski__MessageHandler_8c_accc49e6eb767e0775c1050c57fc7e4f6}
+
+\begin{DoxyCompactList}\small\item\em \mbox{[}library's internal use\mbox{]} Current message level. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handle the output messages. This module implements the output message handler routines based on the environment variable P\-O\-S\-K\-I\-\_\-\-M\-E\-S\-S\-A\-G\-E\-\_\-\-L\-E\-V\-E\-L.
+
+N\-O\-T\-E\-: If the library is build with pthread support, these routines are thread-\/safe using pthread mutex. \begin{DoxyAttention}{Attention}
+These routines are usually for the library's internal use and should not normally be called directly by users. 
+
+Called by \hyperlink{poski__InitCloseHandler_8c}{poski\-\_\-\-Init\-Close\-Handler.\-c}
+\end{DoxyAttention}
+Also, refer \hyperlink{poski__LogFileHandler_8c}{poski\-\_\-\-Log\-File\-Handler.\-c} 
+
+\subsection{Function Documentation}
+\hypertarget{poski__MessageHandler_8c_a6f4398a3bdde40152954b285eab4993a}{\index{poski\-\_\-\-Message\-Handler.\-c@{poski\-\_\-\-Message\-Handler.\-c}!poski\-\_\-\-Init\-Set\-Message\-Level@{poski\-\_\-\-Init\-Set\-Message\-Level}}
+\index{poski\-\_\-\-Init\-Set\-Message\-Level@{poski\-\_\-\-Init\-Set\-Message\-Level}!poski_MessageHandler.c@{poski\-\_\-\-Message\-Handler.\-c}}
+\subsubsection[{poski\-\_\-\-Init\-Set\-Message\-Level}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf poski\-\_\-\-Init\-Set\-Message\-Level} (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{poski__MessageHandler_8c_a6f4398a3bdde40152954b285eab4993a}
+
+
+\mbox{[}library's internal use\mbox{]} Set message level based on the environment variable P\-O\-S\-K\-I\-\_\-\-M\-E\-S\-S\-A\-G\-E\-\_\-\-L\-E\-V\-E\-L. 
+
+N\-O\-T\-E\-: This routine is for the library's internal use only and should not normally be called directly by users. \hypertarget{poski__MessageHandler_8c_a3925f4c524f50f6af610ce873489b7f7}{\index{poski\-\_\-\-Message\-Handler.\-c@{poski\-\_\-\-Message\-Handler.\-c}!poski\-\_\-print\-Message@{poski\-\_\-print\-Message}}
+\index{poski\-\_\-print\-Message@{poski\-\_\-print\-Message}!poski_MessageHandler.c@{poski\-\_\-\-Message\-Handler.\-c}}
+\subsubsection[{poski\-\_\-print\-Message}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf poski\-\_\-print\-Message} (
+\begin{DoxyParamCaption}
+\item[{unsigned}]{level, }
+\item[{const char $\ast$}]{fmt, }
+\item[{}]{...}
+\end{DoxyParamCaption}
+)}}\label{poski__MessageHandler_8c_a3925f4c524f50f6af610ce873489b7f7}
+
+
+Print an message. 
+
+The message is displayed to the $<$poski\-\_\-logfile$>$ only if level $>$= the current message level (g\-\_\-curr\-\_\-message\-\_\-level). 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em level} & Level at and above which this message should be printed. \\
+\hline
+\mbox{\tt in}  & {\em fmt} & A printf-\/compatible format string. \\
+\hline
+\mbox{\tt in}  & {\em ...} & Options for the formatting string. \\
+\hline
+\end{DoxyParams}
+\hypertarget{poski__MessageHandler_8c_ad9c3ed04d222202b375764324a1c9416}{\index{poski\-\_\-\-Message\-Handler.\-c@{poski\-\_\-\-Message\-Handler.\-c}!poski\-\_\-error@{poski\-\_\-error}}
+\index{poski\-\_\-error@{poski\-\_\-error}!poski_MessageHandler.c@{poski\-\_\-\-Message\-Handler.\-c}}
+\subsubsection[{poski\-\_\-error}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf poski\-\_\-error} (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{func\-\_\-name, }
+\item[{const char $\ast$}]{msg, }
+\item[{}]{...}
+\end{DoxyParamCaption}
+)}}\label{poski__MessageHandler_8c_ad9c3ed04d222202b375764324a1c9416}
+
+
+Report an error message. 
+
+The error message is displayed to the $<$poski\-\_\-logfile$>$ when an error is occured. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em func\-\_\-name} & The function name which occurs an error. \\
+\hline
+\mbox{\tt in}  & {\em msg} & A printf-\/compatible format string for the error message. \\
+\hline
+\mbox{\tt in}  & {\em ...} & Options for the formatting string. \\
+\hline
+\end{DoxyParams}
+\hypertarget{poski__MessageHandler_8c_ab7fe336bbc2ef509457eaeb61acb44e7}{\index{poski\-\_\-\-Message\-Handler.\-c@{poski\-\_\-\-Message\-Handler.\-c}!poski\-\_\-warning@{poski\-\_\-warning}}
+\index{poski\-\_\-warning@{poski\-\_\-warning}!poski_MessageHandler.c@{poski\-\_\-\-Message\-Handler.\-c}}
+\subsubsection[{poski\-\_\-warning}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf poski\-\_\-warning} (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{func\-\_\-name, }
+\item[{const char $\ast$}]{msg, }
+\item[{}]{...}
+\end{DoxyParamCaption}
+)}}\label{poski__MessageHandler_8c_ab7fe336bbc2ef509457eaeb61acb44e7}
+
+
+Report a warning message. 
+
+The warning message is displayed to the $<$poski\-\_\-logfile$>$ when an warning is occured. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em func\-\_\-name} & The function name which occurs an warning. \\
+\hline
+\mbox{\tt in}  & {\em msg} & A printf-\/compatible format string for the warning message. \\
+\hline
+\mbox{\tt in}  & {\em ...} & Options for the formatting string. \\
+\hline
+\end{DoxyParams}

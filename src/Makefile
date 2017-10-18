@@ -1,15 +1,16 @@
 CC = cc
-CFLAGS = -std=c99 -march=native -O3 `~/gsl-install/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0`
-LDLIBS = `~/gsl-install/bin/gsl-config --libs` `pkg-config --libs glib-2.0`
+CFLAGS = -std=c99 -march=native -O3 `~/gsl-install/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include
+CPPFLAGS = -O3 `~/gsl-install/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include
+LDLIBS = `~/gsl-install/bin/gsl-config --libs` `pkg-config --libs glib-2.0` -L../taco/lib/ -ltaco
 
-all: reference asx oski
+all: reference asx oski spmv
 clean:
 	rm -rf reference asx oski *.o *.dSYM *.trace *.pyc
 
-run.o: run.c
+reference: run_fill.o test_fill.o reference.o util.o
 
-reference: run.o test.o reference.o util.o
+asx: run_fill.o test_fill.o asx.o util.o
 
-asx: run.o test.o asx.o util.o
+oski: run_fill.o test_fill.o oski.o util.o
 
-oski: run.o test.o oski.o util.o
+spmv: run_spmv.o test_spmv.o util.o

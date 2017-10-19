@@ -4,7 +4,7 @@ import scipy.io
 import scipy.sparse
 import itertools
 
-size = 400
+size = 1000
 I = []
 J = []
 for i in range(size):

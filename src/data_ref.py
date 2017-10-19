@@ -8,7 +8,7 @@ from sys import argv
 from data_meta import *
 
 # generate performance matrix
-# python data_spmv_times.py [matrixdir] [outputdir] [architecture] [matrix_id]
+# python data_refs.py [matrixdir] [outputdir] [architecture] [matrix_id]
 matrix_id = argv[4]
 
 matrix_name = matrices[int(matrix_id)]["name"]
@@ -18,8 +18,6 @@ print(matrix_name)
 ref = get_references([matrix_name])
 
 outdir = os.path.join(ref_dir)
-if not os.path.isdir(outdir):
-    os.mkdir(outdir)
 
 outfile = os.path.join(ref_dir, matrix_name)
 

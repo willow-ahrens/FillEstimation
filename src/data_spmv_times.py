@@ -15,12 +15,14 @@ matrix_id = argv[4]
 matrix_name = matrices[int(matrix_id)]["name"]
 
 # generate times matrix
-output = np.zeros((B, B))
+result = np.zeros((B, B))
 for i in range(1, B+1):
   for j in range(1, B+1):
     print (i,j)
-    output[i-1][j-1] = util.spmv_time([matrix_name], r = i, c = j, trials = trials)[0]["time_mean"]
+    result[i-1][j-1] = util.spmv_time([matrix_name], r = i, c = j, trials = trials)[0]["time_mean"]
 
+print result
 outfile = os.path.join(spmv_times_dir, matrix_name)
-# save
-np.save(outfile, output)
+np.save(outfile, result)
+with open(outfile, 'w') as out:
+  out.write(str(result))

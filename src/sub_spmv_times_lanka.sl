@@ -15,7 +15,7 @@ HOME=$SCRATCH/FillEstimation
 DATA=$HOME/data
 source env.sh $HOME
 
-export TACO_CFLAGS="-O3 -ffast-math -std=c99 -fopenmp"
+export TACO_CFLAGS="-O3 -ffast-math -std=c99 -fopenmp -funroll-loops"
 export OMP_NUM_THREADS=12
 export DATA_SPMV_PREFIX="numactl -N 1"
 export TACO_TMPDIR=$HOME/taco/tmp$SLURM_ARRAY_TASK_ID

@@ -3,7 +3,6 @@
 from sys import argv
 import os
 
-# 
 # input dir
 # output file in the form
 # matrix_name [asx_time] [oski_time] [asx_err] [oski_err] [asx_spmv] [oski_spmv]

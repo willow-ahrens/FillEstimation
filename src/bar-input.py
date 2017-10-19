@@ -20,6 +20,10 @@ ref_base = os.path.join(basedir, ref_dir)
 reffile = os.path.join(ref_base, matrix_name + '.npy')
 assert os.path.isfile(reffile)
 
+perf_base = os.path.join(basedir, ref_dir)
+perffile = os.path.join(perf_base, matrix_name + '.npy')
+assert os.path.isfile(perffile)
+
 # load in reference and spmv times
 reference = np.load(reffile)
 

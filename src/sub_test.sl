@@ -15,4 +15,4 @@ MATRIX=$SCRATCH/matrix
 HOME=$SCRATCH/FillEstimation
 DATA=$HOME/data
 source env.sh $HOME
-python data_profile.py $MATRIX $DATA lanka
+python data_test.py $MATRIX $DATA lanka

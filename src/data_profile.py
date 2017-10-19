@@ -21,6 +21,7 @@ if __name__ == "__main__":
       print "i: " + str(i)
       print "j: " + str(j)
       t = util.spmv_time(["dense"], r = i, c = j, trials = trials)[0]["time_mean"]
+      print t
         
       r = (n * m) / float(t)
       result[i-1][j-1] = r

@@ -5,7 +5,11 @@
 #SBATCH --mail-user=pahrens@mit.edu
 #SBATCH --mail-type=ALL
 #SBATCH --array=0-31
-#SBATCH -p lanka-v3
+#SBATCH -p research
+
+export TACO_CFLAGS="-O3 -ffast-math -std=c99 -fopenmp"
+export OMP_NUM_THREADS=12
+export DATA_SPMV_PREFIX="numactl -N 1"
 
 SCRATCH=/data/scratch/pahrens
 MATRIX=$SCRATCH/matrix

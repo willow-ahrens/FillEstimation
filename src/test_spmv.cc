@@ -58,12 +58,12 @@ int test (size_t m,
                (int)(ptr[h])}, data[h]);
   }
 
-  for(size_t h = 0; h < nn; h ++){
+  for(size_t h = 0; h < nn; h++){
     x.insert({(int)(h/c),
               (int)(h%c)}, 1.0);
   }
 
-  for(size_t h = 0; h < n; h ++){
+  for(size_t h = 0; h < n; h++){
     xp.insert({(int)h}, 1.0);
   }
 

@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 #SBATCH -N 1         #Use 2 nodes
-#SBATCH -t 01:00:00
+#SBATCH -t 02:00:00
 #SBATCH --mail-user=pahrens@mit.edu
 #SBATCH --mail-type=ALL
 #SBATCH -p regular   #Submit to the regular 'partition'

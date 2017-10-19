@@ -1,13 +1,21 @@
-CC = gcc-7
-CFLAGS = -std=c99 -lm -march=native -O3 -g3 `pkg-config --cflags glib-2.0`
-LDFLAGS = -lgsl `pkg-config --libs glib-2.0`
+CC = cc
+CXX = CC
+CFLAGS = -std=c99 -march=native -g `~/gsl-install/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include
+CXXFLAGS = -g `~/gsl-install/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include
+LDLIBS = `~/gsl-install/bin/gsl-config --libs` `pkg-config --libs glib-2.0` -L../taco/lib/ -ltaco -ldl
 
-all: reference asx oski
+all: reference asx oski spmv
 clean:
 	rm -rf reference asx oski *.o *.dSYM *.trace *.pyc
 
-reference: run.c test.o reference.o util.o
+reference: run_fill.o test_fill.o reference.o util.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
-asx: run.c test.o asx.o util.o
+asx: run_fill.o test_fill.o asx.o util.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
-oski: run.c test.o oski.o util.o
+oski: run_fill.o test_fill.o oski.o util.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
+
+spmv: run_spmv.o test_spmv.o util.o
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)

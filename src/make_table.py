@@ -2,11 +2,13 @@
 
 from sys import argv
 import os
+import data_meta
 
-# input dir
-# output file in the form
-# matrix_name [asx_time] [oski_time] [asx_err] [oski_err] [asx_spmv] [oski_spmv]
-_, matrix_list, in_dir1, in_dir2, outfile = argv
+# python data_refs.py [matrixdir] [outputdir] [architecture] [matrix_list] [output]
+_, _, _, _, matrix_list, outfile = argv
+
+in_dir1 = data_meta.spmv_times_dir
+in_dir2 = data_meta.table_dir
 
 err_prefix = 'err_'
 spmv_prefix = 'spmv_'

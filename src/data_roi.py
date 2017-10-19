@@ -2,15 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from util import *
 from sys import argv
-from test_meta import *
+from data_meta import *
 
-B = 12
+# python data_roi.py [matrixdir] [outputdir] [architecture]
+
 trials = 100
 def exprange(a, b, n):
   r = (float(b) / float(a))**(1.0/(n - 1))
   return [a * r**i for i in range(n)]
-
-_, _, basedir, outdir = argv
 
 n = 10
 asx_delta = 0.01
@@ -64,8 +63,7 @@ for (reference, matrix) in zip(references, matrices):
     
     # generate local performance matrix
   filename =  matrix['name'] + '.npy'
-  spmv_dir = os.path.join(basedir, spmv_times_dir)
-  tfile = os.path.join(spmv_dir, filename)
+  tfile = os.path.join(spmv_times_dir, filename)
   assert os.path.isfile(tfile)
   matrix_times = np.load(tfile)
 
@@ -87,11 +85,8 @@ for (reference, matrix) in zip(references, matrices):
       hi_bars.append(np.std(results[0]["errors"]))
       lo_bars.append(np.std(results[0]["errors"]))
 
-    roidir = os.path.join(basedir, outdir)
-    if not os.path.isdir(roidir):
-        os.mkdir(roidir)
     outfile = 'error_' + method['name'] + '_' + matrix['name']
-    out_path = os.path.join(roidir, outfile)
+    out_path = os.path.join(roi_dir, outfile)
 
     # output in form
     # x y ylow yhigh

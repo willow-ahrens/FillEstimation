@@ -4,8 +4,32 @@ import os
 import sys
 
 trials = 100
-B = 12
+if sys.argv[3] == "lanka12":
+  B = 12
+  methods = [{"name":"asx",
+             "label":"ASX",
+             "color":"red",
+             "point":{"epsilon":0.5, "delta":0.01},
+             },
+             {"name":"oski",
+             "label":"OSKI",
+             "color":"blue",
+             "point":{"delta":0.02}
+             }]
 
+if sys.argv[3] == "lanka4":
+  B = 4
+  methods = [{"name":"asx",
+             "label":"ASX",
+             "color":"red",
+             "point":{"epsilon":0.5, "delta":0.01},
+             },
+             {"name":"oski",
+             "label":"OSKI",
+             "color":"blue",
+             "point":{"delta":0.02}
+             }]
+  
 #_, _, data_dir, platform  = sys.argv
 
 spmv_times_dir = os.path.join(sys.argv[2], sys.argv[3], 'spmv_times')
@@ -16,7 +40,7 @@ table_dir = os.path.join(sys.argv[2], sys.argv[3], 'table')
 
 roi_dir = os.path.join(sys.argv[2], sys.argv[3], 'roi')
 
-ref_dir = os.path.join(sys.argv[2], 'ref')
+ref_dir = os.path.join(sys.argv[2], sys.argv[3], 'ref')
 
 if False:
   for d in [spmv_times_dir, profile_dir, bar_dir, roi_dir, ref_dir]:
@@ -29,18 +53,6 @@ if False:
 out_times_prefix = 'times'
 out_err_prefix = 'err'
 out_spmv_prefix = 'spmv'
-
-methods = [{"name":"asx",
-           "label":"ASX",
-           "color":"red",
-           "point":{"epsilon":0.5, "delta":0.01},
-           },
-           {"name":"oski",
-           "label":"OSKI",
-           "color":"blue",
-           "point":{"delta":0.02}
-           }
-           ]
 
 # full matrix list
 matrices = [{"name": "cfd2_conv"},

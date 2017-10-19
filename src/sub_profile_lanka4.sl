@@ -11,5 +11,11 @@ SCRATCH=/data/scratch/pahrens
 MATRIX=$SCRATCH/matrix
 HOME=$SCRATCH/FillEstimation
 DATA=$HOME/data
+source env.sh $HOME
 
-python make_table.py $DATA/lanka12/table $DATA/lanka4/table $HOME/src/matrix_meta $HOME/src/table_lanka.tex
+export TACO_CFLAGS="-O3 -ffast-math -std=c99 -fopenmp -funroll-loops"
+export OMP_NUM_THREADS=12
+export DATA_SPMV_PREFIX="numactl -N 1"
+export TACO_TMPDIR=$HOME/taco/tmp
+
+python data_profile.py $MATRIX $DATA lanka4

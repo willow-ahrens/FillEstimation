@@ -2,13 +2,9 @@
 
 from sys import argv
 import os
-import data_meta
 
-# python data_refs.py [matrixdir] [outputdir] [architecture] [matrix_list] [output]
-_, _, _, _, matrix_list, outfile = argv
-
-in_dir1 = data_meta.table_dir
-in_dir2 = data_meta.table_dir
+# python data_refs.py [table_dir_1] [table_dir_2] [matrix_list] [output]
+_, in_dir1, in_dir2, matrix_list, outfile = argv
 
 err_prefix = 'err_'
 spmv_prefix = 'spmv_'

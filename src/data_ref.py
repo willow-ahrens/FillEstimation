@@ -15,7 +15,7 @@ matrix_name = matrices[int(matrix_id)]["name"]
 print(matrix_name)
 
 # generate references for matrix_name
-ref = get_references([matrix_name])
+ref = get_references([matrix_name], B = B)
 
 outdir = os.path.join(ref_dir)
 

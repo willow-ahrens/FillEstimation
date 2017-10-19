@@ -7,15 +7,15 @@ import os
 # input dir
 # output file in the form
 # matrix_name [asx_time] [oski_time] [asx_err] [oski_err] [asx_spmv] [oski_spmv]
-_, matrix_list, in_dir, outfile = argv
+_, matrix_list, in_dir1, in_dir2, outfile = argv
 
 err_prefix = 'err_'
 spmv_prefix = 'spmv_'
 times_prefix = 'times_'
 max_len = 5
 sep = ' & '
-better_prefix = r'\textcolor{safe-peach}{'
-better_suffix = '}'
+better_prefix = r'\cellcolor{safe-peach!25}'
+# better_suffix = '}'
 
 def truncate(str_in):
     if len(str_in) > max_len:
@@ -24,7 +24,7 @@ def truncate(str_in):
 
 
 def better_helper(s):
-    return better_prefix + s + better_suffix
+    return better_prefix + s # + better_suffix
 
 # lower is better
 def better_test(asx_str, oski_str):
@@ -43,37 +43,64 @@ if __name__ == "__main__":
     matrices = [m.strip() for m in matrices]
 
     print matrices
-    counter = 1
     with open(outfile, 'w') as out:
         for matrix in matrices:
-            with open(os.path.join(in_dir, times_prefix + matrix), 'r') as timesfile:
+            print matrix
+            stuff = matrix.split(' ')
+            # set the first thing
+            matrix_name = stuff[0]
+            if matrix_name.endswith('_conv'):
+                matrix_name = stuff[0][:-5]
+            matrix_name = matrix_name.replace('_','\_')
+
+            # todo : put matrix meta here
+
+            out_line = matrix_name + sep + stuff[1] + sep + stuff[2]
+            
+
+            # for now do this
+            with open(os.path.join(in_dir1, times_prefix + stuff[0]), 'r') as timesfile:
                 time = timesfile.readline().strip()
                 parts = time.split(' ')
 
                 # get normalized times
-
                 asx_time, oski_time = better_test(truncate(parts[1]), truncate(parts[2]))
+                out_line = out_line + sep + asx_time + sep + oski_time
 
-            with open(os.path.join(in_dir, err_prefix + matrix), 'r') as errfile:
+            with open(os.path.join(in_dir1, err_prefix + stuff[0]), 'r') as errfile:
                 err = errfile.readline().strip()
                 parts = err.split(' ')
-
                 asx_err, oski_err = better_test(truncate(parts[1]), truncate(parts[3]))
+                out_line = out_line + sep + asx_err + sep + oski_err
 
-            with open(os.path.join(in_dir, spmv_prefix + matrix), 'r') as spmvfile:
+            with open(os.path.join(in_dir1, spmv_prefix + stuff[0]), 'r') as spmvfile:
                 spmv = spmvfile.readline().strip()
                 parts = spmv.split(' ')
- 
                 asx_spmv, oski_spmv = better_test(truncate(parts[1]), truncate(parts[3]))
-               
-            ind_string = str(counter) + '.'
-            if counter < 10:
-                ind_string = '0' + ind_string
-            matrix_name = matrix
-            if matrix.endswith('_conv'):
-                matrix_name = matrix[:-5]
-            matrix_name = ind_string + matrix_name
-            matrix_name = matrix_name.replace('_','\_')
+                out_line = out_line + sep + asx_spmv + sep + oski_spmv
 
-            out.write(matrix_name + sep + asx_time + sep + oski_time + sep + asx_err + sep + oski_err + sep + asx_spmv + sep + oski_spmv + ' \\\\ \n')
-            counter = counter + 1
+            out_line = out_line + '&'
+
+            # directory 2
+            with open(os.path.join(in_dir2, times_prefix + stuff[0]), 'r') as timesfile:
+                time = timesfile.readline().strip()
+                parts = time.split(' ')
+
+                # get normalized times
+                asx_time, oski_time = better_test(truncate(parts[1]), truncate(parts[2]))
+                out_line = out_line + sep + asx_time + sep + oski_time
+
+            with open(os.path.join(in_dir2, err_prefix + stuff[0]), 'r') as errfile:
+                err = errfile.readline().strip()
+                parts = err.split(' ')
+                asx_err, oski_err = better_test(truncate(parts[1]), truncate(parts[3]))
+                out_line = out_line + sep + asx_err + sep + oski_err
+
+            with open(os.path.join(in_dir2, spmv_prefix + stuff[0]), 'r') as spmvfile:
+                spmv = spmvfile.readline().strip()
+                parts = spmv.split(' ')
+                asx_spmv, oski_spmv = better_test(truncate(parts[1]), truncate(parts[3]))
+                out_line = out_line + sep + asx_spmv + sep + oski_spmv
+
+            out.write(out_line +' \\\\ \n')
+

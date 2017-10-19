@@ -1,6 +1,11 @@
+gsl-2.4
+gsl
+taco
+taco-oopsla2017
 src/matrix
 src/*.mtx
 src/asx
+src/spmv
 src/oski
 src/reference
 src/local-plot-inputs

@@ -1,16 +1,39 @@
 import json
 import os
+import scipy.io
 from subprocess import check_output
 import numpy as np
 import random
 import sys
 from sys import argv
 
-# _, basedir, matrix_name = argv
-wherematrix = os.path.join(argv[1], "matrix")
+# _, matrix_dir, ...
+wherematrix = argv[1]
 
 def matrix_path(matrix):
   return os.path.join(wherematrix, "%s.mtx" % (matrix))
+
+def matrix_read(matrix):
+  return scipy.io.mmread(matrix_path(matrix))
+
+def spmv_time(matrices, r = 1, c = 1, trials = 1):
+  outputs = []
+  for matrix in matrices:
+    myenv = os.environ.copy()
+    myenv["GSL_RNG_SEED"] = str(random.randrange(sys.maxint))
+    command = [os.path.join(os.path.dirname(os.path.realpath(__file__)), "spmv")]
+    command += ["-r", "%d" % r]
+    command += ["-c", "%d" % c]
+    command += ["-t", "%d" % trials]
+    command += [matrix_path(matrix)]
+    print(command)
+    output = check_output(command, env=myenv)
+    try:
+      outputs.append(json.loads(output))
+    except ValueError as e:
+      print(output)
+      raise(e)
+  return outputs
 
 def fill_estimates(name, matrices, B = 12, epsilon = 0.1, delta = 0.01, trials = 1, clock = True, results = False):
   outputs = []

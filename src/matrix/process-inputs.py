@@ -2,13 +2,16 @@ import sys
 import numpy
 import scipy.io
 import scipy.sparse
-import shutil
+from conv import *
 
-import os
-import tarfile
+# this should be in src/matrix
+# after download-dataset.sh
 
 # iterate through all .tar.gz
 # keep a list of repos
+import os
+import tarfile
+
 
 def convert_matrix(infile, outfile):
     with open(infile) as f:
@@ -17,7 +20,7 @@ def convert_matrix(infile, outfile):
         matrix = scipy.sparse.csr_matrix(matrix)
         
         print 'before write'
-        scipy.io.mmwrite(outfile, matrix)
+            scipy.io.mmwrite(outfile, matrix)
 
 # guarantee that its a tar file
 def untar(fname):
@@ -41,11 +44,8 @@ if __name__ == "__main__":
         mpath = os.path.join(mfile, mfile + '.mtx')
 
         print mpath
+
         # output is in name_conv.mtx
         outpath = mfile + '_conv.mtx'
         print outpath
         convert_matrix(mpath, outpath)
-
-	# after converting we don't need the original input
-	# delete the directory
-	shutil.rmtree(mfile)

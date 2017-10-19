@@ -82,13 +82,9 @@ for method in methods:
 # files (normalized time to estimate, error, normalized spmv time) in the form 
 # matrix_id asx oski
 
-outdir = os.path.join(basedir, bar_inputs_dir)
-if not os.path.isdir(outdir):
-    os.mkdir(outdir)
-
-time_path = os.path.join(outdir, out_times_prefix + '_' + matrix_name)
-err_path = os.path.join(outdir, out_err_prefix + '_' + matrix_name)
-spmv_path = os.path.join(outdir, out_spmv_prefix + '_' + matrix_name)
+time_path = os.path.join(table_dir, out_times_prefix + '_' + matrix_name)
+err_path = os.path.join(table_dir, out_err_prefix + '_' + matrix_name)
+spmv_path = os.path.join(table_dir, out_spmv_prefix + '_' + matrix_name)
 
 with open(time_path, 'w') as time_out:
     time_out.write(matrix_name + ' ' + str(asx_time) + ' ' + str(oski_time) + '\n')

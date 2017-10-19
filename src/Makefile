@@ -1,6 +1,6 @@
 CC = gcc
 CXX = g++
-CFLAGS = -O3 -std=c99 -march=native `../gsl/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include
+CFLAGS = -O3 -ffast-math -std=c99 -march=native `../gsl/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include
 CXXFLAGS = -O3 -std=c++11 `../gsl/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include -DDECIMAL_DIG=17
 LDLIBS = `../gsl/bin/gsl-config --libs` `pkg-config --libs glib-2.0` -L../taco/lib -ltaco -ldl
 

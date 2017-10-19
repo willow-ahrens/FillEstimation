@@ -12,7 +12,7 @@ spmv_times_dir = os.path.join(sys.argv[2], sys.argv[3], 'spmv_times')
 
 profile_dir = os.path.join(sys.argv[2], sys.argv[3], 'profile')
 
-bar_dir = os.path.join(sys.argv[2], sys.argv[3], 'bar')
+table_dir = os.path.join(sys.argv[2], sys.argv[3], 'table')
 
 roi_dir = os.path.join(sys.argv[2], sys.argv[3], 'roi')
 

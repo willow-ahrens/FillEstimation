@@ -12,4 +12,4 @@ MATRIX=$SCRATCH/matrix
 HOME=$SCRATCH/FillEstimation
 DATA=$HOME/data
 
-python make_table.py $MATRIX $DATA lanka $HOME/src/matrix_list $HOME/src/table_lanka.tex
+python make_table.py $MATRIX $DATA lanka $HOME/src/matrix_meta $HOME/src/table_lanka.tex

@@ -7,7 +7,7 @@ import data_meta
 # python data_refs.py [matrixdir] [outputdir] [architecture] [matrix_list] [output]
 _, _, _, _, matrix_list, outfile = argv
 
-in_dir1 = data_meta.spmv_times_dir
+in_dir1 = data_meta.table_dir
 in_dir2 = data_meta.table_dir
 
 err_prefix = 'err_'

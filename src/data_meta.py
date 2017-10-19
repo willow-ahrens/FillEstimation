@@ -12,11 +12,16 @@ spmv_times_dir = os.path.join(sys.argv[2], sys.argv[3], 'spmv_times')
 
 profile_dir = os.path.join(sys.argv[2], sys.argv[3], 'profile')
 
-bar_dir = os.path.join(sys.argv[2], sys.argv[3], 'bar')
+table_dir = os.path.join(sys.argv[2], sys.argv[3], 'table')
 
 roi_dir = os.path.join(sys.argv[2], sys.argv[3], 'roi')
 
 ref_dir = os.path.join(sys.argv[2], 'ref')
+
+if False:
+  for d in [spmv_times_dir, profile_dir, bar_dir, roi_dir, ref_dir]:
+    if not os.path.isdir(d):
+      os.mkdir(d)
 
 # files in default-bar
 # each node should output one of these

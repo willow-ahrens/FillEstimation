@@ -21,7 +21,12 @@ def spmv_time(matrices, r = 1, c = 1, trials = 1):
   for matrix in matrices:
     myenv = os.environ.copy()
     myenv["GSL_RNG_SEED"] = str(random.randrange(sys.maxint))
-    command = [os.path.join(os.path.dirname(os.path.realpath(__file__)), "spmv")]
+    prefix = os.getenv("DATA_SPMV_PREFIX") 
+    if prefix:
+      command = prefix.split(" ")
+    else:
+      command = []
+    command += [os.path.join(os.path.dirname(os.path.realpath(__file__)), "spmv")]
     command += ["-r", "%d" % r]
     command += ["-c", "%d" % c]
     command += ["-t", "%d" % trials]

@@ -32,15 +32,15 @@ int test (size_t m,
   Format  bdv({Dense,Dense});
   Format   dv({Dense});
 
-  size_t bm = m/r;
-  size_t bn = n/c;
+  size_t bm = (m + r - 1)/r;
+  size_t bn = (n + c - 1)/c;
   size_t mm = bm * r;
   size_t nn = bn * c;
 ;
   // Create tensors
   Tensor<double> A({(int)bm, (int)bn, (int)r, (int)c}, bcsr);
   Tensor<double> b({(int)bm,(int)r},   bdv);
-  Tensor<double> x({(int)bn,(int)c},     bdv);
+  Tensor<double> x({(int)bn,(int)c},   bdv);
 
   Tensor<double> Ap({(int)m, (int)n}, csr);
   Tensor<double> bp({(int)m}, dv);
@@ -58,12 +58,12 @@ int test (size_t m,
                (int)(ptr[h])}, data[h]);
   }
 
-  for(size_t h = 0; h < nn; h ++){
+  for(size_t h = 0; h < nn; h++){
     x.insert({(int)(h/c),
               (int)(h%c)}, 1.0);
   }
 
-  for(size_t h = 0; h < n; h ++){
+  for(size_t h = 0; h < n; h++){
     xp.insert({(int)h}, 1.0);
   }
 

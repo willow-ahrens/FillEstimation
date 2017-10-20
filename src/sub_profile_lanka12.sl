@@ -2,7 +2,7 @@
 
 #SBATCH --nodes=1-1
 #SBATCH --cpus-per-task=48
-#SBATCH -t 01:00:00
+#SBATCH -t 04:00:00
 #SBATCH --mail-user=pahrens@mit.edu
 #SBATCH --mail-type=ALL
 #SBATCH -p lanka-v3

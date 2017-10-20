@@ -12,7 +12,7 @@ import os
 
 MAX_BLOCK = data_meta.B
 baseline = 1
-trials = 100
+trials = 1000
 (n, m) = np.shape(util.matrix_read("dense"))
 
 if __name__ == "__main__":

@@ -22,7 +22,7 @@ if sys.argv[3] == "lanka4":
   methods = [{"name":"asx",
              "label":"ASX",
              "color":"red",
-             "point":{"epsilon":0.15, "delta":0.01},
+             "point":{"epsilon":0.1, "delta":0.01},
              },
              {"name":"oski",
              "label":"OSKI",

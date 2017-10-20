@@ -53,9 +53,9 @@ int estimate_fill (size_t m,
                    double *fill,
                    int verbose){
   hash_t *table = hash_create();
-  int fill_index = 0;
-  for (int b_r = 1; b_r <= B; b_r++) {
-    for (int b_c = 1; b_c <= B; b_c++) {
+  size_t fill_index = 0;
+  for (size_t b_r = 1; b_r <= B; b_r++) {
+    for (size_t b_c = 1; b_c <= B; b_c++) {
       size_t i = 0;
       size_t j = 0;
       size_t nnzb = 0;
@@ -66,8 +66,8 @@ int estimate_fill (size_t m,
         j = ind[t];
         size_t block_i = i/b_r;
         size_t block_j = j/b_c;
-        if (hash_get(table, block_i * m + block_j, 1)) {
-          hash_set(table, block_i * m + block_j, 0);
+        if (hash_get(table, block_i * n + block_j, 1)) {
+          hash_set(table, block_i * n + block_j, 0);
           nnzb += 1;
         }
       }

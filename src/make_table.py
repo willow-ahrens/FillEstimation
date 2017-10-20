@@ -11,8 +11,10 @@ spmv_prefix = 'spmv_'
 times_prefix = 'times_'
 max_len = 5
 sep = ' & '
+blank = ' && '
 better_prefix = r'\cellcolor{safe-peach!25}'
 # better_suffix = '}'
+domain = ''
 
 def truncate(str_in):
     if len(str_in) > max_len:
@@ -51,8 +53,16 @@ if __name__ == "__main__":
             matrix_name = matrix_name.replace('_','\_')
 
             # todo : put matrix meta here
+            temp_domain = stuff[1]
+            if domain == '' or temp_domain != domain:
+                domain = temp_domain
+                name_without_underscore = temp_domain.replace('_', ' ')
+                print name_without_underscore
+                # write
+                if name_without_underscore != "Computational Fluid Dynamics":
+                    out.write(" \\multicolumn{21}{l}{\\textbf{\\textit{Domain: " + name_without_underscore + '}}} \\\\ \n')
 
-            out_line = matrix_name + sep + stuff[1] + sep + stuff[2]
+            out_line = "\\  \\  " + matrix_name + sep + stuff[2] + sep + stuff[3] #  name_without_underscore
             
 
             # for now do this
@@ -62,21 +72,19 @@ if __name__ == "__main__":
 
                 # get normalized times
                 asx_time, oski_time = better_test(truncate(parts[1]), truncate(parts[2]))
-                out_line = out_line + sep + asx_time + sep + oski_time
+                out_line = out_line + blank + asx_time + sep + oski_time
 
             with open(os.path.join(in_dir1, err_prefix + stuff[0]), 'r') as errfile:
                 err = errfile.readline().strip()
                 parts = err.split(' ')
                 asx_err, oski_err = better_test(truncate(parts[1]), truncate(parts[3]))
-                out_line = out_line + sep + asx_err + sep + oski_err
+                out_line = out_line + blank + asx_err + sep + oski_err
 
             with open(os.path.join(in_dir1, spmv_prefix + stuff[0]), 'r') as spmvfile:
                 spmv = spmvfile.readline().strip()
                 parts = spmv.split(' ')
                 asx_spmv, oski_spmv = better_test(truncate(parts[1]), truncate(parts[3]))
-                out_line = out_line + sep + asx_spmv + sep + oski_spmv
-
-            out_line = out_line + '&'
+                out_line = out_line + blank + asx_spmv + sep + oski_spmv
 
             # directory 2
             with open(os.path.join(in_dir2, times_prefix + stuff[0]), 'r') as timesfile:
@@ -85,19 +93,19 @@ if __name__ == "__main__":
 
                 # get normalized times
                 asx_time, oski_time = better_test(truncate(parts[1]), truncate(parts[2]))
-                out_line = out_line + sep + asx_time + sep + oski_time
+                out_line = out_line + blank + asx_time + sep + oski_time
 
             with open(os.path.join(in_dir2, err_prefix + stuff[0]), 'r') as errfile:
                 err = errfile.readline().strip()
                 parts = err.split(' ')
                 asx_err, oski_err = better_test(truncate(parts[1]), truncate(parts[3]))
-                out_line = out_line + sep + asx_err + sep + oski_err
+                out_line = out_line + blank + asx_err + sep + oski_err
 
             with open(os.path.join(in_dir2, spmv_prefix + stuff[0]), 'r') as spmvfile:
                 spmv = spmvfile.readline().strip()
                 parts = spmv.split(' ')
                 asx_spmv, oski_spmv = better_test(truncate(parts[1]), truncate(parts[3]))
-                out_line = out_line + sep + asx_spmv + sep + oski_spmv
+                out_line = out_line + blank + asx_spmv + sep + oski_spmv
 
             out.write(out_line +' \\\\ \n')
 

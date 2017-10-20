@@ -1,32 +1,32 @@
-cfd2_conv CFD 1.6
-parabolic_fem_conv CFD 2.1
-ASIC_680k_conv Circuit 3.8
-G3_circuit_conv Circuit 4.6
-Hamrle3_conv Circuit 5.5
-rajat24_conv Circuit 1.9
-cage13_conv Graph 7.5
-cnr-2000_conv Graph 3.2
-Stanford_conv Graph 2.3
-degme_conv LP 8.1
-rail4284_conv LP 1
-pds-100_conv LP 1.1
-exdata_1_conv Opt. 2.3
-TSOPF_RS_b2383_conv Opt. 16
-largebasis_conv Opt. 5.5
-gupta1_conv Opt. 2.1
-af_shell10_conv Struct. 27
-F1_conv Struct. 14
-gearbox_conv Struct. 4.6
-inline_1_conv Struct. 19
-ldoor_conv Struct. 24
-pwtk_conv Struct. 5.9
-bmw7st_1_conv Struct. 7.3
-ct20stif Struct. 2.6
-Ga41As41H72_conv Other 9.4
-stomach_conv Other 3.0
-thermal2_conv Other 4.9
-3dtube_conv Other 3.2
-kkt_power_conv Other 8.1
-nd24k_conv Other 14
-pathological_asx Synth. .07
-pathological_oski Synth. .7
+cfd2_conv Computational_Fluid_Dynamics 1.6 54
+parabolic_fem_conv Computational_Fluid_Dynamics 2.1 73
+3dtube_conv Computational_Fluid_Dynamics 3.2 53 
+ASIC_680k_conv Circuit_Simulation 3.8 134
+G3_circuit_conv Circuit_Simulation 4.6 165 
+Hamrle3_conv Circuit_Simulation 5.5 194
+rajat24_conv Circuit_Simulation 1.9 68
+cage13_conv Graph 7.5 255
+cnr-2000_conv Graph 3.2 109
+Stanford_conv Graph 2.3 78
+degme_conv Linear_Programming 8.1 277
+rail4284_conv Linear_Programming 1 364
+pds-100_conv Linear_Programming 1.1 38
+gupta1_conv Linear_Programming 2.1 35
+exdata_1_conv Mathematical_Optimization 2.3 35
+largebasis_conv Mathematical_Optimization 5.5 103
+TSOPF_RS_b2383_conv Power_Network 16 527
+kkt_power_conv Power_Network 8.1 287
+af_shell10_conv Structural 27 958
+F1_conv Structural 14 465
+gearbox_conv Structural 4.6 152
+inline_1_conv Structural 19 640
+ldoor_conv Structural 24 820
+pwtk_conv Structural 5.9 201
+bmw7st_1_conv Structural 7.3 125
+ct20stif Structural 2.6 34
+Ga41As41H72_conv Other 9.4 321
+stomach_conv Other 3.0 103
+thermal2_conv Other 4.9 173
+nd24k_conv Other 14 469
+pathological_asx Synthetic .07 2.3
+pathological_oski Synthetic .7 2.0

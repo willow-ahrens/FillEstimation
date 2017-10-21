@@ -1,0 +1,502 @@
+%\documentclass{sig-alternate-draft}
+%\documentclass{sig-alternate}\newcommand{\note}[2]{}
+
+% Uncomment to turn on automatic table generation
+%\documentclass[preprint]{sig-alternate} % TB 2013-09-15: Modified sig-alternate to include page numbers
+%\documentclass[pageno]{jpaper}
+%\documentclass[10pt,preprint]{sigalternate}
+%\documentclass[10pt,preprint]{sigalternate}
+\documentclass[sigconf]{acmart}
+\setcopyright{rightsretained}
+%\newcommand{\asplossubmissionnumber}{396}
+
+\usepackage[normalem]{ulem}
+%\usepackage{siunitx}
+\newif\ifsigalt\sigalttrue % false means submission mode.
+%\usepackage{supertech-sig}
+
+%begin supertech grap
+\pagenumbering{gobble}
+\usepackage{clrscode4e}
+\usepackage{xspace} % xspace takes care of the \@ after a capitalized word before a period.
+\usepackage{amsmath}
+\usepackage{subcaption}
+\usepackage{afterpage}
+\usepackage{placeins}
+%\usepackage[x11names]{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+% Margin notes - use \notesfalse to turn off notes.
+%\newif\ifnotes
+%\notestrue
+%\newcommand{\longnote}[1]{%
+%  \ifnotes
+%    {\medskip\noindent Note: \marginpar[\hfill$\Longrightarrow$]
+%      {$\Longleftarrow$}{#1}\medskip}
+%  \fi}
+%
+%\newcommand{\cnote}[2]{%
+%  \ifnotes%
+%  {\scriptsize[[{\color{#1} \sf \raggedright{#2}}]]}%
+%  %{\marginpar{\color{#1}\tiny \sf \raggedright\parbox[t]{\columnwidth}{#2}}}%
+%  \fi}
+
+%\newcommand{\secput}[2]{\section{\protect\raggedright #2}\label{sec:#1}}
+\newcommand{\secput}[2]{\section{#2}\label{sec:#1}}
+\newcommand{\defn}[1]       {{\textit{\textbf{#1}}}}
+\newcommand{\ang}[1]            {\ifmmode{\mathopen{}\left\langle #1 \right\rangle\mathclose{}}
+                                 \else{$\mathopen{}\left\langle${#1}$\right\rangle\mathclose{}$}\fi}
+
+
+\newcommand{\punt}[1]{}
+%% References
+
+\newcommand{\chapref}[1]        {Chapter~\ref{chap:#1}}
+\newcommand{\secref}[1]         {Section~\ref{sec:#1}}
+%\newcommand{\secref}[1]         {\ref{sec:#1}}
+\newcommand{\secreftwo}[2]      {Sections \ref{sec:#1} and~\ref{sec:#2}}
+\newcommand{\secrefthree}[3]    {Sections \ref{sec:#1}, \ref{sec:#2}, and \ref{sec:#3}}
+\newcommand{\secreffour}[4]     {Sections \ref{sec:#1}, \ref{sec:#2}, \ref{sec:#3}, and~\ref{sec:#4}}
+\newcommand{\appref}[1]         {Appendix~\ref{app:#1}}
+\newcommand{\figlabel}[1]   {\label{fig:#1}}
+\newcommand{\figref}[1]         {Figure~\ref{fig:#1}}
+\newcommand{\figreftwo}[2]      {Figures \ref{fig:#1} and~\ref{fig:#2}}
+\newcommand{\figrefthree}[3]      {Figures \ref{fig:#1}, \ref{fig:#2}, and~\ref{fig:#3}}
+
+\newcommand{\tabref}[1]         {Table~\ref{tab:#1}}
+\newcommand{\stref}[1]          {Step~\ref{st:#1}}
+\newcommand{\thmlabel}[1]   {\label{thm:#1}}
+\newcommand{\thmref}[1]         {Theorem~\ref{thm:#1}}
+\newcommand{\thmreftwo}[2]         {Theorems \ref{thm:#1} and \ref{thm:#2}}
+\newcommand{\lemlabel}[1]   {\label{lem:#1}}
+\newcommand{\lemref}[1]         {Lemma~\ref{lem:#1}}
+\newcommand{\lemreftwo}[2]      {Lemmas \ref{lem:#1} and~\ref{lem:#2}}
+\newcommand{\lemrefthree}[3]    {Lemmas \ref{lem:#1}, \ref{lem:#2} and~\ref{lem:#3}}
+\newcommand{\lemreffour}[4]     {Lemmas \ref{lem:#1}, \ref{lem:#2}, \ref{lem:#3} and~\ref{lem:#4}}
+\newcommand{\corlabel}[1]   {\label{cor:#1}}
+\newcommand{\corref}[1]         {Corollary~\ref{cor:#1}}
+\newcommand{\correftwo}[2]         {Corollaries~\ref{cor:#1} and~\ref{cor:#2}}
+\newcommand{\equref}[1]          {Equation~(\ref{eq:#1})}
+\newcommand{\STechEqref}[1] {Equation~(\ref{eq:#1})}
+\newcommand{\eqreftwo}[2]       {Equations (\ref{eq:#1}) and~(\ref{eq:#2})}
+\newcommand{\ineqref}[1]        {Inequality~(\ref{ineq:#1})}
+\newcommand{\ineqreftwo}[2]     {Inequalities (\ref{ineq:#1}) and~(\ref{ineq:#2})}
+\newcommand{\invlabel}[1]   {\label{inv:#1}}
+\newcommand{\invref}[1]         {Invariant~\ref{inv:#1}}
+\newcommand{\invreftwo}[2]      {Invariants~\ref{inv:#1} and~\ref{inv:#2}}
+\newcommand{\invrefthree}[3]    {Invariants~\ref{inv:#1}, \ref{inv:#2}, and~\ref{inv:#3}}
+\newcommand{\condref}[1]        {Condition~\ref{cond:#1}}
+\newcommand{\condreftwo}[2]     {Conditions~\ref{cond:#1} and~\ref{cond:#2}}
+\newcommand{\ruleref}[1]        {Rule~\ref{rule:#1}}
+
+\newcommand{\defref}[1]         {Definition~\ref{def:#1}}
+\newcommand{\defreftwo}[2]      {Definitions \ref{def:#1} and~\ref{def:#2}}
+\newcommand{\defrefthree}[3]    {Definitions \ref{def:#1}, \ref{def:#2}, and~\ref{def:#3}}
+\newcommand{\propref}[1]        {Property~\ref{prop:#1}}
+\newcommand{\propreftwo}[2]     {Properties~\ref{prop:#1} and~\ref{prop:#2}}
+\newcommand{\caseref}[1]        {Case~\ref{case:#1}}
+\newcommand{\casereftwo}[2]     {Cases \ref{case:#1} and~\ref{case:#2}}
+\newcommand{\caserefthree}[3]   {Cases \ref{case:#1}, \ref{case:#2}, and~\ref{case:#3}}
+\newcommand{\caserefrange}[2]   {Cases~\ref{case:#1} through~\ref{case:#2}}
+\newcommand{\lilabel}[1]        {\label{li:#1}}
+\newcommand{\liref}[1]          {line~\ref{li:#1}}
+\newcommand{\Liref}[1]          {Line~\ref{li:#1}}
+\newcommand{\lirefs}[2]         {lines \ref{li:#1}--\ref{li:#2}}
+\newcommand{\Lirefs}[2]         {Lines \ref{li:#1}--\ref{li:#2}}
+\newcommand{\lireftwo}[2]       {lines \ref{li:#1} and~\ref{li:#2}}
+\newcommand{\Lireftwo}[2]       {Lines \ref{li:#1} and~\ref{li:#2}}
+\newcommand{\lirefthree}[3]     {lines \ref{li:#1}, \ref{li:#2}, and~\ref{li:#3}}
+\newcommand{\Lirefthree}[3]     {Lines \ref{li:#1}, \ref{li:#2}, and~\ref{li:#3}}
+\newcommand{\lirefrange}[1]     {lines \ref{li:#1(}--\ref{li:#1)}}
+\newcommand{\Lirefrange}[1]     {Lines \ref{li:#1(}--\ref{li:#1)}}
+\newcommand{\exref}[1]          {Exercise~\ref{ex:#1}}
+\newcommand{\princref}[1]       {Principle~\ref{prop:#1}}
+
+
+
+
+
+%\newtheorem{principle}          {Principle}
+%\newtheorem{theorem}            {Theorem}
+%\newtheorem{lemma}[theorem]     {Lemma}
+%\newtheorem{corollary}[theorem] {Corollary}
+%\newtheorem{xample}             {Example}
+%\newtheorem{definition}         {Definition}
+%\newtheorem{property}           {Property}
+%\newtheorem{invariant}[theorem] {Invariant}
+
+%\newcommand{\proof}     {\noindent{\em Proof.}\hspace{1em}}
+%\def\squarebox#1{\hbox to #1{\hfill\vbox to #1{\vfill}}}
+%\newcommand{\qedbox}            {\vbox{\hrule\hbox{\vrule\squarebox{.667em}\vrule}\hrule}}
+
+
+%end supertech grap
+
+
+%\notesfalse
+
+
+% NOTE(TFK): Change \useautotablefalse to \useautotabletrue to turn
+%   on automatic table generation.
+\newif\ifuseautotable\useautotablefalse
+
+%\documentclass[9pt,twocolumn]{article}  % required by SPAA submission guidelines
+
+%\usepackage{supertech}
+\definecolor{light-gray}{gray}{0.95}
+
+%\usepackage{times}
+\usepackage{tabu}
+\usepackage{python}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{python}
+%\usepackage{subcaption}
+\usepackage{breqn}
+
+\usepackage[nodisplayskipstretch]{setspace}
+\setstretch{0.85}
+
+\setlength{\belowdisplayskip}{-5pt}
+\setlength{\belowdisplayshortskip}{-5pt}
+
+
+%NOTE(TFK): Commands for decreasing amount of space used in equations.
+%\setlength{\thinmuskip}{0mu}
+%\setlength{\medmuskip}{0mu}
+%\setlength{\thickmuskip}{0mu}
+\thinmuskip=0mu
+\medmuskip=1mu
+\thickmuskip=2mu
+
+
+%\setlength{\abovecaptionskip}{-2pt}
+%\setlength{\belowcaptionskip}{-5pt}
+
+%\usepackage{marginpar}
+%\usepackage{caption}
+
+%\captionsetup{width=0.9\columnwidth}
+%\captionsetup[figure]{labelfont=bf}
+%\usepackage{siunitx}{binary-units}
+
+% American letter size:
+%\textwidth6.5in \textheight9in \oddsidemargin 0pt \evensidemargin 0pt
+%\topmargin -47pt
+
+% Use this to check space usage sans figures.
+%\usepackage[printfigures]{figcaps}
+
+\mark{{}{}}     % Initializes TeX's marks
+
+%\newcommand{\yhnote}[1]{\cnote{purple}{YH: #1}}
+%\newcommand{\tknote}[1]{\cnote{orange}{TK: #1}}
+%\newcommand{\celnote}[1]{\cnote{blue}{CEL: #1}}
+%\newcommand{\tbsnote}[1]{\cnote{red}{TB: #1}}
+\newcommand{\yhnote}[1]{}
+\newcommand{\tknote}[1]{}
+\newcommand{\celnote}[1]{}
+\newcommand{\tbsnote}[1]{}
+
+%% Misc
+ 
+\def\pgets{\mathrel{\hspace{1pt}\mbox{$+$$=$}\hspace{1pt}}}
+\def\otimesgets{\mathrel{\hspace{1pt}\mbox{$\otimes$$=$}\hspace{1pt}}}
+\def\veegets{\mathrel{\hspace{1pt}\mbox{$\vee$$=$}\hspace{1pt}}}
+\def\wedgegets{\mathrel{\hspace{1pt}\mbox{$\wedge$$=$}\hspace{1pt}}}
+\def\plusplus{\mbox{$+$$+$}}
+\def\minusminus{\mbox{$-$$-$}}
+
+%\newcommand{\union}             {\cup}
+%\newcommand{\bunion}            {\bigcup}
+%\newcommand{\intersect}         {\cap}
+%\newcommand{\bintersect}        {\bigcap}
+
+%\newcommand{\degree}[1] {\func{deg}(#1)}
+
+
+\newcommand{\preds}[1] {\attrib{#1}{pred}}
+\newcommand{\succs}[1] {\attrib{#1}{succ}}
+\newcommand{\adj}[1] {\attrib{#1}{adj}}
+\newcommand{\vertices}[1] {\attrib{#1}{vertices}}
+\newcommand{\edges}[1] {\attrib{#1}{edges}}
+\newcommand{\vcolor}[1] {\attrib{#1}{color}}
+\newcommand{\join}[1] {\attrib{#1}{join}}
+\newcommand{\counter}[1] {\attrib{#1}{counter}}
+
+\newcommand{\ffpi}{\ensuremath\pi_{\text{FF}}}
+\newcommand{\lfpi}{\ensuremath\pi_{\text{LF}}}
+\newcommand{\llfpi}{\ensuremath\pi_{\text{LLF}}}
+
+\newcommand{\lnsqd}{\ln^2\!\!\Delta}
+\newcommand{\lncbd}{\ln^3\!\!\Delta}
+\newcommand{\lnsqbeta}{\ln^2\!\beta}
+
+\newcommand{\logsqd}{\log^2\!\!\Delta}
+\newcommand{\logcbd}{\log^3\!\!\Delta}
+
+\newcommand{\attribp}[2]{\ensuremath{#1\negthinspace\rightarrow\negthinspace\id{#2}}}
+\newcommand{\attribbp}[3]{\attribp{#1}{\attribp{#2}{#3}}}
+
+% Names
+\newcommand{\prism}{\textcolor{red}{\textup{JP}}\xspace}
+\newcommand{\JP}{\textup{JP}\xspace}
+\newcommand{\LLF}{\textup{LLF}\xspace}
+\newcommand{\SLL}{\textup{SLL}\xspace}
+\newcommand{\LF}{\textup{LF}\xspace}
+\newcommand{\SL}{\textup{SL}\xspace}
+\newcommand{\R}{\textup{R}\xspace}
+\newcommand{\FF}{\textup{FF}\xspace}
+\newcommand{\SD}{\textup{SD}\xspace}
+\newcommand{\ID}{\textup{ID}\xspace}
+
+\newcommand{\cilktrace}{\textup{Trace-R}\xspace}
+\newcommand{\set}[1]            {\mathopen{}\{ #1 \}\mathclose{}}
+%\punt{
+%\usepackage[
+%	counters = {theorem},
+%	title = {Omitted\ Proofs},
+%	abstract, appendix
+%]{magicappendix}
+%}
+
+%\setlength\belowdisplayskip{0pt} 
+%\setlength\belowdisplayshortskip{0pt}
+%\setlength\abovedisplayskip{0pt} 
+%\setlength\abovedisplayshortskip{0pt}
+%\expandafter\def\expandafter\normalsize\expandafter{%
+%    \normalsize
+%    \setlength\abovedisplayskip{5pt}
+%    \setlength\belowdisplayskip{5pt}
+%    \setlength\abovedisplayshortskip{5pt}
+%    \setlength\belowdisplayshortskip{5pt}
+%}
+
+% DOI
+%\acmDOI{10.475/123_4}
+%
+%% ISBN
+%\acmISBN{123-4567-24-567/08/06}
+%
+%%Conference
+%\acmConference[WOODSTOCK'97]{ACM Woodstock conference}{July 1997}{El
+%  Paso, Texas USA} 
+%\acmYear{1997}
+%\copyrightyear{2016}
+%
+%\acmPrice{15.00}
+
+\copyrightyear{2017} 
+\acmYear{2017} 
+\setcopyright{acmcopyright}
+\acmConference{SPAA '17}{July 24-26, 2017}{Washington DC, USA}\acmPrice{15.00}\acmDOI{10.1145/3087556.3087566}
+\acmISBN{978-1-4503-4593-4/17/07}
+
+
+%\copyrightyear{2017} 
+%\acmYear{2017} 
+%\setcopyright{acmcopyright}
+%\acmConference{SPAA'17}{}{July 24--26, 2017, Washington, DC, USA}
+%\acmPrice{15.00}
+%\acmDOI{http://dx.doi.org/10.1145/XXXXXXX.XXXXXXX}
+%\acmISBN{978-1-4503-4593-4/17/07} 
+%Authors, replace the red X's with your assigned DOI string. See pdf attached to ACM rightsreview confirmation email.
+
+\fancyhead{}
+\settopmatter{printacmref=false}
+
+
+
+
+\makeatletter\begin{document}
+
+%TFKNOTE: See if removing these two lines reduces bad breaks.
+%\belowdisplayshortskip=0pt
+%\belowdisplayskip=0pt
+
+
+
+\title{Optimal Reissue Policies for Reducing Tail Latency}
+
+
+%\numberofauthors{3}
+
+  %\streetaddress{32 Vassar Street}
+  %\city{Cambridge}
+  %\state{Massachusetts}
+  %\postcode{02139}
+
+\author{Tim Kaler}
+\affiliation{
+  \vspace{2.5ex}
+  \institution{MIT CSAIL}
+  %\streetaddress{32 Vassar Street}
+  %\city{Cambridge}
+  %\state{Massachusetts}
+  %\postcode{02139}
+}
+\email{tfk@mit.edu}
+
+\author{Yuxiong He}
+\affiliation{
+  \institution{Microsoft Research}
+  %\streetaddress{32 Vassar Street}
+  %\city{Cambridge}
+  %\state{Massachusetts}
+  %\postcode{02139}
+}
+\email{yuxhe@microsoft.com}
+
+\author{Sameh Elnikety}
+\affiliation{
+  \institution{Microsoft Research}
+  %\streetaddress{32 Vassar Street}
+  %\city{Cambridge}
+  %\state{Massachusetts}
+  %\postcode{02139}
+}
+\email{samehe@microsoft.com}
+
+
+% \author{%
+% Tim Kaler \hspace{2em}
+% Yuxiong He \hspace{2em}
+% Sameh Elnikety \\\hspace{2em}
+%     \url{tfk@mit.edu}\\
+%     \url{{yuxhe, samehe}@microsoft.com}\\
+%     MIT Computer Science and Artificial Intelligence Laboratory\\
+%     32 Vassar Street\\
+%     Cambridge, MA\ \ 02139
+% }
+%
+%\date{}
+
+% \conferenceinfo{SPAA'13,} {}
+% \CopyrightYear{2013}
+% \crdata{}
+%\clubpenalty=1000
+%\widowpenalty=1000
+
+%\punt{
+%\footnotenonumber{This work was supported in part by the National
+%  Science Foundation under Grants CNS-1017058, CCF-1162148, and
+%  CCF-1314547.  Tao B. Schardl is supported in part by an NSF Graduate
+%  Research Fellowship.}
+%}
+
+%\thispagestyle{empty}
+%\vspace*{-4ex}
+%\bigskip
+%\centerline{{\bf Keywords}: }
+
+%\category{}{}{}[]
+%\terms{}
+%\keywords{}
+%\end{titlepage}
+%\newpage
+
+% New command for autoformatting tables.
+% To disable, uncomment the line \renewcommand{\autotable}[1] {}
+%\newcommand{\autotable}[1] {\immediate\write18{./autogen.sh "#1" > autogen.tmp}\immediate\input{autogen.tmp}}
+
+%\newcommand{\autotableArg}[2] {\immediate\write18{./autogen.sh "#1" "#2" > autogen.tmp}\immediate\input{autogen.tmp}}
+%\ifuseautotable
+%\else
+%\renewcommand{\autotable}[1] {\input{figure_templates/bin/autogen-#1.tex}}
+%\renewcommand{\autotableArg}[2] {\input{figure_templates/bin/autogen-#1-#2.tex}}
+%\fi
+
+\newcounter{copnum}
+\newcommand{\thecop}{COP \arabic{copnum}}
+
+\newcommand{\Let}{\textbf{let} }
+
+\newcommand{\singleR}{\proc{SingleR}\xspace}
+\newcommand{\adaptiveSingleR}{\proc{AdaptiveSingleR}\xspace}
+\newcommand{\singleD}{\proc{SingleD}\xspace}
+\newcommand{\doubleR}{\proc{DoubleR}\xspace}
+\newcommand{\multipleR}{\proc{MultipleR}\xspace}
+
+\newcommand{\varQgeqDN}{Q_{X>d_n}\!\!\left[P_n \right]}
+\newcommand{\varQN}{Q\!\!\left[P_n \right]}
+
+\newcommand{\varDNPONE}{d_{n\hspace{-.25ex}{+}\hspace{-.25ex}1}}
+\newcommand{\varDNPTWO}{d_{n\hspace{-.25ex}{+}\hspace{-.25ex}2}}
+\newcommand{\prob}{\textrm{Pr}}
+
+
+% Alter some LaTeX defaults for better treatment of figures:
+    % See p.105 of "TeX Unbound" for suggested values.
+    % See pp. 199-200 of Lamport's "LaTeX" book for details.
+    %   General parameters, for ALL pages:
+    \renewcommand{\topfraction}{0.9}	% max fraction of floats at top
+    \renewcommand{\bottomfraction}{0.8}	% max fraction of floats at bottom
+    %   Parameters for TEXT pages (not float pages):
+    \setcounter{topnumber}{2}
+    \setcounter{bottomnumber}{2}
+    \setcounter{totalnumber}{4}     % 2 may work better
+    \setcounter{dbltopnumber}{2}    % for 2-column pages
+    \renewcommand{\dbltopfraction}{0.9}	% fit big float above 2-col. text
+    \renewcommand{\textfraction}{0.07}	% allow minimal text w. figs
+    %   Parameters for FLOAT pages (not text pages):
+    \renewcommand{\floatpagefraction}{0.7}	% require fuller float pages
+	% N.B.: floatpagefraction MUST be less than topfraction !!
+    \renewcommand{\dblfloatpagefraction}{0.7}	% require fuller float pages
+
+	% remember to use [htp] or [htpb] for placement
+
+
+\input{figures/scanserialvar.tex}
+
+%\input{abstract}
+%
+%\maketitle
+%
+%%\fontsize{10}{12}\selectfont
+%\input{intro}
+%
+%%\input{formulation}
+%%\input{deterministic}
+%\input{random}
+%\input{optimality}
+%
+%%\input{independent}
+%%\input{datadriven}
+%%\input{datadriven}
+%%\input{correlation}
+%%\input{aggregation}
+%\input{usingsingleR}
+%\input{simulation_figure_page}
+%\input{simulation_figure_page2}
+%\input{eval}
+%\input{sensitivity}
+%\input{system_figure_page}
+%\input{systemeval}
+%%\input{related}
+%\input{concl}
+
+%\input{appendix}
+
+
+%\bibliographystyle{abbrv}
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{allpapers}
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
+
+
+
+

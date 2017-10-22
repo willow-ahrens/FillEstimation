@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "util.h"
+#include <omp.h>
 
 /**
  *  \brief Given an \f$m\times n\f$ CSR matrix \f$A\f$,
@@ -51,131 +52,150 @@ static int EstimateBlockCounts(const size_t * ptr, const size_t * ind,
     size_t r, size_t B,
     double prob_examine, size_t * p_nnz_est, size_t * p_nb_est)
 {
-  /* block dimensions */
-  size_t M;
-
-  /* stores total number of non-zero blocks */
-  size_t num_nonzeros;
-
-  /* auxiliary storage: reused for each block-row */
-  size_t *block_count;	/* size N */
-  size_t I;		/* block-row iteration variable */
-
   assert(p_nnz_est != NULL);
   assert(p_nb_est != NULL);
 
-  M = m / r;		/* # of full block-rows */
+  memset(p_nb_est, 0, sizeof(size_t) * B);
 
   if (n == 0) {
     *p_nnz_est = 0;
-    memset(p_nb_est, 0, sizeof(size_t) * B);
     return 0;	/* Quick return */
   }
-  /*
-   * ---------------------------------------------------- Allocate
-   * temporary space.
-   */
 
-  assert(n >= 1);
-  block_count = malloc(sizeof(size_t) * B * n);
-  if (block_count == NULL) {
-    return -1;
+  double rands[m/r];
+
+  for(int i = 0; i < m/r; i++){
+    rands[i] = random_uniform();
   }
-  memset(block_count, 0, sizeof(size_t) * B * n);
 
-  /** Get the block count for block column size c, block column J. */
-  #define GET_BC(A, c, J) (A)[((c)-1)*n + (J)]
-  /** Increment the block count for block column size c, block column J. */
-  #define INC_BC(A, c, J) (A)[((c)-1)*n + (J)]++
-  /** Set the block count for block column size c, block column J, to zero. */
-  #define ZERO_BC(A, c, J) (A)[((c)-1)*n + (J)] = 0
+  #pragma omp parallel firstprivate(m, n, r, B, prob_examine)
+  {
+    size_t my_p_nb_est[B];
 
-  /*
-   * ---------------------------------------------------- Phase I:
-   * Count the number of new blocks to create.
-   */
-  memset(p_nb_est, 0, sizeof(size_t) * B);
-  num_nonzeros = 0;
-  for (I = 0; I < M; I++) {	/* loop over block rows */
-    size_t i;
-    size_t di;
-
-    double rand_val = random_uniform();
-
-    if (rand_val > prob_examine){
-      continue;	/* skip this block row */
-    }else{
-
-      /*
-       * Count the number of blocks within block-row I, and
-       * remember in 'block_count' which of the possible blocks
-       * have been 'visited' (i.e., contain at least 1 non-zero).
-       */
-      for (i = I * r, di = 0; di < r; di++, i++) {
-        size_t k;
-
+    /* block dimensions */
+    size_t M;
+  
+    /* stores total number of non-zero blocks */
+    size_t num_nonzeros;
+  
+    /* auxiliary storage: reused for each block-row */
+    size_t block_count[B * n];	/* size N */
+    for(size_t i = 0; i < B * n; i++){
+      block_count[i] = 0;
+    }
+    size_t I;		/* block-row iteration variable */
+  
+    M = m / r;		/* # of full block-rows */
+  
+    /*
+     * ---------------------------------------------------- Allocate
+     * temporary space.
+     */
+  
+  
+    /** Get the block count for block column size c, block column J. */
+    #define GET_BC(A, c, J) (A)[((c)-1)*n + (J)]
+    /** Increment the block count for block column size c, block column J. */
+    #define INC_BC(A, c, J) (A)[((c)-1)*n + (J)]++
+    /** Set the block count for block column size c, block column J, to zero. */
+    #define ZERO_BC(A, c, J) (A)[((c)-1)*n + (J)] = 0
+  
+    /*
+     * ---------------------------------------------------- Phase I:
+     * Count the number of new blocks to create.
+     */
+    
+    for(size_t i = 0; i < B; i++){
+      my_p_nb_est[i] = 0;
+    }
+    num_nonzeros = 0;
+    #pragma omp for schedule(dynamic)
+    for (I = 0; I < M; I++) {	/* loop over block rows */
+      size_t i;
+      size_t di;
+  
+      if (rands[I] > prob_examine){
+        continue;	/* skip this block row */
+      }else{
+  
         /*
-         * Invariant: block_count[J] == # of non-zeros
-         * encountered in rows I*r .. I*r+di that should be
-         * stored in column-block J (i.e., that have column
-         * indices J*c <= j < (J+1)*c).
+         * Count the number of blocks within block-row I, and
+         * remember in 'block_count' which of the possible blocks
+         * have been 'visited' (i.e., contain at least 1 non-zero).
          */
-
-        /*
-         * Count the number of additional logical blocks
-         * needed to store non-zeros in row i, and mark the
-         * blocks in block row I that have been visited.
-         */
-        for (k = ptr[i]; k < ptr[i + 1]; k++) {
-          size_t j = ind[k];	/* column index */
-          size_t c;
-
-          for (c = 1; c <= B; c++) {
-            size_t J = j / c;	/* block column index */
-
-            if (GET_BC(block_count, c, J) == 0) {
-              /* "create" (count) new block */
-              INC_BC(block_count, c, J);
-              p_nb_est[c - 1]++;
+        for (i = I * r, di = 0; di < r; di++, i++) {
+          size_t k;
+  
+          /*
+           * Invariant: block_count[J] == # of non-zeros
+           * encountered in rows I*r .. I*r+di that should be
+           * stored in column-block J (i.e., that have column
+           * indices J*c <= j < (J+1)*c).
+           */
+  
+          /*
+           * Count the number of additional logical blocks
+           * needed to store non-zeros in row i, and mark the
+           * blocks in block row I that have been visited.
+           */
+          for (k = ptr[i]; k < ptr[i + 1]; k++) {
+            size_t j = ind[k];	/* column index */
+            size_t c;
+  
+            for (c = 1; c <= B; c++) {
+              size_t J = j / c;	/* block column index */
+  
+              if (GET_BC(block_count, c, J) == 0) {
+                /* "create" (count) new block */
+                INC_BC(block_count, c, J);
+                my_p_nb_est[c - 1]++;
+              }
             }
           }
         }
       }
-    }
-    num_nonzeros += ptr[i] - ptr[I * r];
-
-    /* POST: num_nonzeros == total # of non-zeros examined so far */
-    /* POST: num_blocks == total # of new blocks in rows 0..i */
-    /*
-     * POST: block_count[c,J] == # of non-zeros in block J of
-     * block-row I
-     */
-
-    /*
-     * Reset block_count for next iteration, I+1. This second
-     * loop is needed to keep the complexity of phase I to
-     * O(nnz).
-     */
-    for (i = I * r, di = 0; di < r; di++, i++) {
-      size_t k;
-
-      for (k = ptr[i]; k < ptr[i + 1]; k++) {
-        size_t j = ind[k];	/* column index */
-        size_t c;
-
-        for (c = 1; c <= B; c++) {
-          size_t J = j / c;	/* block column index */
-          ZERO_BC(block_count, c, J);
+      num_nonzeros += ptr[i] - ptr[I * r];
+  
+      /* POST: num_nonzeros == total # of non-zeros examined so far */
+      /* POST: num_blocks == total # of new blocks in rows 0..i */
+      /*
+       * POST: block_count[c,J] == # of non-zeros in block J of
+       * block-row I
+       */
+  
+      /*
+       * Reset block_count for next iteration, I+1. This second
+       * loop is needed to keep the complexity of phase I to
+       * O(nnz).
+       */
+      for (i = I * r, di = 0; di < r; di++, i++) {
+        size_t k;
+  
+        for (k = ptr[i]; k < ptr[i + 1]; k++) {
+          size_t j = ind[k];	/* column index */
+          size_t c;
+  
+          for (c = 1; c <= B; c++) {
+            size_t J = j / c;	/* block column index */
+            ZERO_BC(block_count, c, J);
+          }
         }
       }
     }
+    /* POST: num_blocks == total # of blocks in examined rows. */
+    /* POST: num_nonzeros == total # of non-zeros in examined rows. */
+  
+  
+    {
+      #pragma omp atomic
+      *p_nnz_est += num_nonzeros;
+      for(int foo = 0; foo < B; foo++){
+        
+        #pragma omp atomic
+        p_nb_est[foo] += my_p_nb_est[foo];
+      }
+    }
   }
-  /* POST: num_blocks == total # of blocks in examined rows. */
-  /* POST: num_nonzeros == total # of non-zeros in examined rows. */
-
-  free(block_count);
-
-  *p_nnz_est = num_nonzeros;
   return 0;
 }
 

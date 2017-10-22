@@ -101,13 +101,18 @@ int estimate_fill (size_t m,
     }
   }
 
-  #pragma omp parallel private(s)
+
+  #pragma omp parallel firstprivate(s, T, m, n, nnz, B, epsilon, delta)
   {
-    int Z[W][W];
     double localfill[B * B];
 
-    #pragma omp for
+    for(int fill_index = 0; fill_index < B * B; fill_index++){
+      localfill[fill_index] = 0;
+    }
+
+    #pragma omp for schedule(static)
     for (size_t t = 0; t < s; t++) {
+      int Z[W][W];
       size_t i = samples_i[t];
       size_t j = samples_j[t];
 
@@ -163,7 +168,6 @@ int estimate_fill (size_t m,
     {
       for(int fill_index = 0; fill_index < B * B; fill_index++){
         fill[fill_index] += localfill[fill_index];
-        fill_index++;
       }
     }
   }

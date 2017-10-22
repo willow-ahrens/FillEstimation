@@ -62,7 +62,7 @@ static int EstimateBlockCounts(const size_t * ptr, const size_t * ind,
     return 0;	/* Quick return */
   }
 
-  double rands[m/r];
+  double *rands = malloc(sizeof(double) * (m/r));
 
   for(int i = 0; i < m/r; i++){
     rands[i] = random_uniform();
@@ -79,7 +79,10 @@ static int EstimateBlockCounts(const size_t * ptr, const size_t * ind,
     size_t num_nonzeros;
   
     /* auxiliary storage: reused for each block-row */
-    size_t block_count[B * n];	/* size N */
+    size_t *block_count = malloc(sizeof(size_t) * B * n);	/* size N */
+    if(block_count == NULL){
+	printf("FOOO\n");
+    }
     for(size_t i = 0; i < B * n; i++){
       block_count[i] = 0;
     }
@@ -195,7 +198,9 @@ static int EstimateBlockCounts(const size_t * ptr, const size_t * ind,
         p_nb_est[foo] += my_p_nb_est[foo];
       }
     }
+    free(block_count);
   }
+  free(rands);
   return 0;
 }
 

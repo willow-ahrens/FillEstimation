@@ -10,6 +10,9 @@ all: reference asx oski spmv
 clean:
 	rm -rf reference asx oski *.o *.dSYM *.trace *.pyc
 
+asx.o: asx.c
+	$(CC) -funroll-loops $(CFLAGS) -c $^   $(LDLIBS)
+
 reference: run_fill.o test_fill.o reference.o util.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 

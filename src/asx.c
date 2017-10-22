@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "util.h"
+#include <omp.h>
 
 char *name () {
   return "asx";
@@ -56,7 +57,6 @@ int estimate_fill (size_t m,
                    double *fill,
                    int verbose){
   size_t W = 2 * B;
-  int Z[W][W];
 
   double T = 2 * log(B/delta) * B * B / (epsilon * epsilon);
   size_t s;
@@ -101,57 +101,73 @@ int estimate_fill (size_t m,
     }
   }
 
-  for (size_t t = 0; t < s; t++) {
-    size_t i = samples_i[t];
-    size_t j = samples_j[t];
+  #pragma omp parallel private(s)
+  {
+    int Z[W][W];
+    double localfill[B * B];
 
-    //compute x for some i, j
-    for (int r = 0; r < W; r++) {
-      for (int c = 0; c < W; c++) {
-        Z[r][c] = 0;
+    #pragma omp for
+    for (size_t t = 0; t < s; t++) {
+      size_t i = samples_i[t];
+      size_t j = samples_j[t];
+
+      //compute x for some i, j
+      for (int r = 0; r < W; r++) {
+        for (int c = 0; c < W; c++) {
+          Z[r][c] = 0;
+        }
+      }
+
+      for (size_t ii = max(i, B - 1) - (B - 1); ii <= min(i + (B - 1), m - 1); ii++) {
+        int r = (B + ii) - i;
+        size_t jj;
+        size_t jj_min = max(j, B - 1) - (B - 1);
+        size_t jj_max = min(j + (B - 1), n - 1);
+
+        size_t scan = search(ind, ptr[ii], ptr[ii + 1], jj_min);
+
+        while (scan < ptr[ii + 1] && (jj = ind[scan]) <= jj_max) {
+          int c = (B + jj) - j;
+          Z[r][c] = 1;
+          scan++;
+        }
+      }
+
+      for (int r = 1; r < W; r++) {
+        for (int c = 1; c < W; c++) {
+          Z[r][c] += Z[r][c - 1];
+        }
+      }
+
+      for (int r = 1; r < W; r++) {
+        for (int c = 1; c < W; c++) {
+          Z[r][c] += Z[r - 1][c];
+        }
+      }
+
+      int fill_index = 0;
+      for (int b_r = 1; b_r <= B; b_r++) {
+        int r_hi = B + b_r - 1 - (i % b_r);
+        int r_lo = r_hi - b_r;
+        for (int b_c = 1; b_c <= B; b_c++) {
+          int c_hi = B + b_c - 1 - (j % b_c);
+          int c_lo = c_hi - b_c;
+          int y_0 = Z[r_hi][c_hi] - Z[r_lo][c_hi] - Z[r_hi][c_lo] + Z[r_lo][c_lo];
+          localfill[fill_index] += 1.0/y_0;
+          fill_index++;
+        }
       }
     }
 
-    for (size_t ii = max(i, B - 1) - (B - 1); ii <= min(i + (B - 1), m - 1); ii++) {
-      int r = (B + ii) - i;
-      size_t jj;
-      size_t jj_min = max(j, B - 1) - (B - 1);
-      size_t jj_max = min(j + (B - 1), n - 1);
-
-      size_t scan = search(ind, ptr[ii], ptr[ii + 1], jj_min);
-
-      while (scan < ptr[ii + 1] && (jj = ind[scan]) <= jj_max) {
-        int c = (B + jj) - j;
-        Z[r][c] = 1;
-        scan++;
-      }
-    }
-
-    for (int r = 1; r < W; r++) {
-      for (int c = 1; c < W; c++) {
-        Z[r][c] += Z[r][c - 1];
-      }
-    }
-
-    for (int r = 1; r < W; r++) {
-      for (int c = 1; c < W; c++) {
-        Z[r][c] += Z[r - 1][c];
-      }
-    }
-
-    int fill_index = 0;
-    for (int b_r = 1; b_r <= B; b_r++) {
-      int r_hi = B + b_r - 1 - (i % b_r);
-      int r_lo = r_hi - b_r;
-      for (int b_c = 1; b_c <= B; b_c++) {
-        int c_hi = B + b_c - 1 - (j % b_c);
-        int c_lo = c_hi - b_c;
-        int y_0 = Z[r_hi][c_hi] - Z[r_lo][c_hi] - Z[r_hi][c_lo] + Z[r_lo][c_lo];
-        fill[fill_index] += 1.0/y_0;
+    #pragma omp critical
+    {
+      for(int fill_index = 0; fill_index < B * B; fill_index++){
+        fill[fill_index] += localfill[fill_index];
         fill_index++;
       }
     }
   }
+    
 
   int fill_index = 0;
   for (int b_r = 1; b_r <= B; b_r++) {

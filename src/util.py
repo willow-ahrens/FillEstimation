@@ -45,11 +45,6 @@ def fill_estimates(name, matrices, B = 12, epsilon = 0.1, delta = 0.01, trials =
   for matrix in matrices:
     myenv = os.environ.copy()
     myenv["GSL_RNG_SEED"] = str(random.randrange(sys.maxint))
-    prefix = os.getenv("DATA_FILL_PREFIX") 
-    if prefix:
-      command = prefix.split(" ")
-    else:
-      command = []
     command = [os.path.join(os.path.dirname(os.path.realpath(__file__)), name)]
     command += ["-B", "%d" % B]
     command += ["-e", "%g" % epsilon]

@@ -18,6 +18,5 @@ source env.sh $HOME
 #export OMP_NUM_THREADS=12
 #export DATA_SPMV_PREFIX="numactl -N 1"
 #export TACO_TMPDIR=$HOME/taco/tmp$SLURM_ARRAY_TASK_ID
-#export DATA_FILL_PREFIX="numactl -N 1"
 
 python data_table.py $MATRIX $DATA lanka4 $SLURM_ARRAY_TASK_ID

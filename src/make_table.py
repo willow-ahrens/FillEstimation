@@ -25,6 +25,22 @@ def truncate(str_in):
 def better_helper(s):
     return better_prefix + s # + better_suffix
 
+def spmv_test(asx_str, oski_str):
+    if float(oski_str) > 1:
+        oski_return = '1.0*'
+        if float(asx_str) > 1:
+            asx_return = '1.0*'
+        else:
+            asx_return = better_helper(asx_str)
+    elif float(asx_str) > 1:
+        asx_return = '1.0*'
+        # oski guaranteed to be at most 1
+        oski_return = better_helper(oski_str)
+    else:
+        asx_return = asx_str
+        oski_return = oski_str
+    return asx_return, oski_return
+
 # lower is better
 def better_test(asx_str, oski_str):
     if float(oski_str) == float(asx_str):
@@ -83,7 +99,8 @@ if __name__ == "__main__":
             with open(os.path.join(in_dir1, spmv_prefix + stuff[0]), 'r') as spmvfile:
                 spmv = spmvfile.readline().strip()
                 parts = spmv.split(' ')
-                asx_spmv, oski_spmv = better_test(truncate(parts[1]), truncate(parts[3]))
+                asx_spmv, oski_spmv = spmv_test(truncate(parts[1]), truncate(parts[3]))
+                
                 out_line = out_line + blank + asx_spmv + sep + oski_spmv
 
             # directory 2
@@ -104,7 +121,7 @@ if __name__ == "__main__":
             with open(os.path.join(in_dir2, spmv_prefix + stuff[0]), 'r') as spmvfile:
                 spmv = spmvfile.readline().strip()
                 parts = spmv.split(' ')
-                asx_spmv, oski_spmv = better_test(truncate(parts[1]), truncate(parts[3]))
+                asx_spmv, oski_spmv = spmv_test(truncate(parts[1]), truncate(parts[3]))
                 out_line = out_line + blank + asx_spmv + sep + oski_spmv
 
             out.write(out_line +' \\\\ \n')

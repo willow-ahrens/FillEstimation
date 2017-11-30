@@ -1,0 +1,5 @@
+CC = gcc
+CXX = g++
+CFLAGS = -O3 -ffast-math -std=c99 `$(TOP)gsl/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I$(TOP)taco/include
+CXXFLAGS = -O3 -std=c++11 `$(TOP)gsl/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I$(TOP)taco/include
+LDLIBS = `$(TOP)gsl/bin/gsl-config --libs` `pkg-config --libs glib-2.0` -L$(TOP)taco/lib -ltaco -ldl

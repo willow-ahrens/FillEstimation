@@ -1,8 +1,13 @@
-CC = gcc
-CXX = g++
-CFLAGS = -O3 -ffast-math -std=c99 `../gsl/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include
-CXXFLAGS = -O3 -std=c++11 `../gsl/bin/gsl-config --cflags` `pkg-config --cflags glib-2.0` -I../taco/include -DDECIMAL_DIG=17
-LDLIBS = `../gsl/bin/gsl-config --libs` `pkg-config --libs glib-2.0` -L../taco/lib -ltaco -ldl
+CFLAGS +=
+CXXFLAGS += -DDECIMAL_DIG=17
+LDLIBS +=
+
+TOP = $(dir $(realpath $(firstword $(MAKEFILE_LIST))/..))
+ARCH = $(shell uname)
+ifeq ($(wildcard $(TOP)/src/Makefile.$(ARCH)),)
+    ARCH = default
+endif
+include $(TOP)/src/Makefile.$(ARCH)
 
 all: reference asx oski spmv
 clean:

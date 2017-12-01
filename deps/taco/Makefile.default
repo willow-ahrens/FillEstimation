@@ -1,0 +1,4 @@
+stamp:
+	mkdir -p $(TACO)build
+	(cd $(TACO)build; cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=$(TACO)build $(TACO)taco;  make -j; make install)
+	touch $(TACO)stamp

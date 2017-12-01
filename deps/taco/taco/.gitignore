@@ -1,0 +1,10 @@
+build/
+bin/
+lib/
+*.swp
+*Makefile
+*CMakeFiles/
+*cmake_install.cmake
+CMakeCache.txt
+
+apps/tensor_times_vector/tensor_times_vector

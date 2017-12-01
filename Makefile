@@ -1,6 +1,6 @@
 TOP = $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
-.PHONY: all deps src clean clean_deps clean_src
+.PHONY: all deps src clean clean_deps clean_src arch
 
 all: deps src
 
@@ -18,3 +18,5 @@ clean_deps:
 clean_src:
 	$(MAKE) -C $(TOP)src clean
 
+arch:
+	@uname

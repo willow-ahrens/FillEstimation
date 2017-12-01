@@ -2,7 +2,7 @@ CFLAGS +=
 CXXFLAGS += -DDECIMAL_DIG=17
 LDLIBS +=
 
-TOP = $(dir $(realpath $(firstword $(MAKEFILE_LIST))/..))
+TOP = $(realpath $(dir $(realpath $(firstword $(MAKEFILE_LIST))))..)
 ARCH = $(shell uname)
 ifeq ($(wildcard $(TOP)/src/Makefile.$(ARCH)),)
     ARCH = default

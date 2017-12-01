@@ -1,4 +1,5 @@
 TOP = $(dir $(realpath $(firstword $(MAKEFILE_LIST))/..))
+DEPS = $(TOP)deps/
 
 .PHONY: all gsl taco clean clean_gsl clean_taco
 
@@ -7,14 +8,14 @@ all: gsl taco
 clean: clean_gsl clean_taco
 
 gsl:
-	$(MAKE) -C $(TOP)gsl all
+	$(MAKE) -C $(DEPS)gsl all
 
 taco:
-	$(MAKE) -C $(TOP)taco all
+	$(MAKE) -C $(DEPS)taco all
 
 clean_gsl:
-	$(MAKE) -C $(TOP)gsl clean
+	$(MAKE) -C $(DEPS)gsl clean
 
 clean_taco:
-	$(MAKE) -C $(TOP)taco clean
+	$(MAKE) -C $(DEPS)taco clean
 

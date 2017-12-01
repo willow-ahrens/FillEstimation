@@ -1,15 +1,16 @@
 TOP = $(dir $(realpath $(firstword $(MAKEFILE_LIST))/../..))
 GSL=$(TOP)deps/gsl/
+ARCH = $(shell uname)
+ifeq ($(wildcard $(GSL)/Makefile.$(ARCH)),)
+    ARCH = default
+endif
 
-.PHONY: all gsl clean clean_gsl
+.PHONY: all clean
 
-all: gsl
+all: stamp
 
-gsl:
-	mkdir -p $(GSL)build
-	(cd gsl-2.4; ./configure --prefix=$(GSL)build; make -j; make install)
-
-clean: clean_gsl
+include $(GSL)/Makefile.$(ARCH)
 
 clean:
+	rm -f $(GSL)stamp
 	rm -rf $(GSL)build

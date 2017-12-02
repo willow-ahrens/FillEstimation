@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <gsl/gsl_spmatrix.h>
 #include "util.h"
 
 char *name () {
@@ -52,10 +53,11 @@ int estimate_fill (size_t m,
                    double delta,
                    double *fill,
                    int verbose){
-  hash_t *table = hash_create();
+  gsl_spmatrix *blocks = gsl_spmatrix_alloc_nzmax(m, n, nnz, GSL_SPMATRIX_TRIPLET);
   size_t fill_index = 0;
   for (size_t b_r = 1; b_r <= B; b_r++) {
     for (size_t b_c = 1; b_c <= B; b_c++) {
+      gsl_spmatrix_set_zero(blocks);
       size_t i = 0;
       size_t j = 0;
       size_t nnzb = 0;
@@ -64,18 +66,14 @@ int estimate_fill (size_t m,
           i++;
         }
         j = ind[t];
-        size_t block_i = i/b_r;
-        size_t block_j = j/b_c;
-        if (hash_get(table, block_i * n + block_j, 1)) {
-          hash_set(table, block_i * n + block_j, 0);
-          nnzb += 1;
-        }
+        size_t block_i = (i/b_r) + 1;
+        size_t block_j = (j/b_c) + 1;
+	gsl_spmatrix_set(blocks, block_i, block_j, 1.0);
       }
-      fill[fill_index] = b_r * b_c * nnzb / (double)nnz;
-      hash_clear(table);
+      fill[fill_index] = b_r * b_c * gsl_spmatrix_nnz(blocks) / (double)nnz;
       fill_index++;
     }
   }
-  hash_destroy(table);
+  gsl_spmatrix_free(blocks);
   return 0;
 }

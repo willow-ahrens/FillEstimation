@@ -1,8 +1,9 @@
-#include <glib.h>
 #include <gsl/gsl_rng.h>
 #include <stdlib.h>
 #include "util.h"
 
+/*
+#include <glib.h>
 hash_t *hash_create () {
   return (char*) g_hash_table_new(g_direct_hash, g_direct_equal);
 }
@@ -28,6 +29,18 @@ void hash_destroy (hash_t *table) {
   return g_hash_table_destroy((GHashTable*)table);
 }
 
+void random_choose (size_t *samples, size_t n, size_t lo, size_t hi) {
+  hash_t *table = hash_create();
+  for (size_t i = 0; i < n; i++) {
+    size_t j = random_range(lo, hi);
+    samples[i] = hash_get(table, j, j);
+    hash_set(table, j, hash_get(table, lo, lo));
+    lo++;
+  }
+  hash_destroy(table);
+}
+*/
+
 gsl_rng *r = 0;
 
 size_t random_range (size_t lo, size_t hi) {
@@ -47,17 +60,6 @@ double random_uniform () {
     r = gsl_rng_alloc (T);
   }
   return gsl_rng_uniform(r);
-}
-
-void random_choose (size_t *samples, size_t n, size_t lo, size_t hi) {
-  hash_t *table = hash_create();
-  for (size_t i = 0; i < n; i++) {
-    size_t j = random_range(lo, hi);
-    samples[i] = hash_get(table, j, j);
-    hash_set(table, j, hash_get(table, lo, lo));
-    lo++;
-  }
-  hash_destroy(table);
 }
 
 int size_t_cmp(const void *a, const void *b)

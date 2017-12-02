@@ -1,8 +1,10 @@
 stamp:
 	mkdir -p $(TACO)/build
+	mkdir -p $(TACO)/build/build
 	(export XTPE_LINK_TYPE=dynamic;\
 	export CRAYPE_LINK_TYPE=dynamic;\
-	cd $(TACO)/build;\
+	cd $(TACO)/build/build;\
 	cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=$(TACO)/build $(TACO)/taco;\
-	make -j)
+	make -j;\
+	make install)
 	touch $(TACO)/stamp

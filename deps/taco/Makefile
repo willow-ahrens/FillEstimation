@@ -2,9 +2,9 @@ TOP = $(realpath $(dir $(realpath $(firstword $(MAKEFILE_LIST))))../..)
 TACO=$(TOP)/deps/taco
 ARCH = $(shell uname)
 ifeq ($(wildcard $(TACO)/Makefile.$(ARCH)),)
-	MYARCH = default
+	MYARCH = Default
 else
-	MYARCH = ARCH
+	MYARCH = $(ARCH)
 endif
 
 .PHONY: all clean

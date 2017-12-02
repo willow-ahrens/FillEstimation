@@ -1,5 +1,0 @@
-stamp:
-	rm -rf $(GSL)/build
-	cp -r $(GSL)/gsl-2.4 $(GSL)/build
-	(cd $(GSL)/build; ./configure --prefix=$(GSL)/build; make -j; make install)
-	touch $(GSL)/stamp

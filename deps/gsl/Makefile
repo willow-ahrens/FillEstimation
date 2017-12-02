@@ -2,9 +2,9 @@ TOP = $(realpath $(dir $(realpath $(firstword $(MAKEFILE_LIST))))../..)
 GSL=$(TOP)/deps/gsl
 ARCH = $(shell uname)
 ifeq ($(wildcard $(GSL)/Makefile.$(ARCH)),)
-	MYARCH = default
+	MYARCH = Default
 else
-	MYARCH = ARCH
+	MYARCH = $(ARCH)
 endif
 
 .PHONY: all clean

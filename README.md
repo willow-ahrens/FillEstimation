@@ -11,7 +11,7 @@ this software that we have used in the deps/ folder, and linked them into our
 build system. Each subdirectory of deps/ contains a different software
 dependency and associated Makefile. If you would like to provide custom build
 instructions for some dependency $DEP, create and modify a copy of
-deps/$DEP/Makefile.default named deps/$DEP/Makefile.$ARCH where $ARCH is the
+deps/$DEP/Makefile.Default named deps/$DEP/Makefile.$ARCH where $ARCH is the
 name of your current architecture (The default value of $ARCH can be queried by
 typing make arch at the top level directory of this project) or a custom name
 you have given your machine (you can specify the value of the $ARCH variable

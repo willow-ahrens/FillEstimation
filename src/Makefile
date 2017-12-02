@@ -5,9 +5,11 @@ LDLIBS +=
 TOP = $(realpath $(dir $(realpath $(firstword $(MAKEFILE_LIST))))..)
 ARCH = $(shell uname)
 ifeq ($(wildcard $(TOP)/src/Makefile.$(ARCH)),)
-    ARCH = default
+	MYARCH = default
+else
+	MYARCH = ARCH
 endif
-include $(TOP)/src/Makefile.$(ARCH)
+include $(TOP)/src/Makefile.$(MYARCH)
 
 all: reference asx oski spmv
 clean:

@@ -2,14 +2,16 @@ TOP = $(realpath $(dir $(realpath $(firstword $(MAKEFILE_LIST))))../..)
 TACO=$(TOP)/deps/taco
 ARCH = $(shell uname)
 ifeq ($(wildcard $(TACO)/Makefile.$(ARCH)),)
-    ARCH = default
+	MYARCH = default
+else
+	MYARCH = ARCH
 endif
 
 .PHONY: all clean
 
 all: stamp
 
-include $(TACO)/Makefile.$(ARCH)
+include $(TACO)/Makefile.$(MYARCH)
 
 clean:
 	rm -f $(TACO)/stamp

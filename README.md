@@ -9,11 +9,13 @@ deps/:
 To make our results more replicable, we have included the exact versions of
 this software that we have used in the deps/ folder, and linked them into our
 build system. Each subdirectory of deps/ contains a different software
-dependency and associated Makefile. If you would like to provide custom
-build instructions for some dependency $DEP, create and modify a copy of
+dependency and associated Makefile. If you would like to provide custom build
+instructions for some dependency $DEP, create and modify a copy of
 deps/$DEP/Makefile.default named deps/$DEP/Makefile.$ARCH where $ARCH is the
-name of your current architecture ($ARCH can be queried by typing make arch
-at the top level directory of this project).
+name of your current architecture (The default value of $ARCH can be queried by
+typing make arch at the top level directory of this project) or a custom name
+you have given your machine (you can specify the value of the $ARCH variable
+by invoking make as `make ARCH=$ARCH`).
 
 Code, testing framework, and data generation can all be found in src/
 

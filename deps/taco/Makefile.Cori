@@ -1,0 +1,6 @@
+stamp:
+	mkdir -p $(TACO)/build
+	export XTPE_LINK_TYPE=dynamic
+	export CRAYPE_LINK_TYPE=dynamic
+	(cd $(TACO)/build; cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX=$(TACO)/build $(TACO)/taco;  make -j; make install)
+	touch $(TACO)/stamp

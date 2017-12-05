@@ -17,26 +17,26 @@ matrix = scipy.sparse.coo_matrix((V, (I,J)), dtype=numpy.float64)
 matrix = scipy.sparse.csr_matrix(matrix)
 scipy.io.mmwrite("pathological_oski.mtx", matrix)
 
-asx_size = 1000
-asx_entries = 500
-asx_block = 12
-indices = [i * asx_size + j for (i, j) in itertools.product(range(asx_size), range(asx_size))]
-indices = numpy.random.choice(indices, size=2 * asx_entries, replace=False)
+phil_size = 1000
+phil_entries = 500
+phil_block = 12
+indices = [i * phil_size + j for (i, j) in itertools.product(range(phil_size), range(phil_size))]
+indices = numpy.random.choice(indices, size=2 * phil_entries, replace=False)
 I = []
 J = []
-for k in indices[0:asx_entries]:
-  I.append((k / asx_size) * asx_block)
-  J.append((k % asx_size) * asx_block)
+for k in indices[0:phil_entries]:
+  I.append((k / phil_size) * phil_block)
+  J.append((k % phil_size) * phil_block)
 
-for k in indices[asx_entries: -1]:
-  i = (k / asx_size) * asx_block
-  j = (k % asx_size) * asx_block
-  for ii in range(i, i + asx_block):
-    for jj in range(j, j + asx_block):
+for k in indices[phil_entries: -1]:
+  i = (k / phil_size) * phil_block
+  j = (k % phil_size) * phil_block
+  for ii in range(i, i + phil_block):
+    for jj in range(j, j + phil_block):
       I.append(ii)
       J.append(jj)
 
 V = [1.0 for _ in I]
 matrix = scipy.sparse.coo_matrix((V, (I, J)), dtype=numpy.float64)
 matrix = scipy.sparse.csr_matrix(matrix)
-scipy.io.mmwrite("pathological_asx.mtx", matrix)
+scipy.io.mmwrite("pathological_phil.mtx", matrix)

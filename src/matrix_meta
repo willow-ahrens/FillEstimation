@@ -1,8 +1,8 @@
 parabolic_fem_conv Computational_Fluid_Dynamics 2.1 73
 cfd2_conv Computational_Fluid_Dynamics 1.6 54
-3dtube_conv Computational_Fluid_Dynamics 3.2 53 
+3dtube_conv Computational_Fluid_Dynamics 3.2 53
 Hamrle3_conv Circuit_Simulation 5.5 194
-G3_circuit_conv Circuit_Simulation 4.6 165 
+G3_circuit_conv Circuit_Simulation 4.6 165
 ASIC_680k_conv Circuit_Simulation 3.8 134
 rajat24_conv Circuit_Simulation 1.9 68
 cage13_conv Graph 7.5 255
@@ -28,5 +28,5 @@ nd24k_conv Other 14 469
 Ga41As41H72_conv Other 9.4 321
 thermal2_conv Other 4.9 173
 stomach_conv Other 3.0 103
-pathological_asx Synthetic .07 2.3
+pathological_phil Synthetic .07 2.3
 pathological_oski Synthetic .7 2.0

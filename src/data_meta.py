@@ -6,8 +6,8 @@ import sys
 trials = 100
 if sys.argv[3] == "lanka12":
   B = 12
-  methods = [{"name":"asx",
-             "label":"ASX",
+  methods = [{"name":"phil",
+             "label":"PHIL",
              "color":"red",
              "point":{"epsilon":0.5, "delta":0.01},
              },
@@ -19,8 +19,8 @@ if sys.argv[3] == "lanka12":
 
 if sys.argv[3] == "lanka4":
   B = 4
-  methods = [{"name":"asx",
-             "label":"ASX",
+  methods = [{"name":"phil",
+             "label":"PHIL",
              "color":"red",
              "point":{"epsilon":0.1, "delta":0.01},
              },
@@ -85,7 +85,7 @@ matrices = [{"name": "cfd2_conv"},
             {"name": "3dtube_conv"},
             {"name": "gupta1_conv"},
             {"name": "ct20stif"},
-            {"name": "pathological_asx"},
+            {"name": "pathological_phil"},
             {"name": "pathological_oski"}
             ]
 '''
@@ -94,7 +94,7 @@ matrices = [{"name": "cfd2_conv"},
 matrices = [ {"name": "3dtube_conv"},
             {"name": "gupta1_conv"},
             {"name": "ct20stif"},
-            {"name": "pathological_asx"},
+            {"name": "pathological_phil"},
             {"name": "pathological_oski"}
             ]
 '''

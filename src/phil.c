@@ -4,7 +4,7 @@
 #include "util.h"
 
 char *name () {
-  return "asx";
+  return "phil";
 }
 
 #define REPLACEMENT

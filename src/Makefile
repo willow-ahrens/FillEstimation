@@ -14,14 +14,14 @@ CFLAGS += -std=c99 `$(GSL)/bin/gsl-config --cflags` -I$(TACO)/include
 CXXFLAGS += -std=c++11 `$(GSL)/bin/gsl-config --cflags` -I$(TACO)/include -DDECIMAL_DIG=17
 LDLIBS += `$(GSL)/bin/gsl-config --libs` -L$(TACO)/lib -ltaco -ldl
 
-all: reference asx oski spmv
+all: reference phil oski spmv
 clean:
-	rm -rf reference asx oski *.o *.dSYM *.trace *.pyc
+	rm -rf reference phil oski spmv *.o *.dSYM *.trace *.pyc
 
 reference: run_fill.o test_fill.o reference.o util.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
-asx: run_fill.o test_fill.o asx.o util.o
+phil: run_fill.o test_fill.o phil.o util.o
 	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
 oski: run_fill.o test_fill.o oski.o util.o

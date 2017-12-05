@@ -12,10 +12,10 @@ def exprange(a, b, n):
   return [a * r**i for i in range(n)]
 
 n = 10
-asx_delta = 0.01
+phil_delta = 0.01
 
-methods = [{"name":"asx",
-            "label":"ASX",
+methods = [{"name":"phil",
+            "label":"PHIL",
             "color":"red",
             "bound" : lambda point : point["epsilon"],
             "bound_color": "green"
@@ -26,32 +26,32 @@ methods = [{"name":"asx",
 
 matrices = [{"name": "3dtube_conv",
              "label": "3dtube",
-             "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(7, 0.2, n)]},
+             "phil": {"points": [{"epsilon":e, "delta":phil_delta} for e in exprange(7, 0.2, n)]},
              "oski": {"points": [{"delta":d} for d in exprange(0.001, 0.06, n)]},
              "ymax": 0.5
             },
             {"name": "gupta1_conv",
              "label": "gupta1",
-             "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(7, 0.2, n)]},
+             "phil": {"points": [{"epsilon":e, "delta":phil_delta} for e in exprange(7, 0.2, n)]},
              "oski": {"points": [{"delta":d} for d in exprange(0.001, 0.06, n)]},
              "ymax": 0.5
             },
             {"name": "ct20stif",
              "label": "ct20stif",
-             "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(7, 0.2, n)]},
+             "phil": {"points": [{"epsilon":e, "delta":phil_delta} for e in exprange(7, 0.2, n)]},
              "oski": {"points": [{"delta":d} for d in exprange(0.001, 0.06, n)]},
              "ymax": 0.5
             },
-            {"name": "pathological_asx",
-             "label": "pathological_ASX",
-             "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(2, 0.07, n)], "bound":True},
+            {"name": "pathological_phil",
+             "label": "pathological_PHIL",
+             "phil": {"points": [{"epsilon":e, "delta":phil_delta} for e in exprange(2, 0.07, n)], "bound":True},
              "oski": {"points": [{"delta":d} for d in exprange(0.1, 1.0, n)]},
              "ymax": 0.5,
              "xmaxmax": True
             },
             {"name": "pathological_oski",
              "label": "pathological_OSKI",
-             "asx": {"points": [{"epsilon":e, "delta":asx_delta} for e in exprange(2, 0.07, n)], "bound":True},
+             "phil": {"points": [{"epsilon":e, "delta":phil_delta} for e in exprange(2, 0.07, n)], "bound":True},
              "oski": {"points": [{"delta":d} for d in exprange(0.1, 1.0, n)]},
              "ymax": 4,
              "xmaxmax": True

@@ -6,7 +6,7 @@ from sys import argv
 from data_meta import *
 
 n = 10
-asx_delta = 0.01
+phil_delta = 0.01
 
 # python data_table.py [matrixdir] [outputdir] [architecture] [matrix_id]
 matrix_id = argv[4]
@@ -16,7 +16,7 @@ matrix_name = matrices[int(matrix_id)]["name"]
 # load machine performance profile
 perf_matrix = np.load(os.path.join(profile_dir, "profile.npy"))
 
-oski_time = asx_time = oski_err = asx_err = oski_err_std =asx_err_std = oski_spmv = asx_spmv = oski_spmv_std = asx_spmv_std = 0
+oski_time = phil_time = oski_err = phil_err = oski_err_std =phil_err_std = oski_spmv = phil_spmv = oski_spmv_std = phil_spmv_std = 0
 
 # make sure all the input files exist
 reffile = os.path.join(ref_dir, matrix_name + '.npy')
@@ -61,37 +61,37 @@ for method in methods:
         oski_spmv = np.mean(spmv_times)
         oski_spmv_std = np.std(spmv_times)
     else:
-        # update all asx lists
+        # update all phil lists
         # normalized time to estimate
-        asx_time = results[0]["time_mean"] / base_time
+        phil_time = results[0]["time_mean"] / base_time
         # error and std
-        asx_err = np.mean(results[0]["errors"])
-        asx_err_std = np.std(results[0]["errors"])
+        phil_err = np.mean(results[0]["errors"])
+        phil_err_std = np.std(results[0]["errors"])
 
         # spmv and std
-        asx_spmv = np.mean(spmv_times)
-        asx_spmv_std = np.std(spmv_times)
+        phil_spmv = np.mean(spmv_times)
+        phil_spmv_std = np.std(spmv_times)
        
 # outputfiles
 # in the format 
 # for spmv times and 
-# matrix_name asx_val asx_std oski_val oski_std
+# matrix_name phil_val phil_std oski_val oski_std
 
 # for runtime, we just have val
-# matrix_name asx_val 
+# matrix_name phil_val 
 # files (normalized time to estimate, error, normalized spmv time) in the form 
-# matrix_id asx oski
+# matrix_id phil oski
 
 time_path = os.path.join(table_dir, out_times_prefix + '_' + matrix_name)
 err_path = os.path.join(table_dir, out_err_prefix + '_' + matrix_name)
 spmv_path = os.path.join(table_dir, out_spmv_prefix + '_' + matrix_name)
 
 with open(time_path, 'w') as time_out:
-    time_out.write(matrix_name + ' ' + str(asx_time) + ' ' + str(oski_time) + '\n')
+    time_out.write(matrix_name + ' ' + str(phil_time) + ' ' + str(oski_time) + '\n')
 
 with open(err_path, 'w') as err_out:
-    err_out.write(matrix_name + ' ' + str(asx_err) + ' ' + str(asx_err_std) + ' ' + str(oski_err) + ' ' + str(oski_err_std) + '\n')
+    err_out.write(matrix_name + ' ' + str(phil_err) + ' ' + str(phil_err_std) + ' ' + str(oski_err) + ' ' + str(oski_err_std) + '\n')
 
 with open(spmv_path, 'w') as spmv_out:
-    spmv_out.write(matrix_name + ' ' + str(asx_spmv) + ' ' + str(asx_spmv_std) + ' ' + str(oski_spmv) + ' ' + str(oski_spmv_std) + '\n')
+    spmv_out.write(matrix_name + ' ' + str(phil_spmv) + ' ' + str(phil_spmv_std) + ' ' + str(oski_spmv) + ' ' + str(oski_spmv_std) + '\n')
 

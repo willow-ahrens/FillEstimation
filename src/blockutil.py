@@ -14,7 +14,7 @@ import time
 import scipy.io
 
 oski_prefix = 'oski_'
-asx_prefix = 'asx_'
+phil_prefix = 'phil_'
 ref_prefix = 'ref_'
 
 base_path = argv[1]

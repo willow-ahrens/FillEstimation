@@ -54,16 +54,15 @@ int estimate_fill (size_t m,
                    double delta,
                    double *fill,
                    int verbose){
-  int r;
   size_t *nb_est;
   int err;
-  int j = 0;
+  int fill_index = 0;
 
   nb_est = malloc(sizeof(size_t) * B);
   if (nb_est == NULL)
     return -1;
 
-  for (r = 1; r <= B; r++) {
+  for (int r = 1; r <= B; r++) {
     int c;
 
     memset(nb_est, 0, sizeof(size_t) * B);
@@ -193,13 +192,11 @@ int estimate_fill (size_t m,
     }
     for (c = 1; c <= B; c++) {
       size_t nb_nnz = nb_est[c - 1] * r * c;
-      double ratio;
       if (!S)
-        ratio = nb_nnz ? (1.0 / 0.0) : 1.0;
+        fill[fill_index] = nb_nnz ? (1.0 / 0.0) : 1.0;
       else
-        ratio = (double)nb_nnz / S;
-      fill[j] = ratio;
-      j++;
+        fill[fill_index] = (double)nb_nnz / S;
+      fill_index++;
     }
   }
 

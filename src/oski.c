@@ -58,13 +58,15 @@ int estimate_fill (size_t m,
   assert(m >= 1);
 
   /* blocks + (c - 1) * n stores previously seen column block indicies in the
-    current block row when b_c = c */
+   * current block row when b_c = c.
+   */
   int *blocks = (int*)malloc(sizeof(int) * B * n);
   assert(blocks != NULL);
   memset(blocks, 0, sizeof(int) * B * n);
 
   /* K[(c - 1)] counts distinct column block indicies in the current block row
-    when b_c = c */
+   * when b_c = c.
+   */
   size_t K[B];
 
   /* see above note about fill order */
@@ -82,33 +84,27 @@ int estimate_fill (size_t m,
       K[c - 1] = 0;
     }
 
-    for (size_t I = 0; I < M; I++) { /* loop over block rows */
-      size_t i;
-      size_t di;
+    /* loop over block rows */
+    for (size_t I = 0; I < M; I++) {
 
+      /* examine the block row with probability delta */
       if (random_uniform() > delta){
-        continue;  /* skip this block row */
+        continue;
       }else{
 
-        /*
-         * Count the number of blocks within block-row I, and
-         * remember in 'block_count' which of the possible blocks
-         * have been 'visited' (i.e., contain at least 1 non-zero).
+        /* Count the blocks in block row I, using "blocks" to remember the
+         * blocks that have been seen so far for each block column width "c".
          */
-        for (i = I * r, di = 0; di < r; di++, i++) {
-          /*
-           * Count the number of additional logical blocks
-           * needed to store non-zeros in row i, and mark the
-           * blocks in block row I that have been visited.
-           */
+        for (size_t i = I * r; i < (I + 1) * r; i++) {
           for (size_t t = ptr[i]; t < ptr[i + 1]; t++) {
-            size_t j = ind[t];  /* column index */
+            size_t j = ind[t];
 
             for (int c = 1; c <= B; c++) {
-              size_t J = j / c;  /* block column index */
+              /* "J" is the block column index */
+              size_t J = j / c;
 
+              /* if the block has not yet been seen, count it */
               if (blocks[(c - 1) * n + J] == 0) {
-                /* "create" (count) new block */
                 blocks[(c - 1) * n + J] = 1;
                 K[c - 1]++;
               }
@@ -116,35 +112,29 @@ int estimate_fill (size_t m,
           }
         }
       }
-      S += ptr[i] - ptr[I * r];
-
-      /* POST: S == total # of non-zeros examined so far */
-      /* POST: K == total # of new blocks in rows 0..i */
-      /*
-       * POST: block_count[c,J] == # of non-zeros in block J of
-       * block-row I
-       */
+      S += ptr[(I + 1) * r] - ptr[I * r];
 
       /*
-       * Reset block_count for next iteration, I+1. This second
-       * loop is needed to keep the complexity of phase I to
-       * O(nnz).
+       * Reset "blocks" for the next block row. We loop over the nonzeros
+       * instead of calling "memset" in order to keep the complexity to O(nnz).
        */
-      for (i = I * r, di = 0; di < r; di++, i++) {
-
+      for (size_t i = I * r; i < (I + 1) * r; i++) {
         for (size_t t = ptr[i]; t < ptr[i + 1]; t++) {
-          size_t j = ind[t];  /* column index */
+          size_t j = ind[t];
 
           for (int c = 1; c <= B; c++) {
-            size_t J = j / c;  /* block column index */
+            /* "J" is the block column index */
+            size_t J = j / c;
             blocks[(c - 1) * n + J] = 0;
           }
         }
       }
     }
-    /* POST: num_blocks == total # of blocks in examined rows. */
-    /* POST: S == total # of non-zeros in examined rows. */
 
+    /*
+     * Compute the fill from the number of blocks and nonzeros that have been
+     * seen in the sample.
+     */
     for (int c = 1; c <= B; c++) {
       if (!S)
         fill[fill_index] = K[c - 1] ? (1.0 / 0.0) : 1.0;

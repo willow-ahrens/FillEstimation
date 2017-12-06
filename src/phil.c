@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,6 +56,8 @@ int estimate_fill (size_t m,
                    double delta,
                    double *fill,
                    int verbose){
+  assert(n >= 1);
+  assert(m >= 1);
   size_t W = 2 * B;
   int Z[W][W];
 
@@ -71,8 +74,11 @@ int estimate_fill (size_t m,
 
   //Sample s items
   size_t *samples = (size_t*)malloc(s*sizeof(size_t));
+  assert(samples != NULL);
   size_t *samples_i = (size_t*)malloc(s*sizeof(size_t));
+  assert(samples_i != NULL);
   size_t *samples_j = (size_t*)malloc(s*sizeof(size_t));
+  assert(samples_j != NULL);
 
 #ifdef REPLACEMENT
   if (s == nnz) {

@@ -54,67 +54,40 @@ int estimate_fill (size_t m,
                    double delta,
                    double *fill,
                    int verbose){
-  size_t *nb_est;
-  int err;
+  assert(n >= 1);
+  assert(m >= 1);
+
+  /* blocks + (c - 1) * n stores previously seen column block indicies in the
+    current block row when b_c = c */
+  int *blocks = (int*)malloc(sizeof(int) * B * n);
+  assert(blocks != NULL);
+  memset(blocks, 0, sizeof(int) * B * n);
+
+  /* K[(c - 1)] counts distinct column block indicies in the current block row
+    when b_c = c */
+  size_t K[B];
+
+  /* see above note about fill order */
   int fill_index = 0;
 
-  nb_est = malloc(sizeof(size_t) * B);
-  if (nb_est == NULL)
-    return -1;
-
   for (int r = 1; r <= B; r++) {
-    int c;
 
-    memset(nb_est, 0, sizeof(size_t) * B);
+    /* M is the number of block rows */
+    size_t M = m / r;
 
-    /* block dimensions */
-    size_t M;
-
-    /* stores total number of non-zero blocks */
+    /* stores the number of examined nonzeros */
     size_t S = 0;
 
-    /* auxiliary storage: reused for each block-row */
-    size_t *block_count;	/* size N */
-    size_t I;		/* block-row iteration variable */
-
-
-    M = m / r;		/* # of full block-rows */
-
-    if (n == 0) {
-      S = 0;
-      break;	/* Quick return */
+    for (int c = 1; c <= B; c++){
+      K[c - 1] = 0;
     }
-    /*
-     * ---------------------------------------------------- Allocate
-     * temporary space.
-     */
 
-    assert(n >= 1);
-    block_count = malloc(sizeof(size_t) * B * n);
-    if (block_count == NULL) {
-      return -1;
-    }
-    memset(block_count, 0, sizeof(size_t) * B * n);
-
-    /** Get the block count for block column size c, block column J. */
-    #define GET_BC(A, c, J) (A)[((c)-1)*n + (J)]
-    /** Increment the block count for block column size c, block column J. */
-    #define INC_BC(A, c, J) (A)[((c)-1)*n + (J)]++
-    /** Set the block count for block column size c, block column J, to zero. */
-    #define ZERO_BC(A, c, J) (A)[((c)-1)*n + (J)] = 0
-
-    /*
-     * ---------------------------------------------------- Phase I:
-     * Count the number of new blocks to create.
-     */
-    memset(nb_est, 0, sizeof(size_t) * B);
-    S = 0;
-    for (I = 0; I < M; I++) {	/* loop over block rows */
+    for (size_t I = 0; I < M; I++) { /* loop over block rows */
       size_t i;
       size_t di;
 
       if (random_uniform() > delta){
-        continue;	/* skip this block row */
+        continue;  /* skip this block row */
       }else{
 
         /*
@@ -123,31 +96,21 @@ int estimate_fill (size_t m,
          * have been 'visited' (i.e., contain at least 1 non-zero).
          */
         for (i = I * r, di = 0; di < r; di++, i++) {
-          size_t k;
-
-          /*
-           * Invariant: block_count[J] == # of non-zeros
-           * encountered in rows I*r .. I*r+di that should be
-           * stored in column-block J (i.e., that have column
-           * indices J*c <= j < (J+1)*c).
-           */
-
           /*
            * Count the number of additional logical blocks
            * needed to store non-zeros in row i, and mark the
            * blocks in block row I that have been visited.
            */
-          for (k = ptr[i]; k < ptr[i + 1]; k++) {
-            size_t j = ind[k];	/* column index */
-            size_t c;
+          for (size_t t = ptr[i]; t < ptr[i + 1]; t++) {
+            size_t j = ind[t];  /* column index */
 
-            for (c = 1; c <= B; c++) {
-              size_t J = j / c;	/* block column index */
+            for (int c = 1; c <= B; c++) {
+              size_t J = j / c;  /* block column index */
 
-              if (GET_BC(block_count, c, J) == 0) {
+              if (blocks[(c - 1) * n + J] == 0) {
                 /* "create" (count) new block */
-                INC_BC(block_count, c, J);
-                nb_est[c - 1]++;
+                blocks[(c - 1) * n + J] = 1;
+                K[c - 1]++;
               }
             }
           }
@@ -156,7 +119,7 @@ int estimate_fill (size_t m,
       S += ptr[i] - ptr[I * r];
 
       /* POST: S == total # of non-zeros examined so far */
-      /* POST: num_blocks == total # of new blocks in rows 0..i */
+      /* POST: K == total # of new blocks in rows 0..i */
       /*
        * POST: block_count[c,J] == # of non-zeros in block J of
        * block-row I
@@ -168,15 +131,13 @@ int estimate_fill (size_t m,
        * O(nnz).
        */
       for (i = I * r, di = 0; di < r; di++, i++) {
-        size_t k;
 
-        for (k = ptr[i]; k < ptr[i + 1]; k++) {
-          size_t j = ind[k];	/* column index */
-          size_t c;
+        for (size_t t = ptr[i]; t < ptr[i + 1]; t++) {
+          size_t j = ind[t];  /* column index */
 
-          for (c = 1; c <= B; c++) {
-            size_t J = j / c;	/* block column index */
-            ZERO_BC(block_count, c, J);
+          for (int c = 1; c <= B; c++) {
+            size_t J = j / c;  /* block column index */
+            blocks[(c - 1) * n + J] = 0;
           }
         }
       }
@@ -184,22 +145,15 @@ int estimate_fill (size_t m,
     /* POST: num_blocks == total # of blocks in examined rows. */
     /* POST: S == total # of non-zeros in examined rows. */
 
-    free(block_count);
-
-    if (err) {
-      free(nb_est);
-      return err;
-    }
-    for (c = 1; c <= B; c++) {
-      size_t nb_nnz = nb_est[c - 1] * r * c;
+    for (int c = 1; c <= B; c++) {
       if (!S)
-        fill[fill_index] = nb_nnz ? (1.0 / 0.0) : 1.0;
+        fill[fill_index] = K[c - 1] ? (1.0 / 0.0) : 1.0;
       else
-        fill[fill_index] = (double)nb_nnz / S;
+        fill[fill_index] = ((double)K[c - 1] * r * c) / S;
       fill_index++;
     }
   }
 
-  free(nb_est);
+  free(blocks);
   return 0;
 }

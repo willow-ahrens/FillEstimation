@@ -13,6 +13,7 @@ src = os.path.join(top, "src")
 experiment = {
   "data_path" = os.path.join(top, "data"),
   "matrix_path" = os.path.join(top, "data/matrix"),
+  "machine_path" = os.path.join(src, "default_machine.py"),
   "matrix_registry_path" = os.path.join(top, "data/matrix/registry.json"),
   "run_path" = os.path.join(top, "run"),
   "fill_prefix" = "",
@@ -59,13 +60,17 @@ def read_matrix_entry(matrix):
   return entry
 
 def parse(parser):
+  global verbose
   parser.add_argument("-e", "--experiment", help="an experiment parameters file (default = {0})".format(os.path.join(top, "src/default_experiment.py")), type=str, default = os.path.join(top, "src/default_experiment.py"))
   parser.add_argument("-v", "--verbose", help="increase verbosity", action="store_true")
   args = parser.parse_args()
+
+  verbose = experiment["verbose"] and args.verbose
+
   experiment.update(read_params(args.experiment))
 
-  if "machine" in experiment:
-    experiment.update(read_params(experiment["machine"]))
+  if "machine_path" in experiment:
+    experiment.update(read_params(experiment["machine_path"]))
 
   try
     try

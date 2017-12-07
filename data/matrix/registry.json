@@ -1,0 +1,8 @@
+{
+  "3dtube_conv" : {"name" : "3dtube"},
+  "ct20stif" : {"name" : "ct20stif"},
+  "dense" : {"name" : "dense"},
+  "gupta1_conv" : {"name" : "gupta1"},
+  "pathological_phil" : {"name" : "pathological_phil"},
+  "pathological_oski" : {"name" : "pathological_oski"}
+}

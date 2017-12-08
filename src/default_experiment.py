@@ -17,5 +17,6 @@
   "profile_m" : 1000,
   "profile_n" : 1000,
   "profile_trials" : 1000,
-  "verbose" : False
+  "verbose" : False,
+  "table_matrices" : ["3dtube_conv", "gupta1_conv"]
 }

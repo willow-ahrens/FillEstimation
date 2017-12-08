@@ -312,7 +312,7 @@ def fill_estimates(name, matrix, B = None, epsilon = None, delta = None, sigma =
     raise(e)
 
   if errors:
-    reference = get_reference(B = B)["errors"]
+    reference = get_reference(matrix, B = B)
     parsed["errors"] = [np.abs(result - reference) / reference for result in parsed["results"]]
     parsed["max_errors"] = [max(error) for error in parsed["errors"]]
 
@@ -333,9 +333,9 @@ def get_reference(matrix, B = None):
   make_path(experiment["reference"])
   path = os.path.join(experiment["reference"], "{0}_reference_{1}.npy".format(matrix, B))
   if not os.path.isfile(path):
-    numpy.save(path, fill_estimates("reference", matrix_path(matrix), B = B, trials = 1, clock = False, results = True, errors = False)["results"][0])
+    numpy.save(path, fill_estimates("reference", matrix, B = B, trials = 1, clock = False, results = True, errors = False)["results"][0])
   try:
     reference = numpy.load(path)
   except e:
-    print("error reading reference file at ({0})".format(path))
+    print("Could not read reference file at ({0})".format(path))
   return reference

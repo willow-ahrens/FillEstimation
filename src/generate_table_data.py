@@ -6,8 +6,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("matrix", help="the matrix to use", type=str)
 args = util.parse(parser)
 
-phil_results = util.fill_estimates("phil", args.matrix, trials = estimate["trials"], clock = True, errors = True, spmv_times = True)
-oski_results = util.fill_estimates("oski", args.matrix, trials = estimate["trials"], clock = True, errors = True, spmv_times = True)
+phil_results = util.fill_estimates("phil", args.matrix, trials = util.experiment["trials"], clock = True, errors = True, spmv_times = True)
+oski_results = util.fill_estimates("oski", args.matrix, trials = util.experiment["trials"], clock = True, errors = True, spmv_times = True)
 results = {"phil" : phil_results,
            "oski" : oski_results,
            "normal_spmv_time" : get_spmv_record(args.matrix)[0][0]}

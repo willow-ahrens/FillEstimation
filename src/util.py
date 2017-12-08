@@ -46,25 +46,24 @@ def create_create_slurm_script(preamble):
   return create_slurm_script
 
 experiment = {
+  "experiment_name" : "DefaultExperiment",
   "data_path" : os.path.join(top, "data"),
   "matrix_path" : os.path.join(top, "data/matrix"),
-  "machine_path" : os.path.join(src, "default_machine.py"),
   "matrix_registry_path" : os.path.join(top, "data/matrix/registry.json"),
   "run_path" : os.path.join(top, "run"),
   "fill_prefix" : "",
   "fill_vars" : {},
   "spmv_prefix" : "",
   "spmv_vars" : {},
-  "machine_name" : "DefaultMachine",
   "create_script" : create_bash_script,
-  "experiment_name" : "DefaultExperiment",
   "B" : 12,
   "epsilon" : 0.5,
   "delta" : 0.01,
   "sigma" : 0.01,
+  "trials" : 100,
   "profile_m" : 1000,
   "profile_n" : 1000,
-  "profile_trials" : 10000,
+  "profile_trials" : 1000,
   "verbose" : False
 }
 
@@ -105,9 +104,6 @@ def parse(parser):
   verbose = experiment["verbose"] and args.verbose
 
   experiment.update(read_params(args.experiment))
-
-  if "machine_path" in experiment:
-    experiment.update(read_params(experiment["machine_path"]))
 
   experiment["matrix_registry"] = read_params(experiment["matrix_registry_path"])
 
@@ -229,6 +225,9 @@ def get_profile(B = None, m = None, n = None, trials = None):
         t = spmv_time("__P3T3R_IS_TH3_UB3R_HAX0R__", r = r, c = c, trials = trials)["time_mean"]
         profile[r-1][c-1] = float(n) * float(m) / float(t)
     numpy.save(profile_path, profile)
+
+  experiment["matrix_registry"].remove("__P3T3R_IS_TH3_UB3R_HAX0R__")
+
   return numpy.load(profile_path)
 
 def get_spmv_record(matrix, B = None, trials = None):

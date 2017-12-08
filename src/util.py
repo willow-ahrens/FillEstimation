@@ -92,7 +92,8 @@ def read_matrix_entry(matrix):
   else:
     if verbose:
       print("Warning: matrix {0} not found in matrix registry".format(matrix))
-  entry["path"] = read_path(os.path.join(experiment["matrix"], entry["relpath"]))
+  if "path" not in entry:
+    entry["path"] = read_path(os.path.join(experiment["matrix"], entry["relpath"]))
   return entry
 
 def parse(parser):
@@ -119,6 +120,7 @@ def parse(parser):
   experiment["experiment"] = os.path.join(experiment["data"], "experiment", experiment["experiment_name"])
   experiment["reference"] = os.path.join(experiment["experiment"], "reference")
   experiment["profile"] = os.path.join(experiment["experiment"], "profile")
+  experiment["spmv_record"] = os.path.join(experiment["experiment"], "spmv_record")
 
   assert isinstance(experiment["fill_vars"], dict), "Fill environment variables must evaluate to a dictionary."
 
@@ -169,14 +171,14 @@ def spmv_time(matrix, r = 1, c = 1, trials = 1):
   command += ["-r", "%d" % r]
   command += ["-c", "%d" % c]
   command += ["-t", "%d" % trials]
-  command += [matrix]
+  command += [matrix_path(matrix)]
 
   if verbose:
     print(command)
 
   try:
     output = check_output(command, env=myenv)
-  except e:
+  except Exception as e:
     print("error executing command ({0})".format(command))
     raise(e)
 
@@ -201,8 +203,9 @@ def get_profile(B = None, m = None, n = None, trials = None):
 
   make_path(experiment["profile"])
 
-  profile_path = os.path.join(experiment["profile"], "{0}_profile_{1}_{2}_{3}_{4}.npy".format(matrix, B, m, n, trials))
-  dense_path = os.path.join(experiment["profile"], "dense_{0}_{1}.mtx".format(matrix, m, n))
+  dense_path = os.path.join(experiment["profile"], "dense_{}_{}.mtx".format(m, n))
+  profile_path = os.path.join(experiment["profile"], "profile_{}_{}_{}_{}.npy".format(B, m, n, trials))
+
   if not os.path.isfile(dense_path):
     I = []
     J = []
@@ -215,15 +218,39 @@ def get_profile(B = None, m = None, n = None, trials = None):
     dense = scipy.sparse.csr_matrix(dense)
     scipy.io.mmwrite(dense_path, dense)
 
-  if not os.path.isfile(path):
-    profile = np.ones((util.experiment["B"], uti))
+  experiment["matrix_registry"]["__P3T3R_IS_TH3_UB3R_HAX0R__"] = {"name" : "dense_{}_{}.mtx".format(m, n),
+                                                                  "domain" : "synthetic",
+                                                                  "path" : dense_path}
+
+  if not os.path.isfile(profile_path):
+    profile = numpy.ones((B, B))
     for r in range(1, B + 1):
       for c in range(1, B + 1):
-        t = util.spmv_time("dense", r = r, c = c, trials = trials)["time_mean"]
-        profile[r-1][c-1] = (n * m) / float(t)
-    np.save(profile_path, profile)
+        t = spmv_time("__P3T3R_IS_TH3_UB3R_HAX0R__", r = r, c = c, trials = trials)["time_mean"]
+        profile[r-1][c-1] = float(n) * float(m) / float(t)
+    numpy.save(profile_path, profile)
+  return numpy.load(profile_path)
 
-def fill_estimates(name, matrix, B = None, epsilon = None, delta = None, sigma = None, trials = 1, clock = True, results = False, errors = False):
+def get_spmv_record(matrix, B = None, trials = None):
+  if not B:
+    B = experiment["B"]
+  if not trials:
+    trials = experiment["profile_trials"]
+
+  make_path(experiment["spmv_record"])
+
+  path = os.path.join(experiment["spmv_record"], "{}_{}_{}.npy".format(matrix, B, trials))
+
+  if not os.path.isfile(path):
+    record = numpy.ones((B, B))
+    for r in range(1, B + 1):
+      for c in range(1, B + 1):
+        t = spmv_time(matrix, r = r, c = c, trials = trials)["time_mean"]
+        record[r-1][c-1] = float(t)
+    numpy.save(path, record)
+  return numpy.load(path)
+
+def fill_estimates(name, matrix, B = None, epsilon = None, delta = None, sigma = None, trials = 1, clock = True, results = False, errors = False, blocks = False, spmv_times = False):
   if not B:
     B = experiment["B"]
   if not epsilon:
@@ -234,6 +261,8 @@ def fill_estimates(name, matrix, B = None, epsilon = None, delta = None, sigma =
     sigma = experiment["sigma"]
   if errors:
     results = True
+  if spmv_times:
+    blocks = True
 
   myenv = os.environ.copy()
   myenv["GSL_RNG_SEED"] = str(random.randrange(sys.maxint))
@@ -258,7 +287,7 @@ def fill_estimates(name, matrix, B = None, epsilon = None, delta = None, sigma =
     command += ["-r"]
   else:
     command += ["-R"]
-  command += [matrix]
+  command += [matrix_path(matrix)]
 
   if verbose:
     print(command)
@@ -287,6 +316,14 @@ def fill_estimates(name, matrix, B = None, epsilon = None, delta = None, sigma =
     reference = get_reference(B = B)["errors"]
     parsed["errors"] = [np.abs(result - reference) / reference for result in parsed["results"]]
     parsed["max_errors"] = [max(error) for error in parsed["errors"]]
+
+  if blocks:
+    profile = get_profile(B = B)
+    parsed["blocks"] = [(profile/fill).argmax() for fill in parsed["results"]]
+
+  if spmv_times:
+    record = get_spmv_record(matrix, B = B)
+    parsed["spmv_times"] = [record[block] for block in parsed["blocks"]]
 
   return parsed
 

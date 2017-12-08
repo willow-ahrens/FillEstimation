@@ -8,6 +8,6 @@
   "sigma" : 0.01,
   "profile_m" : 1000,
   "profile_n" : 1000,
-  "profile_trials" : 10000,
+  "profile_trials" : 1000,
   "verbose" : False
 }

@@ -5,7 +5,6 @@
 #SBATCH -t 04:00:00
 #SBATCH --mail-user=pahrens@mit.edu
 #SBATCH --mail-type=ALL
-#SBATCH --array=0-31
 #SBATCH -p lanka-v3
 
 SCRATCH=/data/scratch/pahrens

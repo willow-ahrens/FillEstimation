@@ -10,21 +10,6 @@ import argparse
 top = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "../"))
 src = os.path.join(top, "src")
 
-experiment = {
-  "data_path" = os.path.join(top, "data"),
-  "matrix_path" = os.path.join(top, "data/matrix"),
-  "machine_path" = os.path.join(src, "default_machine.py"),
-  "matrix_registry_path" = os.path.join(top, "data/matrix/registry.json"),
-  "run_path" = os.path.join(top, "run"),
-  "fill_prefix" = "",
-  "fill_vars" = {},
-  "spmv_prefix" = "",
-  "spmv_vars" = {},
-  "machine_name" = "DefaultMachine",
-  "experiment_name" = "DefaultExperiment",
-  "verbose" = False
-}
-
 def make_path(path):
   if not os.path.exists(path):
     try:
@@ -33,29 +18,73 @@ def make_path(path):
       if not os.path.exists(path):
         raise(e)
 
+def create_bash_script(path, name, command, parallel):
+  make_path(path)
+  path = os.path.join(path, "{0}.sh".format(name))
+  with open(path, "w") as f:
+    f.write("#!/bin/bash\n")
+    if parallel:
+      for thing in parallel:
+        f.write("{0} {1}\n".format(command, thing))
+    else:
+      f.write("{0}\n".format(command))
+
+def create_create_slurm_script(preamble):
+  def create_slurm_script(path, name, command, parallel):
+    make_path(path)
+    path = os.path.join(path, "{0}.sh".format(name))
+    with open(path, "w") as f:
+      f.write(preamble)
+      if parallel:
+        f.write("#SBATCH --array=0-{}\n".format(len(parallel) - 1))
+        for (i, thing) in enumerate(parallel):
+          f.write("if [$SLURM_ARRAY_TASK_ID == {0}]; then \n".format(i))
+          f.write("{0} {1}\n".format(command, thing))
+          f.write(";fi")
+      else:
+        f.write("{0}\n".format(command))
+  return create_slurm_script
+
+experiment = {
+  "data_path" : os.path.join(top, "data"),
+  "matrix_path" : os.path.join(top, "data/matrix"),
+  "machine_path" : os.path.join(src, "default_machine.py"),
+  "matrix_registry_path" : os.path.join(top, "data/matrix/registry.json"),
+  "run_path" : os.path.join(top, "run"),
+  "fill_prefix" : "",
+  "fill_vars" : {},
+  "spmv_prefix" : "",
+  "spmv_vars" : {},
+  "machine_name" : "DefaultMachine",
+  "create_script" : create_bash_script,
+  "experiment_name" : "DefaultExperiment",
+  "verbose" : False
+}
+
 def read_path(path):
   return os.path.realpath(os.path.expandvars(path))
 
 def read_params(path):
-  try
+  try:
     with open(read_path(path)) as f:
-      params = eval(r.read())
-  except IOError as e:
-    print("Parameter file ({0}) not found.".format(path))
+      params = eval(f.read())
+  except Exception as e:
+    print("Parameter file ({0}) not found or invalid python format.".format(path))
     raise(e)
   assert isinstance(params, dict), "Parameter file ({0}) must evaluate to a dictionary.".format(path)
   return params
 
 def read_matrix_entry(matrix):
-  entry = {"name" = matrix,
-           "relpath" = "{0}.mtx".format(matrix)
-           "domain" = "unknown"}
-  if matrix in experiment["matrix_registry"], "No matrix entry for {0}".format(matrix)
+  entry = {"name" : matrix,
+           "relpath" : "{0}.mtx".format(matrix),
+           "domain" : "unknown"}
+  if matrix in experiment["matrix_registry"]:
     newentry = experiment["matrix_registry"][matrix]
     assert isinstance(newentry, dict), "Matrix registry entry for ({0}) must evaluate to a dictionary.".format(matrix)
     entry.update(newentry)
-  else
-    print("Warning: matrix {0} not found in matrix registry".format(matrix))
+  else:
+    if verbose:
+      print("Warning: matrix {0} not found in matrix registry".format(matrix))
   entry["path"] = read_path(os.path.join(experiment["matrix"], entry["relpath"]))
   return entry
 
@@ -72,26 +101,17 @@ def parse(parser):
   if "machine_path" in experiment:
     experiment.update(read_params(experiment["machine_path"]))
 
-  try
-    try
-      experiment["matrix_registry"] = json.loads(read_path(experiment["matrix_registry_path"]))
-    except IOError as e:
-      print("Matrix registry ({0}) not found.".format(experiment["matrix_registry_path"]))
-      raise(e)
-  except TypeError as e:
-    print("Matrix registry ({0}) is not valid json.").format(experiment[matrix_registry_path])
-    raise(e)
-  assert isinstance(experiment["matrix_registry"], dict), "Matrix registry in ({0}) must evaluate to a dictionary.".format(experiment["matrix_registry_path"])
+  experiment["matrix_registry"] = read_params(experiment["matrix_registry_path"])
 
   experiment["data"] = read_path(experiment["data_path"])
 
   experiment["matrix"] = read_path(experiment["matrix_path"])
 
-  experiment["run"] = read_path(experiment["run_path"])
+  experiment["run"] = os.path.join(read_path(experiment["run_path"]), experiment["experiment_name"], experiment["machine_name"])
 
-  experiment["experiment"] = os.joinpath(experiment["data"], experiment["experiment_name"])
-  experiment["reference"] = os.joinpath(experiment["experiment"], "reference")
-  experiment["machine"] = os.joinpath(experiment["experiment"], experiment["machine_name"])
+  experiment["experiment"] = os.path.join(experiment["data"], experiment["experiment_name"])
+  experiment["reference"] = os.path.join(experiment["experiment"], "reference")
+  experiment["machine"] = os.path.join(experiment["experiment"], experiment["machine_name"])
 
   assert isinstance(experiment["fill_vars"], dict), "Fill environment variables must evaluate to a dictionary."
 
@@ -106,7 +126,7 @@ def parse(parser):
 def matrix_path(matrix):
   entry = read_matrix_entry(matrix)
   path = entry["path"]
-  assert os.path.isfile(path), "Matrix ({0}) not found at {1}.".format(matrix, os.path.join(entry["relpath"], experiment["matrix_path"]))
+  assert os.path.isfile(path), "Matrix ({0}) not found at {1}.".format(matrix, os.path.join(experiment["matrix_path"], entry["relpath"]))
   return path
 
 def matrix_name(matrix):
@@ -122,7 +142,7 @@ def matrix_read(matrix):
   try:
     scipy.io.mmread(matrix_path(matrix))
   except e:
-    print("Problem reading matrix ({0}) at {1}. Double check that matrix is in matrixmarket format.".format(matrix, os.path.join(entry["relpath"], experiment["matrix_path"]))
+    print("Problem reading matrix ({0}) at {1}. Double check that matrix is in matrixmarket format.".format(matrix, os.path.join(entry["relpath"], experiment["matrix_path"])))
     raise(e)
 
 def matrix_nnz(matrix):
@@ -147,7 +167,7 @@ def spmv_time(matrix, r = 1, c = 1, trials = 1):
   if verbose:
     print(command)
 
-  try
+  try:
     output = check_output(command, env=myenv)
   except e:
     print("error executing command ({0})".format(command))
@@ -162,7 +182,7 @@ def spmv_time(matrix, r = 1, c = 1, trials = 1):
 
   return parsed
 
-def fill_estimates(name, matrices, B = 12, epsilon = 0.1, delta = 0.01, sigma = 0.01, trials = 1, clock = True, results = False, errors = False):
+def fill_estimates(name, matrix, B = 12, epsilon = 0.1, delta = 0.01, sigma = 0.01, trials = 1, clock = True, results = False, errors = False):
   if errors:
     results = True
 
@@ -194,29 +214,29 @@ def fill_estimates(name, matrices, B = 12, epsilon = 0.1, delta = 0.01, sigma = 
   if verbose:
     print(command)
 
-  try
+  try:
     output = check_output(command, env=myenv)
-  except e:
+  except Exception as e:
     print("error executing command ({0})".format(command))
     raise(e)
 
   try:
     parsed = append(json.loads(output))
-  except ValueError as e:
+  except Exception as e:
     print("Output of command ({0}) must be valid json. Got:".format(command))
     print(output)
     raise(e)
 
   try:
-    parsed["results"] = [np.array(result) for result in parsed["results"]]
-  except ValueError as e:
+    parsed["results"] = [numpy.array(result) for result in parsed["results"]]
+  except Exception as e:
     print("Could not read result estimates as numpy arrays. Got:")
     print(parsed["results"])
     raise(e)
 
   if errors:
     reference = get_reference["errors"]
-    parsed["errors"] = [np.abs(result - reference) ./ reference for result in parsed["results"]]
+    parsed["errors"] = [np.abs(result - reference) / reference for result in parsed["results"]]
     parsed["max_errors"] = [max(error) for error in parsed["errors"]]
 
   return parsed
@@ -225,9 +245,9 @@ def get_reference(matrix, B = 12):
   make_path(experiment["reference"])
   path = os.path.join(experiment["reference"], "{0}_reference.npy".format(matrix))
   if not os.path.isfile(path):
-    np.save(path, fill_estimates("reference", matrix, B = B, trials = 1, clock = False, results = True, errors = False)["results"][0])
+    numpy.save(path, fill_estimates("reference", matrix, B = B, trials = 1, clock = False, results = True, errors = False)["results"][0])
   try:
-    reference = np.load(path)
+    reference = numpy.load(path)
   except e:
     print("error reading reference file at ({0})".format(path))
   return reference

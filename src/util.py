@@ -58,6 +58,13 @@ experiment = {
   "machine_name" : "DefaultMachine",
   "create_script" : create_bash_script,
   "experiment_name" : "DefaultExperiment",
+  "B" : 12,
+  "epsilon" : 0.5,
+  "delta" : 0.01,
+  "sigma" : 0.01,
+  "profile_m" : 1000,
+  "profile_n" : 1000,
+  "profile_trials" : 10000,
   "verbose" : False
 }
 
@@ -111,6 +118,7 @@ def parse(parser):
 
   experiment["experiment"] = os.path.join(experiment["data"], "experiment", experiment["experiment_name"])
   experiment["reference"] = os.path.join(experiment["experiment"], "reference")
+  experiment["profile"] = os.path.join(experiment["experiment"], "profile")
 
   assert isinstance(experiment["fill_vars"], dict), "Fill environment variables must evaluate to a dictionary."
 
@@ -161,7 +169,7 @@ def spmv_time(matrix, r = 1, c = 1, trials = 1):
   command += ["-r", "%d" % r]
   command += ["-c", "%d" % c]
   command += ["-t", "%d" % trials]
-  command += [matrix_path(matrix)]
+  command += [matrix]
 
   if verbose:
     print(command)
@@ -181,7 +189,49 @@ def spmv_time(matrix, r = 1, c = 1, trials = 1):
 
   return parsed
 
-def fill_estimates(name, matrix, B = 12, epsilon = 0.1, delta = 0.01, sigma = 0.01, trials = 1, clock = True, results = False, errors = False):
+def get_profile(B = None, m = None, n = None, trials = None):
+  if not B:
+    B = experiment["B"]
+  if not m:
+    m = experiment["profile_m"]
+  if not n:
+    n = experiment["profile_n"]
+  if not trials:
+    trials = experiment["profile_trials"]
+
+  make_path(experiment["profile"])
+
+  profile_path = os.path.join(experiment["profile"], "{0}_profile_{1}_{2}_{3}_{4}.npy".format(matrix, B, m, n, trials))
+  dense_path = os.path.join(experiment["profile"], "dense_{0}_{1}.mtx".format(matrix, m, n))
+  if not os.path.isfile(dense_path):
+    I = []
+    J = []
+    for i in range(m):
+      for j in range(n):
+        I += [i]
+        J += [j]
+    V = [1.0 for _ in I]
+    dense = scipy.sparse.coo_matrix((V, (I,J)), dtype=numpy.float64)
+    dense = scipy.sparse.csr_matrix(dense)
+    scipy.io.mmwrite(dense_path, dense)
+
+  if not os.path.isfile(path):
+    profile = np.ones((util.experiment["B"], uti))
+    for r in range(1, B + 1):
+      for c in range(1, B + 1):
+        t = util.spmv_time("dense", r = r, c = c, trials = trials)["time_mean"]
+        profile[r-1][c-1] = (n * m) / float(t)
+    np.save(profile_path, profile)
+
+def fill_estimates(name, matrix, B = None, epsilon = None, delta = None, sigma = None, trials = 1, clock = True, results = False, errors = False):
+  if not B:
+    B = experiment["B"]
+  if not epsilon:
+    epsilon = experiment["epsilon"]
+  if not delta:
+    delta = experiment["delta"]
+  if not sigma:
+    sigma = experiment["sigma"]
   if errors:
     results = True
 
@@ -208,7 +258,7 @@ def fill_estimates(name, matrix, B = 12, epsilon = 0.1, delta = 0.01, sigma = 0.
     command += ["-r"]
   else:
     command += ["-R"]
-  command += [matrix_path(matrix)]
+  command += [matrix]
 
   if verbose:
     print(command)
@@ -234,50 +284,22 @@ def fill_estimates(name, matrix, B = 12, epsilon = 0.1, delta = 0.01, sigma = 0.
     raise(e)
 
   if errors:
-    reference = get_reference["errors"]
+    reference = get_reference(B = B)["errors"]
     parsed["errors"] = [np.abs(result - reference) / reference for result in parsed["results"]]
     parsed["max_errors"] = [max(error) for error in parsed["errors"]]
 
   return parsed
 
-def get_reference(matrix, B = 12):
+def get_reference(matrix, B = None):
+  if not B:
+    B = experiment["B"]
+
   make_path(experiment["reference"])
-  path = os.path.join(experiment["reference"], "{0}_reference.npy".format(matrix))
+  path = os.path.join(experiment["reference"], "{0}_reference_{1}.npy".format(matrix, B))
   if not os.path.isfile(path):
-    numpy.save(path, fill_estimates("reference", matrix, B = B, trials = 1, clock = False, results = True, errors = False)["results"][0])
+    numpy.save(path, fill_estimates("reference", matrix_path(matrix), B = B, trials = 1, clock = False, results = True, errors = False)["results"][0])
   try:
     reference = numpy.load(path)
   except e:
     print("error reading reference file at ({0})".format(path))
   return reference
-
-"""
-def get_flat_results(outputs):
-  for i in range(len(outputs)):
-    outputs[i]["flat_results"] = [[fill for a in output for fill in a] for output in outputs[i]["results"]]
-
-def get_references(matrices, B = 12):
-  outputs = fill_estimates("reference", matrices, B = B, trials = 1, clock = False, results = True)
-  get_flat_results(outputs)
-  references = [np.array(output["flat_results"][0]) for output in outputs]
-  return references
-
-def get_errors(outputs, references):
-  get_flat_results(outputs)
-  for (i, reference) in enumerate(references):
-    fill_errors = np.abs(np.array(outputs[i]["flat_results"]) - reference[np.newaxis,:])/reference[np.newaxis,:]
-    outputs[i]["errors"] = np.max(fill_errors, axis = 1)
-
-def benchmark(name, matrices, B = 12, epsilon = 0.1, delta = 0.01):
-  timeout = 0.1
-  trials = 1
-  times = []
-  for matrix in matrices:
-    while True:
-      result = fill_estimates(name, [matrix], B = B, epsilon = epsilon, delta = delta, trials = trials)[0]
-      if result["time_total"] >= 0.1:
-        break
-      trials *= 10
-    times.append(result["time_mean"])
-  return np.array(times)
-"""

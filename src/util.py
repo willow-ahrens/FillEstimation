@@ -107,11 +107,10 @@ def parse(parser):
 
   experiment["matrix"] = read_path(experiment["matrix_path"])
 
-  experiment["run"] = os.path.join(read_path(experiment["run_path"]), experiment["experiment_name"], experiment["machine_name"])
+  experiment["run"] = os.path.join(read_path(experiment["run_path"]), experiment["experiment_name"])
 
-  experiment["experiment"] = os.path.join(experiment["data"], experiment["experiment_name"])
+  experiment["experiment"] = os.path.join(experiment["data"], "experiment", experiment["experiment_name"])
   experiment["reference"] = os.path.join(experiment["experiment"], "reference")
-  experiment["machine"] = os.path.join(experiment["experiment"], experiment["machine_name"])
 
   assert isinstance(experiment["fill_vars"], dict), "Fill environment variables must evaluate to a dictionary."
 
@@ -174,7 +173,7 @@ def spmv_time(matrix, r = 1, c = 1, trials = 1):
     raise(e)
 
   try:
-    parsed = append(json.loads(output))
+    parsed = json.loads(output)
   except ValueError as e:
     print("Output of command ({0}) must be valid json. Got:".format(command))
     print(output)
@@ -188,9 +187,9 @@ def fill_estimates(name, matrix, B = 12, epsilon = 0.1, delta = 0.01, sigma = 0.
 
   myenv = os.environ.copy()
   myenv["GSL_RNG_SEED"] = str(random.randrange(sys.maxint))
-  myenv.update(experiment["spmv_vars"])
+  myenv.update(experiment["fill_vars"])
 
-  prefix = experiment["spmv_prefix"]
+  prefix = experiment["fill_prefix"]
   if prefix:
     command = prefix.split(" ")
   else:
@@ -221,7 +220,7 @@ def fill_estimates(name, matrix, B = 12, epsilon = 0.1, delta = 0.01, sigma = 0.
     raise(e)
 
   try:
-    parsed = append(json.loads(output))
+    parsed = json.loads(output)
   except Exception as e:
     print("Output of command ({0}) must be valid json. Got:".format(command))
     print(output)

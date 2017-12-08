@@ -18,6 +18,7 @@ int test (size_t m,
           size_t B,
           double epsilon,
           double delta,
+          double sigma,
           int trials,
           int clock,
           int results,
@@ -31,6 +32,7 @@ static void usage () {
   "  -B, --max-block-size <arg> Maximum block dimension for fill estimates\n"
   "  -e, --epsilon <arg>        Be accurate to relative error epsilon\n"
   "  -d, --delta <arg>          With probability (1 - delta)\n"
+  "  -s, --sigma <arg>          Examine block rows With probability sigma\n"
   "  -t, --trials <arg>         Number of trials to run\n"
   "  -c, --clock                Display timing information\n"
   "  -C, --noclock              Do not display timing information\n"
@@ -46,18 +48,20 @@ int main (int argc, char **argv) {
   size_t B = 12;
   double epsilon = 0.1;
   double delta = 0.01;
+  double sigma = 0.02;
   int trials = 1;
 
   /* Beware. Option parsing below. */
   long longarg;
   double doublearg;
   while (1) {
-    static char *options = "B:e:d:t:cCrRvqh";
+    static char *options = "B:e:s:d:t:cCrRvqh";
     static struct option long_options[] = {
         {"max-block-size", required_argument, 0, 'B'},
         {"trials",         required_argument, 0, 't'},
         {"epsilon", required_argument, 0, 'e'},
         {"delta", required_argument, 0, 'd'},
+        {"sigma", required_argument, 0, 's'},
         {"clock",     no_argument, &clock,   1},
         {"noclock",   no_argument, &clock,   0},
         {"results",   no_argument, &results, 1},
@@ -117,6 +121,17 @@ int main (int argc, char **argv) {
           return 1;
         }
         delta = doublearg;
+        break;
+
+      case 's':
+        errno = 0;
+        doublearg = strtod(optarg, 0);
+        if (errno != 0 || doublearg < 0.0 || doublearg > 1.0) {
+          printf("option -s takes a desired probability >= 0.0 and <= 1.0\n");
+          usage();
+          return 1;
+        }
+        sigma = doublearg;
         break;
 
       case 't':
@@ -206,7 +221,7 @@ int main (int argc, char **argv) {
 
   //gsl_spmatrix_fprintf(stdout, csr, "%g");
 
-  int ret = test(csr->size1, csr->size2, csr->nz, csr->p, csr->i, B, epsilon, delta, trials, clock, results, verbose);
+  int ret = test(csr->size1, csr->size2, csr->nz, csr->p, csr->i, B, epsilon, delta, sigma, trials, clock, results, verbose);
 
   gsl_spmatrix_free(csr);
 

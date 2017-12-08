@@ -8,8 +8,6 @@ char *name () {
   return "phil";
 }
 
-#define REPLACEMENT
-
 /**
  *  Given an m by n CSR matrix A, estimates the fill ratio if the matrix were
  *  converted into b_r by b_c BCSR format. The fill ratio is b_r times b_c times
@@ -32,15 +30,16 @@ char *name () {
  *  \param[in] B Maximum desired block size
  *  \param[in] epsilon Epsilon
  *  \param[in] delta Delta
+ *  \param[in] sigma Sigma
  *  \param[out] *fill Fill ratios for all specified b_r, b_c in order
  *  \param[in] verbose 0 if you should be quiet
  *
  *  Note that the fill ratios should be stored according to the following order:
- *  size_t i = 0;
- *  for (size_t b_r = 1; b_r <= B; b_r++) {
- *    for (size_t b_c = 1; b_c <= B; b_c++) {
- *      //fill[i] = fill for b_r, b_c, o_r, o_c
- *      i++;
+ *  int fill_index = 0;
+ *  for (int b_r = 1; b_r <= B; b_r++) {
+ *    for (int b_c = 1; b_c <= B; b_c++) {
+ *      fill[fill_index] = fill for b_r, b_c
+ *      fill_index++;
  *    }
  *  }
  *
@@ -54,6 +53,7 @@ int estimate_fill (size_t m,
                    size_t B,
                    double epsilon,
                    double delta,
+                   double sigma,
                    double *fill,
                    int verbose){
   assert(n >= 1);
@@ -64,13 +64,7 @@ int estimate_fill (size_t m,
   double T = 2 * log(B/delta) * B * B / (epsilon * epsilon);
   size_t s;
 
-#ifdef REPLACEMENT
-  s = T;
-#else
-  //s = ((T - T/nnz) + sqrt((T - T / nnz) * (T - T / nnz)  + 4 * T * (1 + T / N)))/(2 + 2 * T / nnz);
-  s = ((T - T/nnz) + sqrt(T * (T + (2 * T + T / nnz) / nnz + 4)))/(2 + 2 * T / nnz);
-#endif
-  s = min(s, nnz);
+  s = min(T, nnz);
 
   //Sample s items
   size_t *samples = (size_t*)malloc(s*sizeof(size_t));
@@ -80,7 +74,6 @@ int estimate_fill (size_t m,
   size_t *samples_j = (size_t*)malloc(s*sizeof(size_t));
   assert(samples_j != NULL);
 
-#ifdef REPLACEMENT
   if (s == nnz) {
     for (size_t i = 0; i < nnz; i++) {
       samples[i] = i;
@@ -90,9 +83,6 @@ int estimate_fill (size_t m,
       samples[i] = random_range(0, nnz);
     }
   }
-#else
-  random_choose(samples, s, 0, nnz);
-#endif
 
   //Create arrays of i and j
   sort(samples, s);

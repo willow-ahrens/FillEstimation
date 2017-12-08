@@ -8,11 +8,10 @@ char *name () {
 }
 
 /**
- *  Given an m by n CSR matrix A, estimates the fill ratio if the matrix were
+ *  Given an m by n CSR matrix A, computes the fill ratio if the matrix were
  *  converted into b_r by b_c BCSR format. The fill ratio is b_r times b_c times
  *  the number of nonzero blocks in the BCSR format divided by the number of
- *  nonzeros. All estimates should be accurate to relative error epsilon with
- *  probability at least (1 - delta).
+ *  nonzeros.
  *
  *  The caller supplies this routine with a maximum row and column block size B,
  *  and this routine returns the estimated fill ratios for all
@@ -29,15 +28,16 @@ char *name () {
  *  \param[in] B Maximum desired block size
  *  \param[in] epsilon Epsilon
  *  \param[in] delta Delta
+ *  \param[in] sigma Sigma
  *  \param[out] *fill Fill ratios for all specified b_r, b_c in order
  *  \param[in] verbose 0 if you should be quiet
  *
  *  Note that the fill ratios should be stored according to the following order:
- *  size_t i = 0;
- *  for (size_t b_r = 1; b_r <= B; b_r++) {
- *    for (size_t b_c = 1; b_c <= B; b_c++) {
- *      //fill[i] = fill for b_r, b_c, o_r, o_c
- *      i++;
+ *  int fill_index = 0;
+ *  for (int b_r = 1; b_r <= B; b_r++) {
+ *    for (int b_c = 1; b_c <= B; b_c++) {
+ *      fill[fill_index] = fill for b_r, b_c
+ *      fill_index++;
  *    }
  *  }
  *

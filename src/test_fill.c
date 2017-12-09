@@ -76,8 +76,8 @@ int test (size_t m,
     printf("  ]%s\n", clock ? "," : "");
   }
   if (clock) {
-    printf("  \"time_total\": %.*e,\n", DECIMAL_DIG, time);
-    printf("  \"time_mean\": %.*e%s\n", DECIMAL_DIG, time/trials, 0 ? "," : "");
+    printf("  \"total_time\": %.*e,\n", DECIMAL_DIG, time);
+    printf("  \"mean_time\": %.*e%s\n", DECIMAL_DIG, time/trials, 0 ? "," : "");
   }
   printf("\n}\n");
 

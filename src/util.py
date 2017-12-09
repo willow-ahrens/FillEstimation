@@ -145,7 +145,7 @@ def matrix_size(matrix):
 
 def matrix_read(matrix):
   try:
-    scipy.io.mmread(matrix_path(matrix))
+    return scipy.io.mmread(matrix_path(matrix))
   except e:
     print("Problem reading matrix ({0}) at {1}. Double check that matrix is in matrixmarket format.".format(matrix, os.path.join(entry["relpath"], experiment["matrix_path"])))
     raise(e)
@@ -222,11 +222,11 @@ def get_profile(B = None, m = None, n = None, trials = None):
     profile = numpy.ones((B, B))
     for r in range(1, B + 1):
       for c in range(1, B + 1):
-        t = spmv_time("__P3T3R_IS_TH3_UB3R_HAX0R__", r = r, c = c, trials = trials)["time_mean"]
+        t = spmv_time("__P3T3R_IS_TH3_UB3R_HAX0R__", r = r, c = c, trials = trials)["mean_time"]
         profile[r-1][c-1] = float(n) * float(m) / float(t)
     numpy.save(profile_path, profile)
 
-  experiment["matrix_registry"].remove("__P3T3R_IS_TH3_UB3R_HAX0R__")
+  experiment["matrix_registry"].pop("__P3T3R_IS_TH3_UB3R_HAX0R__", None)
 
   return numpy.load(profile_path)
 
@@ -244,7 +244,7 @@ def get_spmv_record(matrix, B = None, trials = None):
     record = numpy.ones((B, B))
     for r in range(1, B + 1):
       for c in range(1, B + 1):
-        t = spmv_time(matrix, r = r, c = c, trials = trials)["time_mean"]
+        t = spmv_time(matrix, r = r, c = c, trials = trials)["mean_time"]
         record[r-1][c-1] = float(t)
     numpy.save(path, record)
   return numpy.load(path)
@@ -313,12 +313,12 @@ def fill_estimates(name, matrix, B = None, epsilon = None, delta = None, sigma =
 
   if errors:
     reference = get_reference(matrix, B = B)
-    parsed["errors"] = [np.abs(result - reference) / reference for result in parsed["results"]]
-    parsed["max_errors"] = [max(error) for error in parsed["errors"]]
+    parsed["errors"] = [numpy.abs(result - reference) / reference for result in parsed["results"]]
+    parsed["max_errors"] = [numpy.max(error) for error in parsed["errors"]]
 
   if blocks:
     profile = get_profile(B = B)
-    parsed["blocks"] = [(profile/fill).argmax() for fill in parsed["results"]]
+    parsed["blocks"] = [numpy.unravel_index((profile/fill).argmax(), profile.shape) for fill in parsed["results"]]
 
   if spmv_times:
     record = get_spmv_record(matrix, B = B)

@@ -15,3 +15,7 @@ util.experiment["create_script"](util.experiment["run"], "generate_spmv_records"
 #make table data
 if "table_matrices" in util.experiment:
   util.experiment["create_script"](util.experiment["run"], "generate_table_data", "python {0} -e \"{1}\"".format(os.path.join(util.src, "generate_table_data.py"), util.read_path(args.experiment)), util.experiment["table_matrices"])
+
+#make table
+if "table_matrices" in util.experiment:
+  util.experiment["create_script"](util.experiment["run"], "generate_table", "python {0} -e \"{1}\"".format(os.path.join(util.src, "generate_table.py"), util.read_path(args.experiment)), [])

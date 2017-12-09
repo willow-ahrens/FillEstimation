@@ -59,7 +59,7 @@ experiment = {
   "B" : 12,
   "epsilon" : 0.5,
   "delta" : 0.01,
-  "sigma" : 0.01,
+  "sigma" : 0.02,
   "trials" : 100,
   "profile_m" : 1000,
   "profile_n" : 1000,

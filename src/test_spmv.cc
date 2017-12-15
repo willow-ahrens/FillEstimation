@@ -109,8 +109,8 @@ int test (size_t m,
   }
 
   printf("{\n");
-  printf("  \"time_total\": %.*e,\n", DECIMAL_DIG, mytime);
-  printf("  \"time_mean\": %.*e%s\n", DECIMAL_DIG, mytime/trials, 0 ? "," : "");
+  printf("  \"total_time\": %.*e,\n", DECIMAL_DIG, mytime);
+  printf("  \"mean_time\": %.*e%s\n", DECIMAL_DIG, mytime/trials, 0 ? "," : "");
   printf("\n}\n");
 
   return 0;

@@ -17,8 +17,7 @@ phil_delta = 0.01
 methods = [{"name":"phil",
             "label":"PHIL",
             "color":"red",
-            "bound" : lambda point : point["epsilon"],
-            "bound_color": "green"
+            "bound" : lambda point : point["epsilon"], "bound_color": "green"
             },
            {"name":"oski",
             "label":"OSKI",

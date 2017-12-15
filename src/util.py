@@ -10,6 +10,10 @@ import argparse
 top = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "../"))
 src = os.path.join(top, "src")
 
+def exprange(a, b, n):
+  r = (float(b) / float(a))**(1.0/(n - 1))
+  return [a * r**i for i in range(n)]
+
 def make_path(path):
   if not os.path.exists(path):
     try:
@@ -339,3 +343,5 @@ def get_reference(matrix, B = None):
   except e:
     print("Could not read reference file at ({0})".format(path))
   return reference
+
+

@@ -13,6 +13,7 @@ for name in ["phil", "oski"]:
   output = util.fill_estimates(name, args.matrix, trials = util.experiment["trials"], clock = True, errors = True, spmv_times = True)
   results[name] = {"mean_time" : output["mean_time"],
                    "mean_max_error" : numpy.mean(output["max_errors"]),
+                   "std_max_error" : numpy.std(output["max_errors"]),
                    "mean_spmv_time" : numpy.mean(output["spmv_times"])}
 
 table = os.path.join(util.experiment["experiment"], "table")

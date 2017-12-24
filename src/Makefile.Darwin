@@ -2,4 +2,4 @@ CC = gcc-7
 CXX = g++
 CFLAGS = -O3 -ffast-math
 CXXFLAGS = -O3
-LDLIBS = 
+LDLIBS =

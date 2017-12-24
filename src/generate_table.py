@@ -27,9 +27,7 @@ if "table_matrices" in util.experiment:
 
       with open(os.path.join(table, "{}.json".format(matrix)), 'r') as g:
         results = json.load(g)
-      for key in results.keys():
-        for metric in results[key].keys():
-          row["{}_{}".format(key, metric)] = results[key][metric]
+        row.update(results)
 
       if not writer:
         writer = csv.DictWriter(f, fieldnames=sorted(row.keys()))

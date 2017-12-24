@@ -19,7 +19,6 @@
   "profile_trials" : 1000,
   "verbose" : False,
   "table_matrices" : ["3dtube_conv", "gupta1_conv"],
-  "plot_matrices" :  ["3dtube_conv", "gupta1_conv", "ct20stif", "pathological_phil", "pathological_oski"],
   "plot_points" : {"3dtube_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(7, 0.2, 10), exprange(0.001, 0.06, 10))],
                    "gupta1_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(7, 0.2, 10), exprange(0.001, 0.06, 10))],
                    "ct20stif": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(7, 0.2, 10), exprange(0.001, 0.06, 10))],

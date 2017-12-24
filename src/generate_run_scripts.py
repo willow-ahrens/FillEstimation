@@ -21,5 +21,5 @@ if "table_matrices" in util.experiment:
   util.experiment["create_script"](util.experiment["run"], "generate_table", "python {0} -e \"{1}\"".format(os.path.join(util.src, "generate_table.py"), util.read_path(args.experiment)), [])
 
 #make plot
-if "plot_matrices" in util.experiment:
-  util.experiment["create_script"](util.experiment["run"], "generate_plot", "python {0} -e \"{1}\"".format(os.path.join(util.src, "generate_plot.py"), util.read_path(args.experiment)), util.experiment["plot_matrices"])
+if "plot_points" in util.experiment:
+  util.experiment["create_script"](util.experiment["run"], "generate_plot", "python {0} -e \"{1}\"".format(os.path.join(util.src, "generate_plot.py"), util.read_path(args.experiment)), util.experiment["plot_points"].keys())

@@ -16,3 +16,4 @@ include $(GSL)/Makefile.$(MYARCH)
 clean:
 	rm -f $(GSL)/stamp
 	rm -rf $(GSL)/build
+	rm -rf $(GSL)/install

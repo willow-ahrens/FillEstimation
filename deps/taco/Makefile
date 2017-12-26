@@ -16,3 +16,5 @@ include $(TACO)/Makefile.$(MYARCH)
 clean:
 	rm -f $(TACO)/stamp
 	rm -rf $(TACO)/build
+	rm -rf $(TACO)/install
+	rm -rf $(TACO)/tmp

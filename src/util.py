@@ -101,7 +101,7 @@ def read_matrix_entry(matrix):
 
 def parse(parser):
   global verbose
-  parser.add_argument("-e", "--experiment", help="an experiment parameters file (default = {0})".format(os.path.join(top, "src/default_experiment.py")), type=str, default = os.path.join(top, "src/default_experiment.py"))
+  parser.add_argument("-e", "--experiment", help="an experiment parameters file (default = {0})".format(os.path.join(top, "src/experiment_default.py")), type=str, default = os.path.join(top, "src/experiment_default.py"))
   parser.add_argument("-v", "--verbose", help="increase verbosity", action="store_true")
   args = parser.parse_args()
 

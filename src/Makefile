@@ -1,6 +1,6 @@
 TOP = $(realpath $(dir $(realpath $(firstword $(MAKEFILE_LIST))))..)
-GSL = $(TOP)/deps/gsl/build
-TACO = $(TOP)/deps/taco/build
+GSL = $(TOP)/deps/gsl/install
+TACO = $(TOP)/deps/taco/install
 ARCH = $(shell uname)
 define ENV_SH
 endef

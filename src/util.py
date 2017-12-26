@@ -36,8 +36,9 @@ def create_bash_script(path, name, command, parallel):
 def create_create_slurm_script(preamble):
   def create_slurm_script(path, name, command, parallel):
     make_path(path)
-    path = os.path.join(path, "{0}.sh".format(name))
+    path = os.path.join(path, "{0}.sl".format(name))
     with open(path, "w") as f:
+      f.write("#!/bin/bash\n")
       f.write(preamble)
       if parallel:
         f.write("#SBATCH --array=0-{}\n".format(len(parallel) - 1))

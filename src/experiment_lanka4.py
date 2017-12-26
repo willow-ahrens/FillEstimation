@@ -9,8 +9,16 @@
   "spmv_prefix" : "numactl -N 1",
   "spmv_vars" : {"TACO_CFLAGS":"-O3 -ffast-math -std=c99 -fopenmp -funroll-loops",
                  "OMP_NUM_THREADS":"12",
-                 "TMPDIR":os.path.join(top, "deps/src/taco/tmp")},
-  "create_script" : create_bash_script,
+                 "TMPDIR": os.path.join(top, "deps/taco/tmp")},
+  "create_script" : create_create_slurm_script(
+"""
+#SBATCH --nodes=1-1
+#SBATCH --cpus-per-task=48
+#SBATCH -t 04:00:00
+#SBATCH --mail-user=pahrens@mit.edu
+#SBATCH --mail-type=all
+#SBATCH -p lanka-v3
+"""),
   "B" : 4,
   "epsilon" : 0.5,
   "delta" : 0.01,

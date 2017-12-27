@@ -119,7 +119,7 @@ def parse(parser):
   experiment["run"] = os.path.join(read_path(experiment["run_path"]), experiment["experiment_name"])
 
   experiment["experiment"] = os.path.join(experiment["data"], "experiment", experiment["experiment_name"])
-  experiment["reference"] = os.path.join(experiment["experiment"], "reference")
+  experiment["references"] = os.path.join(experiment["experiment"], "references")
   experiment["profile"] = os.path.join(experiment["experiment"], "profile")
   experiment["spmv_records"] = os.path.join(experiment["experiment"], "spmv_records")
 
@@ -335,8 +335,8 @@ def get_reference(matrix, B = None):
   if not B:
     B = experiment["B"]
 
-  make_path(experiment["reference"])
-  path = os.path.join(experiment["reference"], "{0}_reference_{1}.npy".format(matrix, B))
+  make_path(experiment["references"])
+  path = os.path.join(experiment["references"], "{0}_reference_{1}.npy".format(matrix, B))
   if not os.path.isfile(path):
     numpy.save(path, fill_estimates("reference", matrix, B = B, trials = 1, clock = False, results = True, errors = False)["results"][0])
   try:

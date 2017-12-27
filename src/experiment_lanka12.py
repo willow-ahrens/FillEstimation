@@ -25,7 +25,7 @@
   "trials" : 100,
   "profile_m" : 1000,
   "profile_n" : 1000,
-  "profile_trials" : 1000,
+  "profile_trials" : 100,
   "verbose" : False,
   "table_matrices" : [
     "3dtube_conv",

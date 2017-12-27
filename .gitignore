@@ -4,6 +4,7 @@ src/local-plot-inputs
 src/matrix-times
 src/performance-matrices
 src/*plot-inputs
+run
 
 # Created by https://www.gitignore.io/api/c,cmake,python,autotools
 

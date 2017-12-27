@@ -36,15 +36,16 @@ def create_bash_script(path, name, command, parallel):
 def create_create_slurm_script(preamble):
   def create_slurm_script(path, name, command, parallel):
     make_path(path)
-    path = os.path.join(path, "{0}.sh".format(name))
+    path = os.path.join(path, "{0}.sl".format(name))
     with open(path, "w") as f:
+      f.write("#!/bin/bash\n")
       f.write(preamble)
       if parallel:
         f.write("#SBATCH --array=0-{}\n".format(len(parallel) - 1))
         for (i, thing) in enumerate(parallel):
-          f.write("if [$SLURM_ARRAY_TASK_ID == {0}]; then \n".format(i))
-          f.write("{0} {1}\n".format(command, thing))
-          f.write(";fi")
+          f.write("if test $SLURM_ARRAY_TASK_ID -eq {0}; then \n".format(i))
+          f.write("{0} {1};\n".format(command, thing))
+          f.write("fi\n")
       else:
         f.write("{0}\n".format(command))
   return create_slurm_script
@@ -101,7 +102,7 @@ def read_matrix_entry(matrix):
 
 def parse(parser):
   global verbose
-  parser.add_argument("-e", "--experiment", help="an experiment parameters file (default = {0})".format(os.path.join(top, "src/default_experiment.py")), type=str, default = os.path.join(top, "src/default_experiment.py"))
+  parser.add_argument("-e", "--experiment", help="an experiment parameters file (default = {0})".format(os.path.join(top, "src/experiment_default.py")), type=str, default = os.path.join(top, "src/experiment_default.py"))
   parser.add_argument("-v", "--verbose", help="increase verbosity", action="store_true")
   args = parser.parse_args()
 

@@ -1,0 +1,14 @@
+CC = gcc
+CXX = g++
+CFLAGS = -O3 -march=native -ffast-math
+CXXFLAGS = -O3 -march=native
+LDLIBS =
+
+define ENV_SH
+if [ -d "$(GSL)/lib" ] && [[ ":$$LD_LIBRARY_PATH:" != *":$(GSL)/lib:"* ]]; then
+  export LD_LIBRARY_PATH="$${LD_LIBRARY_PATH:+"$$LD_LIBRARY_PATH:"}$(GSL)/lib"
+fi
+if [ -d "$(TACO)/lib" ] && [[ ":$$LD_LIBRARY_PATH:" != *":$(TACO)/lib:"* ]]; then
+  export LD_LIBRARY_PATH="$${LD_LIBRARY_PATH:+"$$LD_LIBRARY_PATH:"}$(TACO)/lib"
+fi
+endef

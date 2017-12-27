@@ -26,9 +26,9 @@ for point in util.experiment["plot_points"][args.matrix]:
     row["{}_mean_spmv_time".format(name)] = numpy.mean(output["spmv_times"])
   results.append(row)
 
-plot = os.path.join(util.experiment["experiment"], "plot")
-util.make_path(plot)
-path = os.path.join(plot, "{}.json".format(args.matrix))
+plots = os.path.join(util.experiment["experiment"], "plots")
+util.make_path(plots)
+path = os.path.join(plots, "{}.json".format(args.matrix))
 
 with open(path, 'w') as f:
   json.dump(results, f, indent=4, sort_keys=True)

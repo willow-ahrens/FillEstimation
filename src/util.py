@@ -151,7 +151,7 @@ def matrix_size(matrix):
 def matrix_read(matrix):
   try:
     return scipy.io.mmread(matrix_path(matrix))
-  except e:
+  except Exception as e:
     print("Problem reading matrix ({0}) at {1}. Double check that matrix is in matrixmarket format.".format(matrix, os.path.join(entry["relpath"], experiment["matrix_path"])))
     raise(e)
 

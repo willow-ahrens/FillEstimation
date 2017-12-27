@@ -43,9 +43,9 @@ def create_create_slurm_script(preamble):
       if parallel:
         f.write("#SBATCH --array=0-{}\n".format(len(parallel) - 1))
         for (i, thing) in enumerate(parallel):
-          f.write("if [$SLURM_ARRAY_TASK_ID == {0}]; then \n".format(i))
-          f.write("{0} {1}\n".format(command, thing))
-          f.write(";fi")
+          f.write("if test $SLURM_ARRAY_TASK_ID -eq {0}; then \n".format(i))
+          f.write("{0} {1};\n".format(command, thing))
+          f.write("fi\n")
       else:
         f.write("{0}\n".format(command))
   return create_slurm_script

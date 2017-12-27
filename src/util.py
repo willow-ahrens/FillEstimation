@@ -120,7 +120,7 @@ def parse(parser):
   experiment["experiment"] = os.path.join(experiment["data"], "experiment", experiment["experiment_name"])
   experiment["reference"] = os.path.join(experiment["experiment"], "reference")
   experiment["profile"] = os.path.join(experiment["experiment"], "profile")
-  experiment["spmv_record"] = os.path.join(experiment["experiment"], "spmv_record")
+  experiment["spmv_records"] = os.path.join(experiment["experiment"], "spmv_records")
 
   assert isinstance(experiment["fill_vars"], dict), "Fill environment variables must evaluate to a dictionary."
 
@@ -240,9 +240,9 @@ def get_spmv_record(matrix, B = None, trials = None):
   if not trials:
     trials = experiment["profile_trials"]
 
-  make_path(experiment["spmv_record"])
+  make_path(experiment["spmv_records"])
 
-  path = os.path.join(experiment["spmv_record"], "{}_{}_{}.npy".format(matrix, B, trials))
+  path = os.path.join(experiment["spmv_records"], "{}_{}_{}.npy".format(matrix, B, trials))
 
   if not os.path.isfile(path):
     record = numpy.ones((B, B))

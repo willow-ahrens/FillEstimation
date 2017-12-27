@@ -1,5 +1,5 @@
 {
-  "experiment_name" : "Lanka4",
+  "experiment_name" : "Lanka12",
   "data_path" : os.path.join(top, "data"),
   "matrix_path" : os.path.join(top, "../matrix"),
   "matrix_registry_path" : os.path.join(top, "../matrix/registry.json"),

@@ -13,12 +13,12 @@
 """
 #SBATCH --nodes=1-1
 #SBATCH --cpus-per-task=48
-#SBATCH -t 03:00:00
+#SBATCH -t 06:00:00
 #SBATCH --mail-user=pahrens@mit.edu
 #SBATCH --mail-type=all
 #SBATCH -p lanka-v3
 """),
-  "B" : 4,
+  "B" : 12,
   "epsilon" : 0.5,
   "delta" : 0.01,
   "sigma" : 0.02,

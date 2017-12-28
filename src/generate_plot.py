@@ -16,7 +16,7 @@ for point in util.experiment["plot_points"][args.matrix]:
   row["matrix_domain"] = util.matrix_domain(args.matrix)
   row["matrix_size"] = util.matrix_size(args.matrix)
   row["matrix_nnz"] = util.matrix_nnz(args.matrix)
-  row["spmv_time_normal"] = util.get_spmv_record(args.matrix)[0][0]
+  row["normal_spmv_time"] = util.get_spmv_record(args.matrix)[0][0]
   row.update(point)
   for name in ["phil", "oski"]:
     output = util.fill_estimates(name, args.matrix, trials = util.experiment["trials"], clock = True, errors = True, spmv_times = True, **point)

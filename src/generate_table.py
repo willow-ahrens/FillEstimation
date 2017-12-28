@@ -12,7 +12,6 @@ if "table_matrices" in util.experiment:
   path = os.path.join(util.experiment["experiment"], "table", "table.csv")
 
   with open(path, 'w') as f:
-    fieldnames = ['first_name', 'last_name']
     writer = None
 
     for matrix in util.experiment["table_matrices"]:
@@ -23,7 +22,7 @@ if "table_matrices" in util.experiment:
       row["matrix_domain"] = util.matrix_domain(matrix)
       row["matrix_size"] = util.matrix_size(matrix)
       row["matrix_nnz"] = util.matrix_nnz(matrix)
-      row["spmv_time_normal"] = util.get_spmv_record(matrix)[0][0]
+      row["normal_spmv_time"] = util.get_spmv_record(matrix)[0][0]
 
       with open(os.path.join(table, "{}.json".format(matrix)), 'r') as g:
         results = json.load(g)

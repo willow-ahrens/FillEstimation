@@ -19,7 +19,7 @@
 #SBATCH -p lanka-v3
 """),
   "B" : 4,
-  "epsilon" : 0.5,
+  "epsilon" : 0.1,
   "delta" : 0.01,
   "sigma" : 0.02,
   "trials" : 100,

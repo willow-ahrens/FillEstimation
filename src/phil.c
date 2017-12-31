@@ -61,12 +61,13 @@ int estimate_fill (size_t m,
   size_t W = 2 * B;
   int Z[W][W];
 
+  /* Compute the necessary number of samples */
   double T = 2 * log(B/delta) * B * B / (epsilon * epsilon);
   size_t s;
 
   s = min(T, nnz);
 
-  //Sample s items
+  /* Sample s locations of nonzeros */
   size_t *samples = (size_t*)malloc(s*sizeof(size_t));
   assert(samples != NULL);
   size_t *samples_i = (size_t*)malloc(s*sizeof(size_t));
@@ -74,17 +75,20 @@ int estimate_fill (size_t m,
   size_t *samples_j = (size_t*)malloc(s*sizeof(size_t));
   assert(samples_j != NULL);
 
+  /* if s == nnz, just compute the fill exactly. Otherwise, sample s nonzeros
+   * so that the samples[t]^th nonzero is included in the sample.
+   */
   if (s == nnz) {
-    for (size_t i = 0; i < nnz; i++) {
-      samples[i] = i;
+    for (size_t t = 0; t < nnz; t++) {
+      samples[t] = t;
     }
   } else {
-    for (size_t i = 0; i < s; i++) {
-      samples[i] = random_range(0, nnz);
+    for (size_t t = 0; t < s; t++) {
+      samples[t] = random_range(0, nnz);
     }
   }
 
-  //Create arrays of i and j
+  /* Convert flat samples array to (i, j) pairs in samples_i and samples_j. */
   sort(samples, s);
   {
     size_t i = 0;
@@ -101,13 +105,14 @@ int estimate_fill (size_t m,
     size_t i = samples_i[t];
     size_t j = samples_j[t];
 
-    //compute x for some i, j
+    /* Fill Z with 0 */
     for (int r = 0; r < W; r++) {
       for (int c = 0; c < W; c++) {
         Z[r][c] = 0;
       }
     }
 
+    /* Set Z to 1 where there are nonzeros in the neighborhood of (i, j) */
     for (size_t ii = max(i, B - 1) - (B - 1); ii <= min(i + (B - 1), m - 1); ii++) {
       int r = (B + ii) - i;
       size_t jj;
@@ -123,6 +128,10 @@ int estimate_fill (size_t m,
       }
     }
 
+    /* These prefix sums set Z[r][c] to the number of nonzeros in the region
+     * extending from (i - B + 1, j - B + 1) to (i - B + r, j - B + c) for all
+     * r > 0, c > 0.
+     */
     for (int r = 1; r < W; r++) {
       for (int c = 1; c < W; c++) {
         Z[r][c] += Z[r][c - 1];
@@ -135,6 +144,9 @@ int estimate_fill (size_t m,
       }
     }
 
+    /* Using Z, compute the number of nonzeros in (i, j)'s block for each
+     * desired block size.
+     */
     int fill_index = 0;
     for (int b_r = 1; b_r <= B; b_r++) {
       int r_hi = B + b_r - 1 - (i % b_r);
@@ -143,12 +155,16 @@ int estimate_fill (size_t m,
         int c_hi = B + b_c - 1 - (j % b_c);
         int c_lo = c_hi - b_c;
         int y_0 = Z[r_hi][c_hi] - Z[r_lo][c_hi] - Z[r_hi][c_lo] + Z[r_lo][c_lo];
+        /* Compute the average inverse of the number of nozeros in (i, j)'s
+         * block.
+         */
         fill[fill_index] += 1.0/y_0;
         fill_index++;
       }
     }
   }
 
+  /* Compute the fill from the average inverses stored in fill array */
   int fill_index = 0;
   for (int b_r = 1; b_r <= B; b_r++) {
     for (int b_c = 1; b_c <= B; b_c++) {

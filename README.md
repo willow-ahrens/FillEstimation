@@ -1,4 +1,4 @@
-Tensor Fill Estimation: a comparison
+Tensor Fill Estimation: A Comparison
 ======================
 
 Build

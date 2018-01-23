@@ -1,13 +1,7 @@
-#ifndef max
-    #define max(a,b) ((a) > (b) ? (a) : (b))
-#endif
-
-#ifndef min
-    #define min(a,b) ((a) < (b) ? (a) : (b))
-#endif
-
 //lo is inclusive, hi is exclusive
 
+inline int max(int a, int b) {return a > b ? a : b;};
+inline int min(int a, int b) {return a < b ? a : b;};
 int random_range (int lo, int hi);
 double random_uniform ();
 void sort (int *stuff, int n);

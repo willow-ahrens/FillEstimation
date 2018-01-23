@@ -71,11 +71,11 @@ int estimate_fill (int m,
           i++;
         }
         j = ind[t];
-        int block_i = (i/b_r) + 1;
-        int block_j = (j/b_c) + 1;
+        int block_i = (i/b_r);
+        int block_j = (j/b_c);
         blocks.insert(std::pair<int, int>(block_i, block_j));
       }
-      fill[fill_index] = b_r * b_c * blocks.size() / (double)nnz;
+      fill[fill_index] = (double)b_r * (double)b_c * (double)blocks.size() / (double)nnz;
       fill_index++;
     }
   }

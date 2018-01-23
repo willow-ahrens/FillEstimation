@@ -21,8 +21,8 @@ int test (int m,
           int r,
           int c,
           int nnz,
-          const int *ind,
           const int *ptr,
+          const int *ind,
           const double *data,
           int trials,
           int verbose) {
@@ -46,12 +46,26 @@ int test (int m,
   Tensor<double> bp({m}, dv);
   Tensor<double> xp({n}, dv);
 
-  for(int h = 0; h < nnz; h++){
-    A.insert({ind[h]/r, ptr[h]/c, ind[h]%r, ptr[h]%c}, data[h]);
+  {
+    int i = 0;
+    for (int h = 0; h < nnz; h++){
+      while (ptr[i + 1] <= h) {
+        i++;
+      }
+      int j = ind[h];
+      A.insert({i/r, j/c, i%r, j%c}, data[h]);
+    }
   }
 
-  for(int h = 0; h < nnz; h++){
-    Ap.insert({ind[h], ptr[h]}, data[h]);
+  {
+    int i = 0;
+    for (int h = 0; h < nnz; h++){
+      while (ptr[i + 1] <= h) {
+        i++;
+      }
+      int j = ind[h];
+      Ap.insert({i, j}, data[h]);
+    }
   }
 
   for(int h = 0; h < nn; h++){

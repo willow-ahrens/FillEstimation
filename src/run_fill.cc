@@ -6,12 +6,12 @@
 #include <sys/stat.h>
 
 extern "C" {
-int test (size_t m,
-          size_t n,
-          size_t nnz,
-          const size_t *ptr,
-          const size_t *ind,
-          size_t B,
+int test (int m,
+          int n,
+          int nnz,
+          const int *ptr,
+          const int *ind,
+          int B,
           double epsilon,
           double delta,
           double sigma,
@@ -20,24 +20,25 @@ int test (size_t m,
           int results,
           int verbose);
 
-  char *name ();
+char *name ();
 
-  static void usage () {
-    fprintf(stderr,"usage: %s [options] <input>\n"
-    "  <input>                    MatrixMarket file (estimate fill of this matrix)\n"
-    "  -B, --max-block-size <arg> Maximum block dimension for fill estimates\n"
-    "  -e, --epsilon <arg>        Be accurate to relative error epsilon\n"
-    "  -d, --delta <arg>          With probability (1 - delta)\n"
-    "  -s, --sigma <arg>          Examine block rows With probability sigma\n"
-    "  -t, --trials <arg>         Number of trials to run\n"
-    "  -c, --clock                Display timing information\n"
-    "  -C, --noclock              Do not display timing information\n"
-    "  -r, --results              Display fill estimates for all trials\n"
-    "  -R, --noresults            Do not display fill estimates\n"
-    "  -v, --verbose              Verbose mode\n"
-    "  -q, --quiet                Quiet mode\n"
-    "  -h, --help                 Display help message\n", name());
-  }
+static void usage () {
+  fprintf(stderr,"usage: %s [options] <input>\n"
+  "  <input>                    MatrixMarket file (estimate fill of this matrix)\n"
+  "  -B, --max-block-size <arg> Maximum block dimension for fill estimates\n"
+  "  -e, --epsilon <arg>        Be accurate to relative error epsilon\n"
+  "  -d, --delta <arg>          With probability (1 - delta)\n"
+  "  -s, --sigma <arg>          Examine block rows With probability sigma\n"
+  "  -t, --trials <arg>         Number of trials to run\n"
+  "  -c, --clock                Display timing information\n"
+  "  -C, --noclock              Do not display timing information\n"
+  "  -r, --results              Display fill estimates for all trials\n"
+  "  -R, --noresults            Do not display fill estimates\n"
+  "  -v, --verbose              Verbose mode\n"
+  "  -q, --quiet                Quiet mode\n"
+  "  -h, --help                 Display help message\n", name());
+}
+
 }
 
 int main (int argc, char **argv) {
@@ -47,7 +48,7 @@ int main (int argc, char **argv) {
   int verbose = 0;
   int help = 0;
 
-  size_t B = 12;
+  int B = 12;
   double epsilon = 0.1;
   double delta = 0.01;
   double sigma = 0.02;
@@ -211,22 +212,7 @@ int main (int argc, char **argv) {
 
   auto csr = taco::read(argv[optind], taco::CSR, true);
 
-  auto ptr = csr.getStorage().getIndex().getModeIndex(1).getIndexArray(0);
-  size_t* size_t_ptr = (size_t*)malloc(sizeof(size_t) * ptr.getSize());
-  for(int i = 0; i < ptr.getSize(); i++){
-    size_t_ptr[i] = ((int*)ptr.getData())[i];
-  }
-
-  auto idx = csr.getStorage().getIndex().getModeIndex(1).getIndexArray(1);
-  size_t* size_t_idx = (size_t*)malloc(sizeof(size_t) * idx.getSize());
-  for(int i = 0; i < idx.getSize(); i++){
-    size_t_idx[i] = ((int*)idx.getData())[i];
-  }
-
-  int ret = test(csr.getDimension(0), csr.getDimension(1), csr.getStorage().getValues().getSize(), size_t_ptr, size_t_idx, B, epsilon, delta, sigma, trials, clock, results, verbose);
-
-  free(size_t_ptr);
-  free(size_t_idx);
+  int ret = test(csr.getDimension(0), csr.getDimension(1), csr.getStorage().getValues().getSize(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(0).getData(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(1).getData(), B, epsilon, delta, sigma, trials, clock, results, verbose);
 
   return ret;
 }

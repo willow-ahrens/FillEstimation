@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <gsl/gsl_spmatrix.h>
+#include <taco.h>
 #include "util.h"
 
-char *name () {
+extern "C" {
+
+const char *name () {
   return "reference";
 }
 
@@ -43,37 +45,39 @@ char *name () {
  *
  *  \returns On success, returns 0. On error, returns an error code.
  */
-int estimate_fill (size_t m,
-                   size_t n,
-                   size_t nnz,
-                   const size_t *ptr,
-                   const size_t *ind,
-                   size_t B,
+int estimate_fill (int m,
+                   int n,
+                   int nnz,
+                   const int *ptr,
+                   const int *ind,
+                   int B,
                    double epsilon,
                    double delta,
                    double *fill,
                    int verbose){
-  gsl_spmatrix *blocks = gsl_spmatrix_alloc_nzmax(m, n, nnz, GSL_SPMATRIX_TRIPLET);
-  size_t fill_index = 0;
-  for (size_t b_r = 1; b_r <= B; b_r++) {
-    for (size_t b_c = 1; b_c <= B; b_c++) {
-      gsl_spmatrix_set_zero(blocks);
-      size_t i = 0;
-      size_t j = 0;
-      size_t nnzb = 0;
-      for (size_t t = 0; t < nnz; t++){
+  taco::Tensor<double> blocks({m, n}, taco::CSR);
+  int fill_index = 0;
+  for (int b_r = 1; b_r <= B; b_r++) {
+    for (int b_c = 1; b_c <= B; b_c++) {
+      blocks.zero();
+      int i = 0;
+      int j = 0;
+      int nnzb = 0;
+      for (int t = 0; t < nnz; t++){
         while (ptr[i + 1] <= t) {
           i++;
         }
         j = ind[t];
-        size_t block_i = (i/b_r) + 1;
-        size_t block_j = (j/b_c) + 1;
-	gsl_spmatrix_set(blocks, block_i, block_j, 1.0);
+        int block_i = (i/b_r) + 1;
+        int block_j = (j/b_c) + 1;
+        blocks.insert({block_i, block_j}, 1.0);
       }
-      fill[fill_index] = b_r * b_c * gsl_spmatrix_nnz(blocks) / (double)nnz;
+      blocks.pack();
+      fill[fill_index] = b_r * b_c * blocks.getStorage().getValues().getSize() / (double)nnz;
       fill_index++;
     }
   }
-  gsl_spmatrix_free(blocks);
   return 0;
+}
+
 }

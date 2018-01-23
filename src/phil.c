@@ -45,12 +45,12 @@ char *name () {
  *
  *  \returns On success, returns 0. On error, returns an error code.
  */
-int estimate_fill (size_t m,
-                   size_t n,
-                   size_t nnz,
-                   const size_t *ptr,
-                   const size_t *ind,
-                   size_t B,
+int estimate_fill (int m,
+                   int n,
+                   int nnz,
+                   const int *ptr,
+                   const int *ind,
+                   int B,
                    double epsilon,
                    double delta,
                    double sigma,
@@ -58,32 +58,32 @@ int estimate_fill (size_t m,
                    int verbose){
   assert(n >= 1);
   assert(m >= 1);
-  size_t W = 2 * B;
+  int W = 2 * B;
   int Z[W][W];
 
   /* Compute the necessary number of samples */
   double T = 2 * log(B/delta) * B * B / (epsilon * epsilon);
-  size_t s;
+  int s;
 
   s = min(T, nnz);
 
   /* Sample s locations of nonzeros */
-  size_t *samples = (size_t*)malloc(s*sizeof(size_t));
+  int *samples = (int*)malloc(s*sizeof(int));
   assert(samples != NULL);
-  size_t *samples_i = (size_t*)malloc(s*sizeof(size_t));
+  int *samples_i = (int*)malloc(s*sizeof(int));
   assert(samples_i != NULL);
-  size_t *samples_j = (size_t*)malloc(s*sizeof(size_t));
+  int *samples_j = (int*)malloc(s*sizeof(int));
   assert(samples_j != NULL);
 
   /* if s == nnz, just compute the fill exactly. Otherwise, sample s nonzeros
    * so that the samples[t]^th nonzero is included in the sample.
    */
   if (s == nnz) {
-    for (size_t t = 0; t < nnz; t++) {
+    for (int t = 0; t < nnz; t++) {
       samples[t] = t;
     }
   } else {
-    for (size_t t = 0; t < s; t++) {
+    for (int t = 0; t < s; t++) {
       samples[t] = random_range(0, nnz);
     }
   }
@@ -91,8 +91,8 @@ int estimate_fill (size_t m,
   /* Convert flat samples array to (i, j) pairs in samples_i and samples_j. */
   sort(samples, s);
   {
-    size_t i = 0;
-    for (size_t t = 0; t < s; t++) {
+    int i = 0;
+    for (int t = 0; t < s; t++) {
       if (ptr[i + 1] <= samples[t]) {
         i = search_strict(ptr, i, m, samples[t]) - 1;
       }
@@ -101,9 +101,9 @@ int estimate_fill (size_t m,
     }
   }
 
-  for (size_t t = 0; t < s; t++) {
-    size_t i = samples_i[t];
-    size_t j = samples_j[t];
+  for (int t = 0; t < s; t++) {
+    int i = samples_i[t];
+    int j = samples_j[t];
 
     /* Fill Z with 0 */
     for (int r = 0; r < W; r++) {
@@ -113,13 +113,13 @@ int estimate_fill (size_t m,
     }
 
     /* Set Z to 1 where there are nonzeros in the neighborhood of (i, j) */
-    for (size_t ii = max(i, B - 1) - (B - 1); ii <= min(i + (B - 1), m - 1); ii++) {
+    for (int ii = max(i, B - 1) - (B - 1); ii <= min(i + (B - 1), m - 1); ii++) {
       int r = (B + ii) - i;
-      size_t jj;
-      size_t jj_min = max(j, B - 1) - (B - 1);
-      size_t jj_max = min(j + (B - 1), n - 1);
+      int jj;
+      int jj_min = max(j, B - 1) - (B - 1);
+      int jj_max = min(j + (B - 1), n - 1);
 
-      size_t scan = search(ind, ptr[ii], ptr[ii + 1], jj_min);
+      int scan = search(ind, ptr[ii], ptr[ii + 1], jj_min);
 
       while (scan < ptr[ii + 1] && (jj = ind[scan]) <= jj_max) {
         int c = (B + jj) - j;

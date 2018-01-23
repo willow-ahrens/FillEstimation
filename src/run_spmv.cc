@@ -1,21 +1,20 @@
 #include <errno.h>
 #include <getopt.h>
-#include <gsl/gsl_spmatrix.h>
+#include <taco.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 
-static int verbose = 0;
-static int help = 0;
+extern "C" {
 
-int test (size_t m,
-	  size_t n,
-	  size_t r,
-	  size_t c,
-	  size_t nnz,
-	  const size_t *ind,
-	  const size_t *ptr,
-	  const double *data,
+int test (int m,
+          int n,
+          int r,
+          int c,
+          int nnz,
+          const int *ind,
+          const int *ptr,
+          const double *data,
           int trials,
           int verbose);
 
@@ -30,18 +29,23 @@ static void usage () {
   "  -h, --help                 Display help message\n");
 }
 
+}
+
 int main (int argc, char **argv) {
 
-  size_t b_r = 1;
-  size_t b_c = 1;
+  int verbose = 0;
+  int help = 0;
+
+  int b_r = 1;
+  int b_c = 1;
   int trials = 1;
 
   /* Beware. Option parsing below. */
   long longarg;
   double doublearg;
   while (1) {
-    static char *options = "r:c:t:vqh";
-    static struct option long_options[] = {
+    const char *options = "r:c:t:vqh";
+    const struct option long_options[] = {
         {"block_r",  required_argument, 0, 'r'},
         {"block_c",  required_argument, 0, 'c'},
         {"trials",   required_argument, 0, 't'},
@@ -148,18 +152,9 @@ int main (int argc, char **argv) {
     return 1;
   }
 
-  FILE *f = fopen(argv[optind], "r");
-  gsl_spmatrix *triples = gsl_spmatrix_fscanf(f);
-  fclose(f);
-  if (triples == 0) {
-    printf("<input> must be filename of MatrixMarket matrix\n");
-    usage();
-    return 1;
-  }
+  auto csr = taco::read(argv[optind], taco::CSR, true);
 
-  int ret = test(triples->size1, triples->size2, b_r, b_c, triples->nz, triples->i, triples->p, triples->data, trials, verbose);
-
-  gsl_spmatrix_free(triples);
+  int ret = test(csr.getDimension(0), csr.getDimension(1), b_r, b_c, csr.getStorage().getValues().getSize(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(0).getData(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(1).getData(), (double*)csr.getStorage().getValues().getData(), trials, verbose);
 
   return ret;
 

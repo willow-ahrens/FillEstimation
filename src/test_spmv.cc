@@ -16,14 +16,14 @@ double wall_time (void) {
 }
 
 extern "C" {
-int test (size_t m,
-	  size_t n,
-	  size_t r,
-	  size_t c,
-	  size_t nnz,
-	  const size_t *ind,
-	  const size_t *ptr,
-	  const double *data,
+int test (int m,
+          int n,
+          int r,
+          int c,
+          int nnz,
+          const int *ind,
+          const int *ptr,
+          const double *data,
           int trials,
           int verbose) {
 
@@ -32,39 +32,34 @@ int test (size_t m,
   Format  bdv({Dense,Dense});
   Format   dv({Dense});
 
-  size_t bm = (m + r - 1)/r;
-  size_t bn = (n + c - 1)/c;
-  size_t mm = bm * r;
-  size_t nn = bn * c;
-;
+  int bm = (m + r - 1)/r;
+  int bn = (n + c - 1)/c;
+  int mm = bm * r;
+  int nn = bn * c;
+
   // Create tensors
-  Tensor<double> A({(int)bm, (int)bn, (int)r, (int)c}, bcsr);
-  Tensor<double> b({(int)bm,(int)r},   bdv);
-  Tensor<double> x({(int)bn,(int)c},   bdv);
+  Tensor<double> A({bm, bn, r, c}, bcsr);
+  Tensor<double> b({bm, r},   bdv);
+  Tensor<double> x({bn, c},   bdv);
 
-  Tensor<double> Ap({(int)m, (int)n}, csr);
-  Tensor<double> bp({(int)m}, dv);
-  Tensor<double> xp({(int)n}, dv);
+  Tensor<double> Ap({m, n}, csr);
+  Tensor<double> bp({m}, dv);
+  Tensor<double> xp({n}, dv);
 
-  for(size_t h = 0; h < nnz; h++){
-    A.insert({(int)(ind[h]/r),
-              (int)(ptr[h]/c),
-              (int)(ind[h]%r),
-              (int)(ptr[h]%c)}, data[h]);
+  for(int h = 0; h < nnz; h++){
+    A.insert({ind[h]/r, ptr[h]/c, ind[h]%r, ptr[h]%c}, data[h]);
   }
 
-  for(size_t h = 0; h < nnz; h++){
-    Ap.insert({(int)(ind[h]),
-               (int)(ptr[h])}, data[h]);
+  for(int h = 0; h < nnz; h++){
+    Ap.insert({ind[h], ptr[h]}, data[h]);
   }
 
-  for(size_t h = 0; h < nn; h++){
-    x.insert({(int)(h/c),
-              (int)(h%c)}, 1.0);
+  for(int h = 0; h < nn; h++){
+    x.insert({h/c, h%c}, 1.0);
   }
 
-  for(size_t h = 0; h < n; h++){
-    xp.insert({(int)h}, 1.0);
+  for(int h = 0; h < n; h++){
+    xp.insert({h}, 1.0);
   }
 
   A.pack();
@@ -75,8 +70,8 @@ int test (size_t m,
 
   // Form a matrix-vector multiplication expression
   IndexVar i, j, k, l;
-  b(i, k) = A(i,j,k,l) * x(j,l);
-  bp(i) = Ap(i,j) * xp(j);
+  b(i, k) = A(i, j, k, l) * x(j,l);
+  bp(i) = Ap(i, j) * xp(j);
 
   // Compile the expression
   b.compile();

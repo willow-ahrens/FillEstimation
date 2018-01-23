@@ -21,13 +21,13 @@ clean:
 	rm -rf reference phil oski spmv env.sh *.o *.dSYM *.trace *.pyc
 
 reference: run_fill.o test_fill.o reference.o util.o
-	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
 
 phil: run_fill.o test_fill.o phil.o util.o
-	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
 
 oski: run_fill.o test_fill.o oski.o util.o
-	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
 
 spmv: run_spmv.o test_spmv.o util.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)

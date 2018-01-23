@@ -45,12 +45,12 @@ char * name() {
  *
  *  \returns On success, returns 0. On error, returns an error code.
  */
-int estimate_fill (int m,
-                   int n,
-                   int nnz,
-                   const int *ptr,
-                   const int *ind,
-                   int B,
+int estimate_fill (size_t m,
+                   size_t n,
+                   size_t nnz,
+                   const size_t *ptr,
+                   const size_t *ind,
+                   size_t B,
                    double epsilon,
                    double delta,
                    double sigma,
@@ -69,7 +69,7 @@ int estimate_fill (int m,
   /* K[(c - 1)] counts distinct column block indicies in the current block row
    * when b_c = c.
    */
-  int K[B];
+  size_t K[B];
 
   /* see above note about fill order */
   int fill_index = 0;
@@ -77,17 +77,17 @@ int estimate_fill (int m,
   for (int r = 1; r <= B; r++) {
 
     /* M is the number of block rows */
-    int M = m / r;
+    size_t M = m / r;
 
     /* stores the number of examined nonzeros */
-    int S = 0;
+    size_t S = 0;
 
     for (int c = 1; c <= B; c++){
       K[c - 1] = 0;
     }
 
     /* loop over block rows */
-    for (int I = 0; I < M; I++) {
+    for (size_t I = 0; I < M; I++) {
 
       /* examine the block row with probability sigma */
       if (random_uniform() > sigma){
@@ -97,13 +97,13 @@ int estimate_fill (int m,
         /* Count the blocks in block row I, using "blocks" to remember the
          * blocks that have been seen so far for each block column width "c".
          */
-        for (int i = I * r; i < (I + 1) * r; i++) {
-          for (int t = ptr[i]; t < ptr[i + 1]; t++) {
-            int j = ind[t];
+        for (size_t i = I * r; i < (I + 1) * r; i++) {
+          for (size_t t = ptr[i]; t < ptr[i + 1]; t++) {
+            size_t j = ind[t];
 
             for (int c = 1; c <= B; c++) {
               /* "J" is the block column index */
-              int J = j / c;
+              size_t J = j / c;
 
               /* if the block has not yet been seen, count it */
               if (blocks[(c - 1) * n + J] == 0) {
@@ -120,13 +120,13 @@ int estimate_fill (int m,
        * Reset "blocks" for the next block row. We loop over the nonzeros
        * instead of calling "memset" in order to keep the complexity to O(nnz).
        */
-      for (int i = I * r; i < (I + 1) * r; i++) {
-        for (int t = ptr[i]; t < ptr[i + 1]; t++) {
-          int j = ind[t];
+      for (size_t i = I * r; i < (I + 1) * r; i++) {
+        for (size_t t = ptr[i]; t < ptr[i + 1]; t++) {
+          size_t j = ind[t];
 
           for (int c = 1; c <= B; c++) {
             /* "J" is the block column index */
-            int J = j / c;
+            size_t J = j / c;
             blocks[(c - 1) * n + J] = 0;
           }
         }

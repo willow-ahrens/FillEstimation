@@ -43,12 +43,12 @@ char *name () {
  *
  *  \returns On success, returns 0. On error, returns an error code.
  */
-int estimate_fill (int m,
-                   int n,
-                   int nnz,
-                   const int *ptr,
-                   const int *ind,
-                   int B,
+int estimate_fill (size_t m,
+                   size_t n,
+                   size_t nnz,
+                   const size_t *ptr,
+                   const size_t *ind,
+                   size_t B,
                    double epsilon,
                    double delta,
                    double *fill,

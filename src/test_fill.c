@@ -12,24 +12,24 @@ double wall_time (void) {
   return 1.0*t.tv_sec + 1.0e-6*t.tv_usec;
 }
 
-int estimate_fill (int m,
-                   int n,
-                   int nnz,
-                   const int *ptr,
-                   const int *ind,
-                   int B,
+int estimate_fill (size_t m,
+                   size_t n,
+                   size_t nnz,
+                   const size_t *ptr,
+                   const size_t *ind,
+                   size_t B,
                    double epsilon,
                    double delta,
                    double sigma,
                    double *fill,
                    int verbose);
 
-int test (int m,
-          int n,
-          int nnz,
-          const int *ptr,
-          const int *ind,
-          int B,
+int test (size_t m,
+          size_t n,
+          size_t nnz,
+          const size_t *ptr,
+          const size_t *ind,
+          size_t B,
           double epsilon,
           double delta,
           double sigma,
@@ -39,13 +39,13 @@ int test (int m,
           int verbose) {
 
   double *fill = (double*)malloc(sizeof(double) * B * B * trials);
-  for (int i = 0; i < B * B * trials; i++) {
+  for (size_t i = 0; i < B * B * trials; i++) {
     fill[i] = 0;
   }
 
   //Load problem into cache
   estimate_fill(m, n, nnz, ptr, ind, B, epsilon, delta, sigma, fill, verbose);
-  for (int i = 0; i < B * B; i++) {
+  for (size_t i = 0; i < B * B; i++) {
     fill[i] = 0;
   }
 
@@ -58,14 +58,14 @@ int test (int m,
   time += wall_time();
 
   printf("{\n");
-  int i = 0;
+  size_t i = 0;
   if (results) {
     printf("  \"results\": [\n");
     for (int t = 0; t < trials; t++) {
       printf("    [\n");
-      for (int b_r = 1; b_r <= B; b_r++) {
+      for (size_t b_r = 1; b_r <= B; b_r++) {
         printf("      [\n");
-        for (int b_c = 1; b_c <= B; b_c++) {
+        for (size_t b_c = 1; b_c <= B; b_c++) {
           printf("%.*e%s", DECIMAL_DIG, fill[i], b_c <= B - 1 ? ", " : "");
           i++;
         }

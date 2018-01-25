@@ -6,44 +6,7 @@ src/performance-matrices
 src/*plot-inputs
 run
 
-# Created by https://www.gitignore.io/api/c,cmake,python,autotools
-
-### Autotools ###
-# http://www.gnu.org/software/automake
-
-/ar-lib
-/mdate-sh
-/py-compile
-/test-driver
-/ylwrap
-
-# http://www.gnu.org/software/autoconf
-
-/autom4te.cache
-/autoscan.log
-/autoscan-*.log
-/aclocal.m4
-/compile
-/config.guess
-/config.h.in
-/config.sub
-/configure
-/configure.scan
-/depcomp
-/install-sh
-/missing
-/stamp-h1
-
-# https://www.gnu.org/software/libtool/
-
-/ltmain.sh
-
-# http://www.gnu.org/software/texinfo
-
-/texinfo.tex
-
-### Autotools Patch ###
-/config.log
+# Created by https://www.gitignore.io/api/c,c++,python
 
 ### C ###
 # Prerequisites
@@ -99,17 +62,24 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-### CMake ###
-CMakeCache.txt
-CMakeFiles
-CMakeScripts
-Testing
-Makefile
-cmake_install.cmake
-install_manifest.txt
-compile_commands.json
-CTestTestfile.cmake
-build
+### C++ ###
+# Prerequisites
+
+# Compiled Object files
+*.slo
+
+# Precompiled Headers
+
+# Compiled Dynamic libraries
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+
+# Executables
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -186,7 +156,7 @@ target/
 .python-version
 
 # celery beat schedule file
-celerybeat-schedule
+celerybeat-schedule.*
 
 # SageMath parsed files
 *.sage.py
@@ -213,14 +183,5 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# End of https://www.gitignore.io/api/c,cmake,python,autotools
 
-# OS generated files #
-######################
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+# End of https://www.gitignore.io/api/c,c++,python

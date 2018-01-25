@@ -1,6 +1,6 @@
 #include <stdlib.h>
-#include "mt19937ar.c"
 #include "util.h"
+#include "mt19937ar.c"
 
 void random_seed(unsigned long s) {
   init_genrand(s);

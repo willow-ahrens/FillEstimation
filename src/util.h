@@ -4,6 +4,7 @@
 
 static inline int max(int a, int b) {return a > b ? a : b;};
 static inline int min(int a, int b) {return a < b ? a : b;};
+void random_seed (unsigned long seed);
 int random_range (int lo, int hi);
 double random_uniform ();
 void sort (int *stuff, int n);

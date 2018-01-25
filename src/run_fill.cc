@@ -6,6 +6,8 @@
 #include <sys/stat.h>
 
 extern "C" {
+#include "util.h"
+
 int test (int m,
           int n,
           int nnz,
@@ -25,6 +27,7 @@ char *name ();
 static void usage () {
   fprintf(stderr,"usage: %s [options] <input>\n"
   "  <input>                    MatrixMarket file (estimate fill of this matrix)\n"
+  "  -g, --rng-seed <arg>       Seed for random number generator\n"
   "  -B, --max-block-size <arg> Maximum block dimension for fill estimates\n"
   "  -e, --epsilon <arg>        Be accurate to relative error epsilon\n"
   "  -d, --delta <arg>          With probability (1 - delta)\n"
@@ -58,8 +61,9 @@ int main (int argc, char **argv) {
   long longarg;
   double doublearg;
   while (1) {
-    const char *options = "B:e:s:d:t:cCrRvqh";
+    const char *options = "g:B:e:s:d:t:cCrRvqh";
     const struct option long_options[] = {
+        {"rng-seed", required_argument, 0, 'g'},
         {"max-block-size", required_argument, 0, 'B'},
         {"trials",         required_argument, 0, 't'},
         {"epsilon", required_argument, 0, 'e'},
@@ -91,6 +95,17 @@ int main (int argc, char **argv) {
     switch (c) {
       case 0:
         /* If this option set a flag, do nothing else now. */
+        break;
+
+      case 'g':
+        errno = 0;
+        longarg = strtol(optarg, 0, 10);
+        if (errno != 0 || longarg < 0) {
+          printf("option -g takes an integer seed >= 0\n");
+          usage();
+          return 1;
+        }
+        random_seed(longarg);
         break;
 
       case 'B':

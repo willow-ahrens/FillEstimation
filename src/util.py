@@ -160,7 +160,6 @@ def matrix_nnz(matrix):
 
 def spmv_time(matrix, r = 1, c = 1, trials = 1):
   myenv = os.environ.copy()
-  myenv["GSL_RNG_SEED"] = str(random.randrange(sys.maxint))
   myenv.update(experiment["spmv_vars"])
 
   prefix = experiment["spmv_prefix"]
@@ -172,6 +171,7 @@ def spmv_time(matrix, r = 1, c = 1, trials = 1):
   command += ["-r", "%d" % r]
   command += ["-c", "%d" % c]
   command += ["-t", "%d" % trials]
+  command += ["-g", "%s" % str(random.randrange(sys.maxint))]
   command += [matrix_path(matrix)]
 
   if verbose:
@@ -269,7 +269,6 @@ def fill_estimates(name, matrix, B = None, epsilon = None, delta = None, sigma =
     blocks = True
 
   myenv = os.environ.copy()
-  myenv["GSL_RNG_SEED"] = str(random.randrange(sys.maxint))
   myenv.update(experiment["fill_vars"])
 
   prefix = experiment["fill_prefix"]
@@ -283,6 +282,7 @@ def fill_estimates(name, matrix, B = None, epsilon = None, delta = None, sigma =
   command += ["-d", "%g" % delta]
   command += ["-s", "%g" % sigma]
   command += ["-t", "%d" % trials]
+  command += ["-g", "%s" % str(random.randrange(sys.maxint))]
   if clock:
     command += ["-c"]
   else:

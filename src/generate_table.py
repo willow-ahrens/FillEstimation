@@ -22,6 +22,8 @@ if "table_matrices" in util.experiment:
       row["matrix_domain"] = util.matrix_domain(matrix)
       row["matrix_size"] = util.matrix_size(matrix)
       row["matrix_nnz"] = util.matrix_nnz(matrix)
+      row["matrix_n"] = util.matrix_n(matrix)
+      row["matrix_m"] = util.matrix_m(matrix)
       row["normal_spmv_time"] = util.get_spmv_record(matrix)[0][0]
 
       with open(os.path.join(table, "{}.json".format(matrix)), 'r') as g:

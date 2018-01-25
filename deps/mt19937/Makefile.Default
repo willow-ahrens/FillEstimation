@@ -1,0 +1,5 @@
+stamp:
+	mkdir -p $(MT19937)/install
+	mkdir -p $(MT19937)/install/include
+	cp $(MT19937)/mt19937ar/mt19937ar.c $(MT19937)/install/include/mt19937ar.c
+	touch $(MT19937)/stamp

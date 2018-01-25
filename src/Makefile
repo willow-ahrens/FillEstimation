@@ -1,5 +1,5 @@
 TOP = $(realpath $(dir $(realpath $(firstword $(MAKEFILE_LIST))))..)
-GSL = $(TOP)/deps/gsl/install
+MT19937 = $(TOP)/deps/mt19937/install
 TACO = $(TOP)/deps/taco/install
 ARCH = $(shell uname)
 define ENV_SH
@@ -12,9 +12,9 @@ endif
 
 include $(TOP)/src/Makefile.$(MYARCH)
 
-CFLAGS += -std=c99 `$(GSL)/bin/gsl-config --cflags` -I$(TACO)/include
-CXXFLAGS += -std=c++11 `$(GSL)/bin/gsl-config --cflags` -I$(TACO)/include -DDECIMAL_DIG=17
-LDLIBS += `$(GSL)/bin/gsl-config --libs` -L$(TACO)/lib -ltaco -ldl
+CFLAGS += -std=c99 -I$(MT19937)/include -I$(TACO)/include
+CXXFLAGS += -std=c++11 -I$(MT19937)/include -I$(TACO)/include -DDECIMAL_DIG=17
+LDLIBS += -L$(TACO)/lib -ltaco -ldl
 
 all: reference phil oski spmv env.sh
 clean:

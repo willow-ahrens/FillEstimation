@@ -1,20 +1,20 @@
 TOP = $(realpath $(dir $(realpath $(firstword $(MAKEFILE_LIST))))..)
 DEPS = $(TOP)/deps
 
-.PHONY: all gsl taco clean clean_gsl clean_taco
+.PHONY: all taco mt19937 clean clean_taco
 
-all: gsl taco
+all: taco mt19937
 
-clean: clean_gsl clean_taco
+clean: clean_taco clean_mt19937
 
-gsl:
-	$(MAKE) -C $(DEPS)/gsl all
+mt19937:
+	$(MAKE) -C $(DEPS)/mt19937 all
 
 taco:
 	$(MAKE) -C $(DEPS)/taco all
 
-clean_gsl:
-	$(MAKE) -C $(DEPS)/gsl clean
+clean_mt19937:
+	$(MAKE) -C $(DEPS)/mt19937 clean
 
 clean_taco:
 	$(MAKE) -C $(DEPS)/taco clean

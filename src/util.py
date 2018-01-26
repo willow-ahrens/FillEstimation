@@ -158,6 +158,12 @@ def matrix_read(matrix):
 def matrix_nnz(matrix):
   return matrix_read(matrix).nnz
 
+def matrix_n(matrix):
+  return matrix_read(matrix).shape[0]
+
+def matrix_m(matrix):
+  return matrix_read(matrix).shape[1]
+
 def spmv_time(matrix, r = 1, c = 1, trials = 1):
   myenv = os.environ.copy()
   myenv["GSL_RNG_SEED"] = str(random.randrange(sys.maxint))

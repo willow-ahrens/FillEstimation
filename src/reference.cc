@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <taco.h>
 #include "util.h"
+#include <unordered_set>
 
 extern "C" {
 
@@ -55,11 +55,14 @@ int estimate_fill (int m,
                    double delta,
                    double *fill,
                    int verbose){
-  taco::Tensor<double> blocks({m, n}, taco::CSR);
+  auto hash = [n](std::pair<int, int> coord){
+    return coord.first * n + coord.second;
+  };
+  std::unordered_set<std::pair<int, int>, decltype(hash)> blocks((size_t)nnz, hash);
   int fill_index = 0;
   for (int b_r = 1; b_r <= B; b_r++) {
     for (int b_c = 1; b_c <= B; b_c++) {
-      blocks.zero();
+      blocks.clear();
       int i = 0;
       int j = 0;
       int nnzb = 0;
@@ -68,12 +71,11 @@ int estimate_fill (int m,
           i++;
         }
         j = ind[t];
-        int block_i = (i/b_r) + 1;
-        int block_j = (j/b_c) + 1;
-        blocks.insert({block_i, block_j}, 1.0);
+        int block_i = (i/b_r);
+        int block_j = (j/b_c);
+        blocks.insert(std::pair<int, int>(block_i, block_j));
       }
-      blocks.pack();
-      fill[fill_index] = b_r * b_c * blocks.getStorage().getValues().getSize() / (double)nnz;
+      fill[fill_index] = (double)b_r * (double)b_c * (double)blocks.size() / (double)nnz;
       fill_index++;
     }
   }

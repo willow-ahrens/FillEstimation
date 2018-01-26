@@ -1,26 +1,22 @@
-#include <gsl/gsl_rng.h>
 #include <stdlib.h>
 #include "util.h"
+#include "mt19937ar.c"
 
-gsl_rng *r = 0;
+void random_seed(unsigned long s) {
+  init_genrand(s);
+}
 
 int random_range (int lo, int hi) {
-  if (!r) {
-    gsl_rng_env_setup();
-    const gsl_rng_type *T = gsl_rng_default;
-    r = gsl_rng_alloc (T);
-  }
   int n = hi - lo;
-  return lo + gsl_rng_uniform_int(r, n);//todo this range might not be big enough/type issues may occur here.
+  while(1){
+    unsigned long r = genrand_int32();
+    int offset = (r % n);
+    if (0xfffffffful - (r - offset) >= n - 1) return lo + offset;
+  }
 }
 
 double random_uniform () {
-  if (!r) {
-    gsl_rng_env_setup();
-    const gsl_rng_type *T = gsl_rng_default;
-    r = gsl_rng_alloc (T);
-  }
-  return gsl_rng_uniform(r);
+  return genrand_res53();
 }
 
 int int_cmp(const void *a, const void *b)

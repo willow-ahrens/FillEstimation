@@ -1,9 +1,0 @@
-stamp:
-	mkdir -p $(GSL)/build
-	mkdir -p $(GSL)/install
-	cp -r $(GSL)/gsl-2.4/* $(GSL)/build
-	(cd $(GSL)/build;\
-	./configure --prefix=$(GSL)/install;\
-	make -j;\
-	make install)
-	touch $(GSL)/stamp

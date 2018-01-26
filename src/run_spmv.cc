@@ -6,14 +6,15 @@
 #include <sys/stat.h>
 
 extern "C" {
+#include "util.h"
 
 int test (int m,
           int n,
           int r,
           int c,
           int nnz,
-          const int *ind,
           const int *ptr,
+          const int *ind,
           const double *data,
           int trials,
           int verbose);
@@ -21,6 +22,7 @@ int test (int m,
 static void usage () {
   fprintf(stderr,"usage: spmv [options] <input>\n"
   "  <input>                    MatrixMarket file (multiply this matrix)\n"
+  "  -g, --rng-seed <arg>       Seed for random number generator\n"
   "  -r, --block_r <arg>        Row block size\n"
   "  -c, --block_c <arg>        Column block size\n"
   "  -t, --trials <arg>         Number of trials to run\n"
@@ -44,8 +46,9 @@ int main (int argc, char **argv) {
   long longarg;
   double doublearg;
   while (1) {
-    const char *options = "r:c:t:vqh";
+    const char *options = "g:r:c:t:vqh";
     const struct option long_options[] = {
+        {"rng-seed", required_argument, 0, 'g'},
         {"block_r",  required_argument, 0, 'r'},
         {"block_c",  required_argument, 0, 'c'},
         {"trials",   required_argument, 0, 't'},
@@ -71,6 +74,17 @@ int main (int argc, char **argv) {
     switch (c) {
       case 0:
         /* If this option set a flag, do nothing else now. */
+        break;
+
+      case 'g':
+        errno = 0;
+        longarg = strtol(optarg, 0, 10);
+        if (errno != 0 || longarg < 0) {
+          printf("option -g takes an integer seed >= 0\n");
+          usage();
+          return 1;
+        }
+        random_seed(longarg);
         break;
 
       case 'r':

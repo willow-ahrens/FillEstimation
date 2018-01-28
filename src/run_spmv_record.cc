@@ -25,8 +25,7 @@ static void usage () {
   fprintf(stderr,"usage: spmv [options] <input>\n"
   "  <input>                    MatrixMarket file (multiply this matrix)\n"
   "  -g, --rng-seed <arg>       Seed for random number generator\n"
-  "  -r, --block_r <arg>        Row block size\n"
-  "  -c, --block_c <arg>        Column block size\n"
+  "  -B, --max-block-size <arg> Maximum block dimension for fill estimates\n"
   "  -t, --trials <arg>         Number of trials to run\n"
   "  -v, --verbose              Verbose mode\n"
   "  -q, --quiet                Quiet mode\n"
@@ -40,19 +39,17 @@ int main (int argc, char **argv) {
   int verbose = 0;
   int help = 0;
 
-  int b_r = 1;
-  int b_c = 1;
+  int B = 12;
   int trials = 1;
 
   /* Beware. Option parsing below. */
   long longarg;
   double doublearg;
   while (1) {
-    const char *options = "g:r:c:t:vqh";
+    const char *options = "g:B:t:vqh";
     const struct option long_options[] = {
         {"rng-seed", required_argument, 0, 'g'},
-        {"block_r",  required_argument, 0, 'r'},
-        {"block_c",  required_argument, 0, 'c'},
+        {"max-block-size", required_argument, 0, 'B'},
         {"trials",   required_argument, 0, 't'},
         {"verbose",   no_argument, &verbose, 1},
         {"quiet",     no_argument, &verbose, 0},
@@ -89,26 +86,15 @@ int main (int argc, char **argv) {
         random_seed(longarg);
         break;
 
-      case 'r':
+      case 'B':
         errno = 0;
         longarg = strtol(optarg, 0, 10);
         if (errno != 0 || longarg < 1) {
-          printf("option -r takes an integer column block size >= 1\n");
+          printf("option -B takes an integer maximum block size >= 1\n");
           usage();
           return 1;
         }
-        b_r = longarg;
-        break;
-
-      case 'c':
-        errno = 0;
-        longarg = strtol(optarg, 0, 10);
-        if (errno != 0 || longarg < 1) {
-          printf("option -c takes an integer column block size >= 1\n");
-          usage();
-          return 1;
-        }
-        b_c = longarg;
+        B = longarg;
         break;
 
       case 't':
@@ -170,18 +156,23 @@ int main (int argc, char **argv) {
 
   auto csr = taco::read(argv[optind], taco::CSR, true);
 
-  double time_total;
-  double time_mean;
-  int ret = test(csr.getDimension(0), csr.getDimension(1), csr.getStorage().getValues().getSize(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(0).getData(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(1).getData(), (double*)csr.getStorage().getValues().getData(), b_r, b_c, trials, verbose, &time_total, &time_mean);
-
-  if (ret) {
-    return ret;
-  }
-
   printf("{\n");
-  printf("  \"total_time\": %.*e,\n", DECIMAL_DIG, time_total);
-  printf("  \"mean_time\": %.*e%s\n", DECIMAL_DIG, time_mean, 0 ? "," : "");
-  printf("\n}\n");
+  printf("  \"results\": [\n");
+  for (int b_r = 1; b_r <= B; b_r++) {
+    printf("      [\n");
+    for (int b_c = 1; b_c <= B; b_c++) {
+      double time_total;
+      double time_mean;
+      int ret = test(csr.getDimension(0), csr.getDimension(1), csr.getStorage().getValues().getSize(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(0).getData(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(1).getData(), (double*)csr.getStorage().getValues().getData(), b_r, b_c, trials, verbose, &time_total, &time_mean);
+      if (ret) {
+        return ret;
+      }
+      printf("%.*e%s", DECIMAL_DIG, time_mean, b_c <= B - 1 ? ", " : "");
+    }
+    printf("      ]%s\n", b_r <= B - 1 ? "," : "");
+  }
+  printf("  ]%s\n", 0 ? "," : "");
+  printf("}\n");
 
   return 0;
 }

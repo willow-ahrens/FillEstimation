@@ -198,6 +198,42 @@ def spmv_time(matrix, r = 1, c = 1, trials = 1):
 
   return parsed
 
+def spmv_record(matrix, B = None, trials = 1):
+  if not B:
+    B = experiment["B"]
+
+  myenv = os.environ.copy()
+  myenv.update(experiment["spmv_vars"])
+
+  prefix = experiment["spmv_prefix"]
+  if prefix:
+    command = prefix.split(" ")
+  else:
+    command = []
+  command += [os.path.join(os.path.dirname(os.path.realpath(__file__)), "spmv_record")]
+  command += ["-B", "%d" % B]
+  command += ["-t", "%d" % trials]
+  command += ["-g", "%s" % str(random.randrange(sys.maxint))]
+  command += [matrix_path(matrix)]
+
+  if verbose:
+    print(command)
+
+  try:
+    output = check_output(command, env=myenv)
+  except Exception as e:
+    print("error executing command ({0})".format(command))
+    raise(e)
+
+  try:
+    parsed = json.loads(output)
+  except ValueError as e:
+    print("Output of command ({0}) must be valid json. Got:".format(command))
+    print(output)
+    raise(e)
+
+  return parsed
+
 def get_profile(B = None, m = None, n = None, trials = None):
   if not B:
     B = experiment["B"]
@@ -252,11 +288,7 @@ def get_spmv_record(matrix, B = None, trials = None):
   path = os.path.join(experiment["spmv_records"], "{}_{}_{}.npy".format(matrix, B, trials))
 
   if not os.path.isfile(path):
-    record = numpy.ones((B, B))
-    for r in range(1, B + 1):
-      for c in range(1, B + 1):
-        t = spmv_time(matrix, r = r, c = c, trials = trials)["mean_time"]
-        record[r-1][c-1] = float(t)
+    record = parsed["results"]
     numpy.save(path, record)
   return numpy.load(path)
 

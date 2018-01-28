@@ -5,13 +5,13 @@ args = util.parse(argparse.ArgumentParser())
 prefix = "source {}; ".format(os.path.join(util.src, "env.sh"))
 
 #cache references
-util.experiment["create_script"](util.experiment["run"], "generate_references", prefix + "python {} -e \"{}\"".format(os.path.join(util.src, "generate_references.py"), util.read_path(args.experiment)), util.experiment["matrix_registry"].keys())
+util.experiment["create_script"](util.experiment["run"], "generate_references", prefix + "python {} -e \"{}\"".format(os.path.join(util.src, "generate_reference.py"), util.read_path(args.experiment)), util.experiment["matrix_registry"].keys())
 
 #cache profile
 util.experiment["create_script"](util.experiment["run"], "generate_profile", prefix + "python {} -e \"{}\"".format(os.path.join(util.src, "generate_profile.py"), util.read_path(args.experiment)), [])
 
 #cache spmv_times
-util.experiment["create_script"](util.experiment["run"], "generate_spmv_records", prefix + "python {} -e \"{}\"".format(os.path.join(util.src, "generate_spmv_records.py"), util.read_path(args.experiment)), util.experiment["matrix_registry"].keys())
+util.experiment["create_script"](util.experiment["run"], "generate_spmv_records", prefix + "python {} -e \"{}\"".format(os.path.join(util.src, "generate_spmv_record.py"), util.read_path(args.experiment)), util.experiment["matrix_registry"].keys())
 
 #make table data
 if "table_matrices" in util.experiment:

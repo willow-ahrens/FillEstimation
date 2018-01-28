@@ -18,14 +18,16 @@ double wall_time (void) {
 extern "C" {
 int test (int m,
           int n,
-          int r,
-          int c,
           int nnz,
           const int *ptr,
           const int *ind,
           const double *data,
+          int r,
+          int c,
           int trials,
-          int verbose) {
+          int verbose,
+          double *time_total,
+          double *time_mean){
 
   Format  csr({Dense,Sparse});
   Format bcsr({Dense,Sparse,Dense,Dense});
@@ -117,11 +119,8 @@ int test (int m,
     mytime += wall_time();
   }
 
-  printf("{\n");
-  printf("  \"total_time\": %.*e,\n", DECIMAL_DIG, mytime);
-  printf("  \"mean_time\": %.*e%s\n", DECIMAL_DIG, mytime/trials, 0 ? "," : "");
-  printf("\n}\n");
-
+  *time_total = mytime;
+  *time_mean = mytime/trials;
   return 0;
 }
 }

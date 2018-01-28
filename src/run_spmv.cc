@@ -10,14 +10,16 @@ extern "C" {
 
 int test (int m,
           int n,
-          int r,
-          int c,
           int nnz,
           const int *ptr,
           const int *ind,
           const double *data,
+          int r,
+          int c,
           int trials,
-          int verbose);
+          int verbose,
+          double *time_total,
+          double *time_mean);
 
 static void usage () {
   fprintf(stderr,"usage: spmv [options] <input>\n"
@@ -168,8 +170,16 @@ int main (int argc, char **argv) {
 
   auto csr = taco::read(argv[optind], taco::CSR, true);
 
-  int ret = test(csr.getDimension(0), csr.getDimension(1), b_r, b_c, csr.getStorage().getValues().getSize(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(0).getData(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(1).getData(), (double*)csr.getStorage().getValues().getData(), trials, verbose);
+  double time_total;
+  double time_mean;
+  int ret = test(csr.getDimension(0), csr.getDimension(1), csr.getStorage().getValues().getSize(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(0).getData(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(1).getData(), (double*)csr.getStorage().getValues().getData(), b_r, b_c, trials, verbose, &time_total, &time_mean);
+
+  if (ret == 0) {
+    printf("{\n");
+    printf("  \"total_time\": %.*e,\n", DECIMAL_DIG, time_total);
+    printf("  \"mean_time\": %.*e%s\n", DECIMAL_DIG, time_mean, 0 ? "," : "");
+    printf("\n}\n");
+  }
 
   return ret;
-
 }

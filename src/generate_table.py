@@ -3,6 +3,10 @@ import argparse
 import os
 import json
 import csv
+import time
+import sys
+
+tic = time.time()
 
 args = util.parse(argparse.ArgumentParser())
 
@@ -34,3 +38,6 @@ if "table_matrices" in util.experiment:
         writer = csv.DictWriter(f, fieldnames=sorted(row.keys()))
         writer.writeheader()
       writer.writerow(row)
+
+toc = time.time()
+sys.stderr.write("generate_table() = {}\n".format(toc - tic))

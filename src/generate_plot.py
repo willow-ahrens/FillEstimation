@@ -3,6 +3,10 @@ import argparse
 import os
 import json
 import numpy
+import time
+import sys
+
+tic = time.time()
 
 parser = argparse.ArgumentParser()
 parser.add_argument("matrix", help="the matrix to use", type=str)
@@ -34,3 +38,6 @@ path = os.path.join(plots, "{}.json".format(args.matrix))
 
 with open(path, 'w') as f:
   json.dump(results, f, indent=4, sort_keys=True)
+
+toc = time.time()
+sys.stderr.write("generate_plot({}) = {}\n".format(args.matrix, toc - tic))

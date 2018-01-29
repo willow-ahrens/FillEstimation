@@ -20,8 +20,8 @@ for point in util.experiment["plot_points"][args.matrix]:
   row["matrix_domain"] = util.matrix_domain(args.matrix)
   row["matrix_size"] = util.matrix_size(args.matrix)
   row["matrix_nnz"] = util.matrix_nnz(args.matrix)
-  row["matrix_n"] = util.matrix_n(matrix)
-  row["matrix_m"] = util.matrix_m(matrix)
+  row["matrix_n"] = util.matrix_n(args.matrix)
+  row["matrix_m"] = util.matrix_m(args.matrix)
   row["normal_spmv_time"] = util.get_spmv_record(args.matrix)[0][0]
   row.update(point)
   for name in ["phil", "oski"]:

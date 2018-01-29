@@ -164,9 +164,11 @@ def matrix_n(matrix):
 def matrix_m(matrix):
   return matrix_read(matrix).shape[1]
 
-def spmv_time(matrix, r = 1, c = 1, trials = 1):
+def spmv_time(matrix, r = 1, c = 1, trials = None):
   myenv = os.environ.copy()
   myenv.update(experiment["spmv_vars"])
+  if not trials:
+    trials = experiment["profile_trials"]
 
   prefix = experiment["spmv_prefix"]
   if prefix:
@@ -198,9 +200,11 @@ def spmv_time(matrix, r = 1, c = 1, trials = 1):
 
   return parsed
 
-def spmv_record(matrix, B = None, trials = 1):
+def spmv_record(matrix, B = None, trials = None):
   if not B:
     B = experiment["B"]
+  if not trials:
+    trials = experiment["profile_trials"]
 
   myenv = os.environ.copy()
   myenv.update(experiment["spmv_vars"])
@@ -288,7 +292,7 @@ def get_spmv_record(matrix, B = None, trials = None):
   path = os.path.join(experiment["spmv_records"], "{}_{}_{}.npy".format(matrix, B, trials))
 
   if not os.path.isfile(path):
-    record = parsed["results"]
+    record = spmv_record(matrix, B = B, trials = trials)["results"]
     numpy.save(path, record)
   return numpy.load(path)
 

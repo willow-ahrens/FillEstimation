@@ -17,6 +17,7 @@
 #SBATCH --mail-user=pahrens@mit.edu
 #SBATCH --mail-type=all
 #SBATCH -p lanka-v3
+#SBATCH --exclude lanka29
 """),
   "B" : 4,
   "epsilon" : 0.1,

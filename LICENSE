@@ -29,7 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 -------------------------------------------------------------------------------
 
-The ASX Tensor Fill Estimation Algorithm includes a copy and modified version
+The PHIL Tensor Fill Estimation Algorithm includes a copy and modified version
 of the BeBOP Optimized Sparse Kernel Interface (OSKI) Library, developed by
 Rich Vuduc, James Demmel, and Kathy Yelick, which is subject to the following
 licensing terms:
@@ -115,7 +115,7 @@ SOFTWARE.
 
 -------------------------------------------------------------------------------
 
-The ASX Tensor Fill Estimation Algorithm includes a copy of the Tensor Algebra
+The PHIL Tensor Fill Estimation Algorithm includes a copy of the Tensor Algebra
 COmpiler (TACO),  developed by Fredrik Kjolstad, David Lugato, Stephen Chou,
 and Shoaib Kamil, stored in the subdirectory "deps/taco/taco" in the original
 distribution. The TACO software is bound by the following license:
@@ -142,7 +142,7 @@ SOFTWARE.
 
 -------------------------------------------------------------------------------
 
-The ASX Tensor Fill Estimation Algorithm includes a copy of MT19937, with
+The PHIL Tensor Fill Estimation Algorithm includes a copy of MT19937, with
 initialization improved 2002/1/26, developed by Takuji Nishimura and Makoto
 Matsumoto, stored in the subdirectory "deps/mt19937/mt19937ar" in the original
 distribution. MT19937 is subject to the following licensing terms:

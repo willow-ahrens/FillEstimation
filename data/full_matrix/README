@@ -1,0 +1,8 @@
+Matrices are from the UF Sparse Matrix Collection and must be in Matrix Market format.
+
+To download the dataset from the paper, you can download and convert it from source 
+using the download_dataset.sh script then processing all the tar files with 
+process_inputs.py. 
+
+To add matrices to the test set for some experiment, add them to registry.json as well as the experiment_*.py
+file in src/ that you want to run. You will need to regenerate the slurm experiment scripts.

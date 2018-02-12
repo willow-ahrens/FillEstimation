@@ -1,8 +1,8 @@
 {
   "experiment_name" : "DefaultExperiment",
   "data_path" : os.path.join(top, "data"),
-  "matrix_path" : os.path.join(top, "data/matrix"),
-  "matrix_registry_path" : os.path.join(top, "data/matrix/registry.json"),
+  "matrix_path" : os.path.join(top, "data/matrix/default"),
+  "matrix_registry_path" : os.path.join(top, "data/matrix/default/registry.json"),
   "run_path" : os.path.join(top, "run"),
   "fill_prefix" : "",
   "fill_vars" : {},

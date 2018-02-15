@@ -83,9 +83,7 @@ int estimate_fill (int m,
       samples[t] = t;
     }
   } else {
-    for (int t = 0; t < s; t++) {
-      samples[t] = random_range(0, nnz);
-    }
+    random_range(samples, s, 0, nnz);
   }
 
   /* Convert flat samples array to (i, j) pairs in samples_i and samples_j. */

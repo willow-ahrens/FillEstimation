@@ -1,5 +1,4 @@
 TOP = $(realpath $(dir $(realpath $(firstword $(MAKEFILE_LIST))))..)
-MT19937 = $(TOP)/deps/mt19937/install
 TACO = $(TOP)/deps/taco/install
 ARCH = $(shell uname)
 define ENV_SH
@@ -12,8 +11,8 @@ endif
 
 include $(TOP)/src/Makefile.$(MYARCH)
 
-CFLAGS += -std=c99 -I$(MT19937)/include -I$(TACO)/include
-CXXFLAGS += -std=c++11 -I$(MT19937)/include -I$(TACO)/include -DDECIMAL_DIG=17
+CFLAGS += -std=c99 -I$(TACO)/include
+CXXFLAGS += -std=c++11 -I$(TACO)/include -DDECIMAL_DIG=17
 LDLIBS += -L$(TACO)/lib -ltaco -ldl
 
 all: reference phil oski spmv spmv_record env.sh

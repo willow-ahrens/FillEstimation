@@ -57,7 +57,7 @@
         "ok2010_conv",
         "s3dkt3m2_conv",
         "nd24k_conv",
-        "ct20stif",
+        "ct20stif_conv",
         "gupta1_conv",
         "TSOPF_RS_b2383_conv",
         "hugetric-00010_conv",
@@ -76,10 +76,5 @@
         "bundle_adj_conv",
         "inline_1_conv",
         "m_t1_conv"
-        ],
-  "plot_points" : {"3dtube_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(7, 0.2, 10), exprange(0.001, 0.06, 10))],
-                   "gupta1_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(7, 0.2, 10), exprange(0.001, 0.06, 10))],
-                   "ct20stif": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(7, 0.2, 10), exprange(0.001, 0.06, 10))],
-                   "pathological_phil": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(2, 0.3, 10), exprange(0.01, 1.0, 10))],
-                   "pathological_oski": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(2, 0.3, 10), exprange(0.01, 1.0, 10))]}
+        ]
 }

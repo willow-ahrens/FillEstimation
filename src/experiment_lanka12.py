@@ -81,6 +81,6 @@
   "plot_points" : {"3dtube_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(7, 0.2, 10), exprange(0.001, 0.06, 10))],
                    "gupta1_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(7, 0.2, 10), exprange(0.001, 0.06, 10))],
                    "ct20stif_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(7, 0.2, 10), exprange(0.001, 0.06, 10))],
-                   "pathological_phil": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(2, 0.3, 10), exprange(0.001, 0.05, 10))],
-                   "pathological_oski": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(2, 0.3, 10), exprange(0.001, 0.04, 10))]}
+                   "pathological_phil": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(2, 0.3, 10), exprange(0.001, 0.032, 10))],
+                   "pathological_oski": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(2, 0.1, 10), exprange(0.001, 0.6, 10))]}
 }

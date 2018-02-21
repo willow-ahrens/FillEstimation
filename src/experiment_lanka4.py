@@ -18,6 +18,7 @@
 #SBATCH --mail-type=all
 #SBATCH -p lanka-v3
 #SBATCH --exclude lanka29
+#SBATCH --exclude lanka27
 """),
   "B" : 4,
   "epsilon" : 0.1,

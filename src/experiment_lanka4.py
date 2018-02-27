@@ -21,7 +21,7 @@
 #SBATCH --exclude lanka27
 """),
   "B" : 4,
-  "epsilon" : 0.2,
+  "epsilon" : 0.25,
   "delta" : 0.01,
   "sigma" : 0.02,
   "trials" : 100,

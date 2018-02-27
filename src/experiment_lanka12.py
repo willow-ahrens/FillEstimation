@@ -21,7 +21,7 @@
 #SBATCH --exclude lanka27
 """),
   "B" : 12,
-  "epsilon" : 0.5,
+  "epsilon" : 4,
   "delta" : 0.01,
   "sigma" : 0.02,
   "trials" : 100,
@@ -78,9 +78,9 @@
 	"inline_1_conv",
 	"m_t1_conv"
 	],
-  "plot_points" : {"3dtube_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(7, 0.3, 10), exprange(0.001, 0.02, 10))],
-                   "gupta1_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(7, 0.25, 10), exprange(0.001, 0.035, 10))],
-                   "ct20stif_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(7, 0.3, 10), exprange(0.001, 0.032, 10))],
-                   "pathological_phil": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(7, 0.33, 10), exprange(0.001, 0.027, 10))],
-                   "pathological_oski": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(6, 0.2, 10), exprange(0.001, 0.14, 10))]}
+  "plot_points" : {"3dtube_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(50.5, 2.166, 10), exprange(0.001, 0.02, 10))],
+                   "gupta1_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(50.5, 1.805, 10), exprange(0.001, 0.035, 10))],
+                   "ct20stif_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(50.5, 2.166, 10), exprange(0.001, 0.032, 10))],
+                   "pathological_phil": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(50.5, 2.38, 10), exprange(0.001, 0.027, 10))],
+                   "pathological_oski": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(43.3, 1.44, 10), exprange(0.001, 0.14, 10))]}
 }

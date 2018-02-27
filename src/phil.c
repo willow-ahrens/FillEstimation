@@ -62,7 +62,7 @@ int estimate_fill (int m,
   int Z[W][W];
 
   /* Compute the necessary number of samples */
-  double T = 2 * log(B/delta) * B * B / (epsilon * epsilon);
+  double T = log((2 * B * B) / delta) * B * B * B * B / (2.0 * epsilon * epsilon);
   int s;
 
   s = min(T, nnz);

@@ -1,16 +1,8 @@
 #include <float.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
-
-#define TIMEOUT 0.1
-
-//Return time time of day as a double-precision floating point value.
-double wall_time (void) {
-  struct timeval t;
-  gettimeofday(&t, NULL);
-  return 1.0*t.tv_sec + 1.0e-6*t.tv_usec;
-}
+#include <chrono>
+#include <random>
 
 int estimate_fill (int m,
                    int n,
@@ -22,6 +14,7 @@ int estimate_fill (int m,
                    double delta,
                    double sigma,
                    double *fill,
+                   std::seed_seq &seeder,
                    int verbose);
 
 int test (int m,
@@ -36,6 +29,7 @@ int test (int m,
           int trials,
           int clock,
           int results,
+          long seed,
           int verbose) {
 
   double *fill = (double*)malloc(sizeof(double) * B * B * trials);
@@ -43,19 +37,22 @@ int test (int m,
     fill[i] = 0;
   }
 
+  std::seed_seq seeder{seed};
+
   //Load problem into cache
-  estimate_fill(m, n, nnz, ptr, ind, B, epsilon, delta, sigma, fill, verbose);
+  estimate_fill(m, n, nnz, ptr, ind, B, epsilon, delta, sigma, fill, seeder, verbose);
   for (int i = 0; i < B * B; i++) {
     fill[i] = 0;
   }
 
-
   //Benchmark some runs
-  double time = -wall_time();
+  auto tic = std::chrono::high_resolution_clock::now();
   for (int t = 0; t < trials; t++){
-    estimate_fill(m, n, nnz, ptr, ind, B, epsilon, delta, sigma, fill + t * B * B, verbose);
+    estimate_fill(m, n, nnz, ptr, ind, B, epsilon, delta, sigma, fill + t * B * B, seeder, verbose);
   }
-  time += wall_time();
+  auto toc = std::chrono::high_resolution_clock::now();
+  auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(toc-tic);
+  double time = diff.count() * 1e-9;
 
   printf("{\n");
   int i = 0;

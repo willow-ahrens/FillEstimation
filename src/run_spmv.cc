@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-
-extern "C" {
-#include "util.h"
+#include <float.h>
+#include <random>
+#include <chrono>
 
 int test (int m,
           int n,
@@ -33,8 +33,6 @@ static void usage () {
   "  -h, --help                 Display help message\n");
 }
 
-}
-
 int main (int argc, char **argv) {
 
   int verbose = 0;
@@ -43,6 +41,7 @@ int main (int argc, char **argv) {
   int b_r = 1;
   int b_c = 1;
   int trials = 1;
+  long seed = std::random_device()();
 
   /* Beware. Option parsing below. */
   long longarg;
@@ -86,7 +85,7 @@ int main (int argc, char **argv) {
           usage();
           return 1;
         }
-        random_seed(longarg);
+        seed = longarg;
         break;
 
       case 'r':

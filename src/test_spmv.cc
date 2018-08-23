@@ -1,21 +1,11 @@
 #include <float.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "taco.h"
-#include <sys/time.h>
+#include <taco.h>
+#include <chrono>
 
 using namespace taco;
 
-#define TIMEOUT 0.1
-
-//Return time time of day as a double-precision floating point value.
-double wall_time (void) {
-  struct timeval t;
-  gettimeofday(&t, NULL);
-  return 1.0*t.tv_sec + 1.0e-6*t.tv_usec;
-}
-
-extern "C" {
 int test (int m,
           int n,
           int nnz,
@@ -95,32 +85,35 @@ int test (int m,
   bp.compile();
   bp.assemble();
 
-  double mytime;
+  double time;
 
   if (r == 1 && c == 1) {
     //Load problem into cache
     bp.compute();
 
     //Benchmark some runs
-    mytime = -wall_time();
+    auto tic = std::chrono::high_resolution_clock::now();
     for (int t = 0; t < trials; t++){
       bp.compute();
     }
-    mytime += wall_time();
+    auto toc = std::chrono::high_resolution_clock::now();
+    auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(toc-tic);
+    time = diff.count() * 1e-9;
   } else {
     //Load problem into cache
     b.compute();
 
     //Benchmark some runs
-    mytime = -wall_time();
+    auto tic = std::chrono::high_resolution_clock::now();
     for (int t = 0; t < trials; t++){
       b.compute();
     }
-    mytime += wall_time();
+    auto toc = std::chrono::high_resolution_clock::now();
+    auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(toc-tic);
+    time = diff.count() * 1e-9;
   }
 
-  *time_total = mytime;
-  *time_mean = mytime/trials;
+  *time_total = time;
+  *time_mean = time/trials;
   return 0;
-}
 }

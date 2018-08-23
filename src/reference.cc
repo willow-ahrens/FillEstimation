@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "util.h"
 #include <unordered_set>
-
-extern "C" {
+#include <random>
 
 const char *name () {
   return "reference";
@@ -53,7 +51,9 @@ int estimate_fill (int m,
                    int B,
                    double epsilon,
                    double delta,
+                   double sigma,
                    double *fill,
+                   std::seed_seq &seeder,
                    int verbose){
   auto hash = [n](std::pair<int, int> coord){
     return coord.first * n + coord.second;
@@ -80,6 +80,4 @@ int estimate_fill (int m,
     }
   }
   return 0;
-}
-
 }

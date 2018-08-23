@@ -4,9 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-
-extern "C" {
-#include "util.h"
+#include <random>
 
 int test (int m,
           int n,
@@ -20,9 +18,10 @@ int test (int m,
           int trials,
           int clock,
           int results,
+          long seed,
           int verbose);
 
-char *name ();
+const char *name ();
 
 static void usage () {
   fprintf(stderr,"usage: %s [options] <input>\n"
@@ -42,8 +41,6 @@ static void usage () {
   "  -h, --help                 Display help message\n", name());
 }
 
-}
-
 int main (int argc, char **argv) {
 
   int clock = 1;
@@ -56,6 +53,7 @@ int main (int argc, char **argv) {
   double delta = 0.01;
   double sigma = 0.02;
   int trials = 1;
+  long seed = std::random_device()();
 
   /* Beware. Option parsing below. */
   long longarg;
@@ -105,7 +103,7 @@ int main (int argc, char **argv) {
           usage();
           return 1;
         }
-        random_seed(longarg);
+        seed = longarg;
         break;
 
       case 'B':
@@ -227,7 +225,7 @@ int main (int argc, char **argv) {
 
   auto csr = taco::read(argv[optind], taco::CSR, true);
 
-  int ret = test(csr.getDimension(0), csr.getDimension(1), csr.getStorage().getValues().getSize(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(0).getData(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(1).getData(), B, epsilon, delta, sigma, trials, clock, results, verbose);
+  int ret = test(csr.getDimension(0), csr.getDimension(1), csr.getStorage().getValues().getSize(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(0).getData(), (int*)csr.getStorage().getIndex().getModeIndex(1).getIndexArray(1).getData(), B, epsilon, delta, sigma, trials, clock, results, seed, verbose);
 
   return ret;
 }

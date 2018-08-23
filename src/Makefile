@@ -12,26 +12,26 @@ endif
 include $(TOP)/src/Makefile.$(MYARCH)
 
 CFLAGS += -std=c99 -I$(TACO)/include
-CXXFLAGS += -std=c++11 -I$(TACO)/include -DDECIMAL_DIG=17
+CXXFLAGS += -std=c++11 -I$(TACO)/include #-DDECIMAL_DIG=17
 LDLIBS += -L$(TACO)/lib -ltaco -ldl
 
 all: reference phil oski spmv spmv_record env.sh
 clean:
 	rm -rf reference phil oski spmv spmv_record env.sh *.o *.dSYM *.trace *.pyc
 
-reference: run_fill.o test_fill.o reference.o util.o
+reference: run_fill.o test_fill.o reference.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
 
-phil: run_fill.o test_fill.o phil.o util.o
+oski: run_fill.o test_fill.o oski.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
 
-oski: run_fill.o test_fill.o oski.o util.o
+phil: run_fill.o test_fill.o phil.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
 
-spmv: run_spmv.o test_spmv.o util.o
+spmv: run_spmv.o test_spmv.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
 
-spmv_record: run_spmv_record.o test_spmv.o util.o
+spmv_record: run_spmv_record.o test_spmv.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
 
 export ENV_SH

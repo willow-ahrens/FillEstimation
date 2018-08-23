@@ -33,10 +33,10 @@
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include "util.h"
+#include <random>
+#include <algorithm>
 
-char *name () {
+const char *name () {
   return "phil";
 }
 
@@ -87,6 +87,7 @@ int estimate_fill (int m,
                    double delta,
                    double sigma,
                    double *fill,
+                   std::seed_seq &seeder,
                    int verbose){
   assert(n >= 1);
   assert(m >= 1);
@@ -97,15 +98,19 @@ int estimate_fill (int m,
   double T = log((2 * B * B) / delta) * B * B * B * B / (2.0 * epsilon * epsilon);
   int s;
 
-  s = min(T, nnz);
+  s = std::min((int)T, nnz);
 
   /* Sample s locations of nonzeros */
-  int *samples = (int*)malloc(s*sizeof(int));
+  int *samples = new int[s];
   assert(samples != NULL);
-  int *samples_i = (int*)malloc(s*sizeof(int));
+  int *samples_i = new int[s];
   assert(samples_i != NULL);
-  int *samples_j = (int*)malloc(s*sizeof(int));
+  int *samples_j = new int[s];
   assert(samples_j != NULL);
+
+  /* Seed the random generator */
+
+  std::mt19937 generator(seeder);
 
   /* if s == nnz, just compute the fill exactly. Otherwise, sample s nonzeros
    * so that the samples[t]^th nonzero is included in the sample.
@@ -115,16 +120,19 @@ int estimate_fill (int m,
       samples[t] = t;
     }
   } else {
-    random_range(samples, s, 0, nnz);
+    std::uniform_int_distribution<> range(0, nnz - 1);
+    for (int t = 0; t < s; t++) {
+      samples[t] = range(generator);
+    }
   }
 
   /* Convert flat samples array to (i, j) pairs in samples_i and samples_j. */
-  sort(samples, s);
+  std::sort(samples, samples + s, std::greater<int>());
   {
     int i = 0;
     for (int t = 0; t < s; t++) {
       if (ptr[i + 1] <= samples[t]) {
-        i = search_strict(ptr, i, m, samples[t]) - 1;
+        i = (std::upper_bound(ptr + i, ptr + m, samples[t]) - ptr) - 1;
       }
       samples_i[t] = i;
       samples_j[t] = ind[samples[t]];
@@ -143,13 +151,13 @@ int estimate_fill (int m,
     }
 
     /* Set Z to 1 where there are nonzeros in the neighborhood of (i, j) */
-    for (int ii = max(i, B - 1) - (B - 1); ii <= min(i + (B - 1), m - 1); ii++) {
+    for (int ii = std::max(i, B - 1) - (B - 1); ii <= std::min(i + (B - 1), m - 1); ii++) {
       int r = (B + ii) - i;
       int jj;
-      int jj_min = max(j, B - 1) - (B - 1);
-      int jj_max = min(j + (B - 1), n - 1);
+      int jj_min = std::max(j, B - 1) - (B - 1);
+      int jj_max = std::min(j + (B - 1), n - 1);
 
-      int scan = search(ind, ptr[ii], ptr[ii + 1], jj_min);
+      int scan = (std::lower_bound(ind + ptr[ii], ind + ptr[ii + 1], jj_min) - ind);
 
       while (scan < ptr[ii + 1] && (jj = ind[scan]) <= jj_max) {
         int c = (B + jj) - j;
@@ -203,8 +211,8 @@ int estimate_fill (int m,
     }
   }
 
-  free(samples);
-  free(samples_i);
-  free(samples_j);
+  delete[] samples;
+  delete[] samples_i;
+  delete[] samples_j;
   return 0;
 }

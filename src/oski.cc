@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "util.h"
+#include <random>
 
-char * name() {
+const char *name() {
   return "oski";
 }
 
@@ -55,6 +55,7 @@ int estimate_fill (int m,
                    double delta,
                    double sigma,
                    double *fill,
+                   std::seed_seq &seeder,
                    int verbose){
   assert(n >= 1);
   assert(m >= 1);
@@ -62,9 +63,13 @@ int estimate_fill (int m,
   /* blocks + (c - 1) * n stores previously seen column block indicies in the
    * current block row when b_c = c.
    */
-  int *blocks = (int*)malloc(sizeof(int) * B * n);
+  int *blocks = new int[B * n];
   assert(blocks != NULL);
   memset(blocks, 0, sizeof(int) * B * n);
+
+  /* Seed the random generator */
+  std::mt19937 generator(seeder);
+  std::uniform_real_distribution<double> range(0.0, 1.0);
 
   /* K[(c - 1)] counts distinct column block indicies in the current block row
    * when b_c = c.
@@ -90,7 +95,7 @@ int estimate_fill (int m,
     for (int I = 0; I < M; I++) {
 
       /* examine the block row with probability sigma */
-      if (random_uniform() > sigma){
+      if (range(generator) > sigma){
         continue;
       }else{
 
@@ -146,6 +151,6 @@ int estimate_fill (int m,
     }
   }
 
-  free(blocks);
+  delete[] blocks;
   return 0;
 }

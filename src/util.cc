@@ -44,7 +44,7 @@ void random_seed(unsigned long s) {
   eng.seed(s);
 }
 
-int random_range (int* stuff, int n, int lo, int hi) {
+void random_range (int* stuff, int n, int lo, int hi) {
   std::uniform_int_distribution<int> intdistr(lo, hi - 1);
   for (int i = 0; i < n; i++){
     stuff[i] = intdistr(eng);

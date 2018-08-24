@@ -139,6 +139,15 @@ int estimate_fill (int m,
     }
   }
 
+  /* Zero out the fill */
+  int fill_index = 0;
+  for (int b_r = 1; b_r <= B; b_r++) {
+    for (int b_c = 1; b_c <= B; b_c++) {
+      fill[fill_index] = 0.0;
+      fill_index++;
+    }
+  }
+
   for (int t = 0; t < s; t++) {
     int i = samples_i[t];
     int j = samples_j[t];
@@ -203,7 +212,7 @@ int estimate_fill (int m,
   }
 
   /* Compute the fill from the average inverses stored in fill array */
-  int fill_index = 0;
+  fill_index = 0;
   for (int b_r = 1; b_r <= B; b_r++) {
     for (int b_c = 1; b_c <= B; b_c++) {
       fill[fill_index] *= b_r * b_c / (double)s;

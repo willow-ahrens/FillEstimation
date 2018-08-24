@@ -127,7 +127,7 @@ int estimate_fill (int m,
   }
 
   /* Convert flat samples array to (i, j) pairs in samples_i and samples_j. */
-  std::sort(samples, samples + s, std::greater<int>());
+  std::sort(samples, samples + s, std::less<int>());
   {
     int i = 0;
     for (int t = 0; t < s; t++) {

@@ -335,6 +335,8 @@ def fill_estimates(name, matrix, B = None, epsilon = None, delta = None, sigma =
     command += ["-R"]
   command += [matrix_path(matrix)]
 
+  print(myenv["LD_LIBRARY_PATH"]) #PETERPETER
+
   if verbose:
     print(command)
 

@@ -17,7 +17,7 @@ LDLIBS += -L$(TACO)/lib -ltaco -ldl
 
 all: reference oski phil pphil spmv spmv_record env.sh
 clean:
-	rm -rf reference phil oski spmv spmv_record env.sh *.o *.dSYM *.trace *.pyc
+	rm -rf reference oski phil pphil spmv spmv_record env.sh *.o *.dSYM *.trace *.pyc
 
 reference: run_fill.o test_fill.o reference.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)

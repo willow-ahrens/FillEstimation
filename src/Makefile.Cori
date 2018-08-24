@@ -1,0 +1,14 @@
+CC = cc
+CXX = CC
+CFLAGS = -O3 -march=native -ffast-math
+CXXFLAGS = -O3 -march=native
+
+export XTPE_LINK_TYPE=dynamic
+export CRAYPE_LINK_TYPE=dynamic
+
+define ENV_SH
+if [ -d "$(TACO)/lib" ] && [[ ":$$LD_LIBRARY_PATH:" != *":$(TACO)/lib:"* ]]; then
+  export LD_LIBRARY_PATH="$${LD_LIBRARY_PATH:+"$$LD_LIBRARY_PATH:"}$(TACO)/lib"
+fi
+export LD_LIBRARY_PATH
+endef

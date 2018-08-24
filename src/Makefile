@@ -13,7 +13,7 @@ endif
 include $(TOP)/src/Makefile.$(MYARCH)
 
 #CFLAGS += -std=c99 -I$(TACO)/include
-CXXFLAGS += -std=c++11 -fopenmp -I$(TACO)/include #-DDECIMAL_DIG=17
+CXXFLAGS += -std=c++11 -fopenmp -I$(TACO)/include -DDECIMAL_DIG=17
 LDLIBS += -L$(TACO)/lib -ltaco -ldl
 
 all: reference oski phil pphil spmv spmv_record env.sh

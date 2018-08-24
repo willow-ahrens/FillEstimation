@@ -177,7 +177,7 @@ int estimate_fill (int m,
     /* if s == nnz, just compute the fill exactly. Otherwise, sample s nonzeros
      * so that the samples[t]^th nonzero is included in the sample.
      */
-    if (my_s == chunk_size(nnz, p, q)) {
+    if (s == nnz) {
       for (int t = 0; t < my_s; t++) {
         my_samples[t] = t + chunk_lower(nnz, p, q);
       }

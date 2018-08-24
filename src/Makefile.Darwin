@@ -1,8 +1,7 @@
 CC = gcc-8
 CXX = g++-8
-LDXX = g++
-CFLAGS = -g -ffast-math
-CXXFLAGS = -g -ffast-math
+CFLAGS = -ggdb# -ffast-math
+CXXFLAGS = -ggdb# -ffast-math
 define ENV_SH
 if [ -d "$(TACO)/lib" ] && [[ ":$$LD_LIBRARY_PATH:" != *":$(TACO)/lib:"* ]]; then
   export LD_LIBRARY_PATH="$${LD_LIBRARY_PATH:+"$$LD_LIBRARY_PATH:"}$(TACO)/lib"

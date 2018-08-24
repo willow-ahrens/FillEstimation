@@ -106,7 +106,7 @@ int estimate_fill (int m,
                    double *fill,
                    std::seed_seq &seeder,
                    int verbose){
-  int p = omp_get_num_threads();
+  int p = omp_get_max_threads();
   assert(n >= 1);
   assert(m >= 1);
   int W = 2 * B;
@@ -129,9 +129,9 @@ int estimate_fill (int m,
       s_p[q] = chunk_size(nnz, p, q);
     }
   } else {
-    s_p[p - 1] = nnz;
+    s_p[p - 1] = s;
     for (int q = 0; q < p - 1; q++){
-      s_p[q] = std::binomial_distribution<int>(s_p[q], ((double)chunk_size(nnz, p, q))/nnz)(generator);
+      s_p[q] = std::binomial_distribution<int>(s_p[p - 1], ((double)chunk_size(nnz, p, q))/(nnz - chunk_lower(nnz, p, q)))(generator);
       s_p[p - 1] -= s_p[q];
     }
   }
@@ -156,11 +156,11 @@ int estimate_fill (int m,
     int my_s = s_p[q];
 
     /* Sample s locations of nonzeros */
-    int *my_samples = new int[s];
+    int *my_samples = new int[my_s];
     assert(my_samples != NULL);
-    int *my_samples_i = new int[s];
+    int *my_samples_i = new int[my_s];
     assert(my_samples_i != NULL);
-    int *my_samples_j = new int[s];
+    int *my_samples_j = new int[my_s];
     assert(my_samples_j != NULL);
 
     /* Private working memory */
@@ -178,8 +178,8 @@ int estimate_fill (int m,
      * so that the samples[t]^th nonzero is included in the sample.
      */
     if (my_s == chunk_size(nnz, p, q)) {
-      for (int t = chunk_lower(nnz, p, q); t < chunk_upper(nnz, p, q); t++) {
-        my_samples[t] = t;
+      for (int t = 0; t < my_s; t++) {
+        my_samples[t] = t + chunk_lower(nnz, p, q);
       }
     } else {
       std::uniform_int_distribution<> range(chunk_lower(nnz, p, q), chunk_upper(nnz, p, q) - 1);

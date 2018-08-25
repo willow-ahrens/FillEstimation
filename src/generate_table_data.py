@@ -13,7 +13,7 @@ parser.add_argument("matrix", help="the matrix to use", type=str)
 args = util.parse(parser)
 
 results = {}
-for name in ["phil", "oski"]:
+for name in ["oski", "phil", "pphil"]:
   output = util.fill_estimates(name, args.matrix, trials = util.experiment["trials"], clock = True, errors = True, spmv_times = True)
   results["{}_mean_time".format(name)] = output["mean_time"]
   results["{}_mean_max_error".format(name)] = numpy.mean(output["max_errors"])

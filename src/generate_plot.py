@@ -24,7 +24,7 @@ for point in util.experiment["plot_points"][args.matrix]:
   row["matrix_m"] = util.matrix_m(args.matrix)
   row["normal_spmv_time"] = util.get_spmv_record(args.matrix)[0][0]
   row.update(point)
-  for name in ["phil", "oski"]:
+  for name in ["oski", "phil", "pphil"]:
     output = util.fill_estimates(name, args.matrix, trials = util.experiment["trials"], clock = True, errors = True, spmv_times = True, **point)
     row["{}_mean_time".format(name)] = output["mean_time"]
     row["{}_mean_max_error".format(name)] = numpy.mean(output["max_errors"])

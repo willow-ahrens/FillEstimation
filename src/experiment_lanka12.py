@@ -4,8 +4,8 @@
   "matrix_path" : os.path.join(top, "data/matrix/full"),
   "matrix_registry_path" : os.path.join(top, "data/matrix/full/registry.json"),
   "run_path" : os.path.join(top, "run"),
-  "fill_prefix" : "",
-  "fill_vars" : {},
+  "fill_prefix" : "numactl -N 1",
+  "fill_vars" : {"OMP_NUM_THREADS":"12"},
   "spmv_prefix" : "numactl -N 1",
   "spmv_vars" : {"TACO_CFLAGS":"-O3 -ffast-math -std=c99 -fopenmp -funroll-loops",
                  "OMP_NUM_THREADS":"12"},
@@ -18,6 +18,7 @@
 #SBATCH --mail-type=all
 #SBATCH -p lanka-v3
 #SBATCH --exclude lanka29
+#SBATCH --exclude lanka44
 #SBATCH --exclude lanka27
 """),
   "B" : 12,

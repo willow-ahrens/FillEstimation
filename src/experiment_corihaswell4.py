@@ -1,25 +1,26 @@
 {
-  "experiment_name" : "Cori12",
+  "experiment_name" : "CoriHaswell4",
   "data_path" : os.path.join(top, "data"),
   "matrix_path" : os.path.join(top, "data/matrix/full"),
   "matrix_registry_path" : os.path.join(top, "data/matrix/full/registry.json"),
   "run_path" : os.path.join(top, "run"),
   "fill_prefix" : "",
-  "fill_vars" : {},
+  "fill_vars" : {"OMP_NUM_THREADS":"16"},
   "spmv_prefix" : "",
   "spmv_vars" : {"TACO_CFLAGS":"-O3 -ffast-math -std=c99 -fopenmp -funroll-loops",
-                 "OMP_NUM_THREADS":"64"},
+                 "OMP_NUM_THREADS":"16"},
   "create_script" : create_create_slurm_script(
 """
 #SBATCH -q regular
 #SBATCH -N 1
+#SBATCH -c 64
 #SBATCH -t 06:00:00
-#SBATCH -L SCRATCH,project
+#SBATCH -L SCRATCH
 #SBATCH --mail-user=pahrens@mit.edu
 #SBATCH --mail-type=all
 #SBATCH -C haswell
 """),
-  "B" : 12,
+  "B" : 4,
   "epsilon" : 3,
   "delta" : 0.01,
   "sigma" : 0.02,
@@ -76,10 +77,5 @@
 	"bundle_adj_conv",
 	"inline_1_conv",
 	"m_t1_conv"
-	],
-  "plot_points" : {"3dtube_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(50.5, 2.166, 10), exprange(0.001, 0.02, 10))],
-                   "gupta1_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(50.5, 1.95, 10), exprange(0.001, 0.035, 10))],
-                   "ct20stif_conv": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(50.5, 2.166, 10), exprange(0.001, 0.032, 10))],
-                   "pathological_phil": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(50.5, 2.38, 10), exprange(0.002, 0.027, 10))],
-                   "pathological_oski": [{"epsilon":e, "delta":0.01, "sigma":s} for (e, s) in zip(exprange(43.3, 1.44, 10), exprange(0.001, 0.14, 10))]}
+	]
 }

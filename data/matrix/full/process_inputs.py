@@ -18,7 +18,7 @@ def convert_matrix(infile, outfile):
                 matrix = scipy.sparse.coo_matrix(matrix, dtype=numpy.float64)
                 matrix = scipy.sparse.csr_matrix(matrix)
                 
-                scipy.io.mmwrite(outfile, matrix)
+                scipy.io.mmwrite(outfile, matrix, symmetry="general", field="real")
 
 # guarantee that its a tar file
 def untar(fname):

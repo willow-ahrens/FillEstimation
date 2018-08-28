@@ -11,14 +11,15 @@
                  "OMP_NUM_THREADS":"16"},
   "create_script" : create_create_slurm_script(
 """
-#SBATCH -q regular
+#SBATCH -q premium
 #SBATCH -N 1
 #SBATCH -c 64
-#SBATCH -t 06:00:00
+#SBATCH -t 02:00:00
 #SBATCH -L SCRATCH
 #SBATCH --mail-user=pahrens@mit.edu
 #SBATCH --mail-type=all
 #SBATCH -C haswell
+module load python
 """),
   "B" : 4,
   "epsilon" : 3,

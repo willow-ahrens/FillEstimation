@@ -1,0 +1,11 @@
+{
+    "oski_mean_max_error": 0.01484313783137514, 
+    "oski_mean_spmv_time": 0.0018135335599999975, 
+    "oski_mean_time": 0.021295651230000004, 
+    "phil_mean_max_error": 0.0060920350550565114, 
+    "phil_mean_spmv_time": 0.0018135335599999975, 
+    "phil_mean_time": 0.008357850330000001, 
+    "pphil_mean_max_error": 0.010500948775789592, 
+    "pphil_mean_spmv_time": 0.0018135335599999975, 
+    "pphil_mean_time": 0.00147268604
+}

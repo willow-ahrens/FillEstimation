@@ -39,9 +39,10 @@ def create_create_slurm_script(preamble):
     path = os.path.join(path, "{0}.sl".format(name))
     with open(path, "w") as f:
       f.write("#!/bin/bash\n")
-      f.write(preamble)
       if parallel:
         f.write("#SBATCH --array=0-{}\n".format(len(parallel) - 1))
+      f.write(preamble)
+      if parallel:
         for (i, thing) in enumerate(parallel):
           f.write("if test $SLURM_ARRAY_TASK_ID -eq {0}; then \n".format(i))
           f.write("{0} {1};\n".format(command, thing))

@@ -11,7 +11,7 @@
                  "OMP_NUM_THREADS":"16"},
   "create_script" : create_create_slurm_script(
 """
-#SBATCH -q premium
+#SBATCH -q regular
 #SBATCH -N 1
 #SBATCH -c 64
 #SBATCH -t 06:00:00

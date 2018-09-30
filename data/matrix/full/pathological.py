@@ -4,7 +4,7 @@ import scipy.io
 import scipy.sparse
 import itertools
 
-oski_size = 100000
+oski_size = 1000000
 oski_block = 6
 I = [i for i in range(oski_size)]
 J = [0 for _ in range(oski_size)]
@@ -17,7 +17,7 @@ matrix = scipy.sparse.coo_matrix((V, (I,J)), dtype=numpy.float64)
 matrix = scipy.sparse.csr_matrix(matrix)
 scipy.io.mmwrite("pathological_oski.mtx", matrix)
 
-phil_size = 10000
+phil_size = 100000
 phil_entries = 10000
 phil_block = 12
 indices = [i * phil_size + j for (i, j) in itertools.product(range(phil_size), range(phil_size))]

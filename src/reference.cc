@@ -53,7 +53,8 @@ int estimate_fill (int m,
                    double delta,
                    double sigma,
                    double *fill,
-                   std::seed_seq &seeder,
+                   long seed,
+                   int trial,
                    int verbose){
   auto hash = [n](std::pair<int, int> coord){
     return coord.first * n + coord.second;

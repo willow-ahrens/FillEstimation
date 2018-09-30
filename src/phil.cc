@@ -87,7 +87,8 @@ int estimate_fill (int m,
                    double delta,
                    double sigma,
                    double *fill,
-                   std::seed_seq &seeder,
+                   long seed,
+                   int trial,
                    int verbose){
   assert(n >= 1);
   assert(m >= 1);
@@ -110,6 +111,7 @@ int estimate_fill (int m,
 
   /* Seed the random generator */
 
+  std::seed_seq seeder{seed, (long)trial};
   std::mt19937 generator(seeder);
 
   /* if s == nnz, just compute the fill exactly. Otherwise, sample s nonzeros

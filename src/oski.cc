@@ -55,7 +55,8 @@ int estimate_fill (int m,
                    double delta,
                    double sigma,
                    double *fill,
-                   std::seed_seq &seeder,
+                   long seed,
+                   int trial,
                    int verbose){
   assert(n >= 1);
   assert(m >= 1);
@@ -68,6 +69,7 @@ int estimate_fill (int m,
   memset(blocks, 0, sizeof(int) * B * n);
 
   /* Seed the random generator */
+  std::seed_seq seeder{seed, (long)trial};
   std::mt19937 generator(seeder);
   std::uniform_real_distribution<double> range(0.0, 1.0);
 

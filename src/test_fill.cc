@@ -14,7 +14,8 @@ int estimate_fill (int m,
                    double delta,
                    double sigma,
                    double *fill,
-                   std::seed_seq &seeder,
+                   long seed,
+                   int trial,
                    int verbose);
 
 int test (int m,
@@ -37,10 +38,8 @@ int test (int m,
     fill[i] = 0;
   }
 
-  std::seed_seq seeder{seed};
-
   //Load problem into cache
-  estimate_fill(m, n, nnz, ptr, ind, B, epsilon, delta, sigma, fill, seeder, verbose);
+  estimate_fill(m, n, nnz, ptr, ind, B, epsilon, delta, sigma, fill, seed, trials, verbose);
   for (int i = 0; i < B * B; i++) {
     fill[i] = 0;
   }
@@ -48,7 +47,7 @@ int test (int m,
   //Benchmark some runs
   auto tic = std::chrono::high_resolution_clock::now();
   for (int t = 0; t < trials; t++){
-    estimate_fill(m, n, nnz, ptr, ind, B, epsilon, delta, sigma, fill + t * B * B, seeder, verbose);
+    estimate_fill(m, n, nnz, ptr, ind, B, epsilon, delta, sigma, fill + t * B * B, seed, t, verbose);
   }
   auto toc = std::chrono::high_resolution_clock::now();
   auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(toc-tic);

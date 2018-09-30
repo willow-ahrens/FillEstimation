@@ -104,7 +104,8 @@ int estimate_fill (int m,
                    double delta,
                    double sigma,
                    double *fill,
-                   std::seed_seq &seeder,
+                   long seed,
+                   int trial,
                    int verbose){
   int p = omp_get_max_threads();
   assert(n >= 1);
@@ -119,6 +120,7 @@ int estimate_fill (int m,
 
   /* Seed the random generator */
 
+  std::seed_seq seeder{seed, (long)trial};
   std::mt19937 generator(seeder);
 
   /* Stratify the samples */
@@ -147,13 +149,10 @@ int estimate_fill (int m,
 
   #pragma omp parallel
   {
-    std::mt19937 my_generator;
-    #pragma omp critical
-    {
-      my_generator = std::mt19937(seeder);
-    }
     int q = omp_get_thread_num();
     int my_s = s_p[q];
+    std::seed_seq my_seeder{seed, (long)trial, (long)q};
+    std::mt19937 my_generator(my_seeder);
 
     /* Sample s locations of nonzeros */
     int *my_samples = new int[my_s];

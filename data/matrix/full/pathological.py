@@ -4,6 +4,8 @@ import scipy.io
 import scipy.sparse
 import itertools
 
+numpy.random.seed(0xDEADBEEF)
+
 oski_size = 1000000
 oski_block = 6
 I = [i for i in range(oski_size)]

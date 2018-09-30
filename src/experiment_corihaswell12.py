@@ -25,7 +25,7 @@ module load python
   "epsilon" : 3,
   "delta" : 0.01,
   "sigma" : 0.02,
-  "trials" : 100,
+  "trials" : 1000,
   "profile_m" : 1000,
   "profile_n" : 1000,
   "profile_trials" : 100,

@@ -1,7 +1,7 @@
 CC = gcc
 CXX = g++
 CFLAGS = -O3 -march=native -ffast-math
-CXXFLAGS = -O3 -march=native
+CXXFLAGS = -O3 -march=native -ffast-math
 LDLIBS =
 
 define ENV_SH

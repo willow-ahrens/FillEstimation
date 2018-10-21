@@ -1,7 +1,7 @@
 CC = cc
 CXX = CC
 CFLAGS = -O3 -march=native -ffast-math
-CXXFLAGS = -O3 -march=native
+CXXFLAGS = -O3 -march=native -ffast-math
 
 export XTPE_LINK_TYPE=dynamic
 export CRAYPE_LINK_TYPE=dynamic

@@ -7,7 +7,7 @@
   "fill_prefix" : "",
   "fill_vars" : {"OMP_NUM_THREADS":"16"},
   "spmv_prefix" : "",
-  "spmv_vars" : {"TACO_CFLAGS":"-O3 -march-native -ffast-math -std=c99 -fopenmp -funroll-loops",
+  "spmv_vars" : {"TACO_CFLAGS":"-O3 -march=native -ffast-math -std=c99 -fopenmp -funroll-loops",
                  "OMP_NUM_THREADS":"16"},
   "create_script" : create_create_slurm_script(
 """

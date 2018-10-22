@@ -22,7 +22,7 @@
 module load python
 """),
   "B" : 4,
-  "epsilon" : 3,
+  "epsilon" : 0.25,
   "delta" : 0.01,
   "sigma" : 0.02,
   "trials" : 100,

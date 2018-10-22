@@ -1,11 +1,11 @@
 {
-    "oski_mean_max_error": 0.0031744817739857985, 
-    "oski_mean_spmv_time": 0.001352932969999999, 
-    "oski_mean_time": 0.02217845531, 
-    "phil_mean_max_error": 0.0027632609118873946, 
-    "phil_mean_spmv_time": 0.001352932969999999, 
-    "phil_mean_time": 0.00729391274, 
-    "pphil_mean_max_error": 0.0027571048248505579, 
-    "pphil_mean_spmv_time": 0.001352932969999999, 
-    "pphil_mean_time": 0.0016578575600000001
+    "oski_mean_max_error": 0.0031797826028472174, 
+    "oski_mean_spmv_time": 0.0016102419499999996, 
+    "oski_mean_time": 0.02113412742, 
+    "phil_mean_max_error": 0.0027278760828470532, 
+    "phil_mean_spmv_time": 0.0016102419499999996, 
+    "phil_mean_time": 0.007292624940000001, 
+    "pphil_mean_max_error": 0.0027351826303853425, 
+    "pphil_mean_spmv_time": 0.0016102419499999996, 
+    "pphil_mean_time": 0.00148854845
 }

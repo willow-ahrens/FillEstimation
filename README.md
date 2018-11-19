@@ -30,8 +30,9 @@ directory of our project will build our software dependencies.
 test harnesses we use to generate results.
 
   Our [Phil]() algorithm is implemented in `src/phil.cpp` and built into the
-executable `phil`. A different algorithm (described in the file
-`oski-1.0.1h/src/heur/estfill.c` in the
+executable `phil`. A parallel implementation of [Phil](), [PPhil](), exists in
+`src/phil.cpp` and is built into the executable `pphil`. A different algorithm
+(described in the file `oski-1.0.1h/src/heur/estfill.c` in the
 [OSKI](https://bebop.cs.berkeley.edu/oski/) library) is implemented in
 `src/oski.cpp` and built into the executable `oski`. A reference algorithm is
 implemented in `reference.cpp` and built into the executable `reference`. An

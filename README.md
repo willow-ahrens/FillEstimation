@@ -29,12 +29,12 @@ directory of our project will build our software dependencies.
   The src directory contains the implementations of our algorithms and the
 test harnesses we use to generate results.
 
-  Our [Phil]() algorithm is implemented in `src/phil.c` and built into the
+  Our [Phil]() algorithm is implemented in `src/phil.cpp` and built into the
 executable `phil`. A different algorithm (described in the file
 `oski-1.0.1h/src/heur/estfill.c` in the
 [OSKI](https://bebop.cs.berkeley.edu/oski/) library) is implemented in
-`src/oski.c` and built into the executable `oski`. A reference algorithm is
-implemented in `reference.c` and built into the executable `reference`. An
+`src/oski.cpp` and built into the executable `oski`. A reference algorithm is
+implemented in `reference.cpp` and built into the executable `reference`. An
 implementation of sparse (possibly blocked) matrix-vector multiply is provided
 by the [TACO](http://tensor-compiler.org/) library in `spmv.cpp` and built into
 the executable `spmv`. All executables take a `-h` option describing their
